@@ -1,0 +1,124 @@
+version: "3.8"
+
+x-common-env: &common-env
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432
+  DATABASE_USERNAME: ${PG_USERNAME}
+  DATABASE_PASSWORD: ${PG_PASSWORD}
+  SELENIUM_REMOTE_HOST: selenium
+  WEBPACKER_DEV_SERVER_HOST: webpacker
+
+services:
+  app: &app
+    build:
+      context: .dockerdev
+      dockerfile: Dockerfile
+      args:
+        PROJECT_NAME: ${PROJECT_NAME}
+        RUBY_VERSION: ${RUBY_VERS}
+        NODE_VERSION: ${NODE_VERS}
+        YARN_VERSION: ${YARN_VERS}
+        BUNDLER_VERSION: ${BUNDLER_VERS}
+        RAILS_VERSION: ${RAILS_VERS}
+    image: ${PROJECT_NAME}:${ENV_VERS}
+    tmpfs:
+      - /tmp
+
+  backend: &backend
+    <<: *app
+    stdin_open: true
+    tty: true
+    environment:
+      <<: *common-env
+      NODE_ENV: ${NODE_ENV:-development}
+      RAILS_ENV: ${RAILS_ENV:-development}
+    volumes:
+      - .:/${PROJECT_NAME}:cached
+      - bundle:/usr/local/bundle
+      - node_modules:/${PROJECT_NAME}/node_modules
+      - packs:/${PROJECT_NAME}/public/packs
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  rails:
+    <<: *backend
+    command: rails server -b 0.0.0.0
+    ports:
+      - '3000:3000'
+
+  runner:
+    <<: *backend
+    command: /bin/bash
+    ports:
+      - '3000:3000'
+      - '3002:3002'
+
+  rspec: &rspec
+    <<: *backend
+    command: bundle exec rspec ${TARGET}
+    environment:
+      <<: *common-env
+      NODE_ENV: ${NODE_ENV:-test}
+      HEADLESS: 'true'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      selenium:
+        condition: service_healthy
+
+  rspec-browser:
+    <<: *rspec
+    environment:
+      <<: *common-env
+      NODE_ENV: ${NODE_ENV:-test}
+      HEADLESS: 'false'
+
+  postgres:
+    image: postgres:${PG_VERS}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./log:/root/log:cached
+    environment:
+      - PSQL_HISTFILE=/root/log/.psql_history
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: pg_isready -U ${PG_USERNAME} -h 127.0.0.1
+      interval: 5s
+
+  selenium:
+    image: selenium/standalone-chrome
+    ports:
+      - '4444:4444'
+    healthcheck:
+      test: ["CMD", "curl", "-I", "http://127.0.0.1:4444/wd/hub/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  webpacker:
+    <<: *app
+    command: ./bin/webpack-dev-server
+    ports:
+      - '3035:3035'
+    volumes:
+      - .:/${PROJECT_NAME}:cached
+      - bundle:/usr/local/bundle
+      - node_modules:/${PROJECT_NAME}/node_modules
+      - packs:/${PROJECT_NAME}/public/packs
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - RAILS_ENV=${RAILS_ENV:-development}
+      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+
+
+volumes:
+  postgres:
+  bundle:
+    external:
+      name: ${PROJECT_NAME}_${GEMSET_VERS}_bundle
+  node_modules:
+    external:
+      name: ${PROJECT_NAME}_${NODE_MODULES_VERS}_node_modules
+  packs:
