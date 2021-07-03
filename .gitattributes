@@ -1,5 +1,10 @@
 # See https://git-scm.com/docs/gitattributes for more about git attribute files.
 
+# Force all line endings to be LF except for windows batch files
+* text=auto eol=lf
+*.{cmd,[cC][mM][dD]} text eol=crlf
+*.{bat,[bB][aA][tT]} text eol=crlf
+
 # Mark the database schema as having been generated.
 db/schema.rb linguist-generated
 
