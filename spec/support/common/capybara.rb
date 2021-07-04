@@ -34,7 +34,7 @@ RSpec.configure do |config|
       Capybara.app_host    = "http://#{session_server.host}:#{session_server.port}"
     else
       driven_by :remote_chrome
-      Capybara.server      = :puma
+      Capybara.server      = :puma, { Silent: true }
       Capybara.server_host = '0.0.0.0'
       Capybara.server_port = ENV.fetch('TEST_PORT', 3001)
       session_server       = Capybara.current_session.server
