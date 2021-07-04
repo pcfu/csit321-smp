@@ -58,6 +58,16 @@ services:
     command: bundle exec rspec ${TARGET}
     environment:
       <<: *common-env
+      SELENIUM_HOST: ${DOCKER_IP:-172.17.0.1}
+      NODE_ENV: ${NODE_ENV:-test}
+      HEADLESS: 'false'
+    ports:
+      - '3001:3001'
+
+  rspec-headless:
+    <<: *rspec
+    environment:
+      <<: *common-env
       NODE_ENV: ${NODE_ENV:-test}
       HEADLESS: 'true'
     depends_on:
@@ -65,13 +75,6 @@ services:
         condition: service_healthy
       selenium:
         condition: service_healthy
-
-  rspec-browser:
-    <<: *rspec
-    environment:
-      <<: *common-env
-      NODE_ENV: ${NODE_ENV:-test}
-      HEADLESS: 'false'
 
   postgres:
     image: postgres:${PG_VERS}
