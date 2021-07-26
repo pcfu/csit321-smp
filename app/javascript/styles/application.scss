@@ -1,36 +1,11 @@
-* {
-  box-sizing: border-box;
-}
+@import "bootstrap/scss/bootstrap";
 
 body {
-  margin: 0px;
-  padding: 0px;
   font-family: Helvetica, "Trebuchet MS", Verdana, sans-serif;
+}
 
-  .placeholder {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    h1 {
-      margin: 0;
-    }
-
-    h2 {
-      margin: 5px 0;
-    }
-
-    .members-container {
-      margin-top: 30px;
-
-      span {
-        padding: 20px;
-        font-size: 1.2em;
-        font-weight: bold;
-        color: blue;
-      }
-    }
-  }
+.members-container span {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: blue;
 }
