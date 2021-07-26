@@ -7,6 +7,9 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%= Gon::Base.render_data %>
+    <%= include_gon(:camel_case => true) %>
+
     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= yield :assets %>
