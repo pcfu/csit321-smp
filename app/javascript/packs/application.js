@@ -17,4 +17,7 @@ const jQuery = require('jquery');
 global.$ = global.jQuery = jQuery;
 window.$ = window.jQuery = jQuery;
 
+require('datatables.net');
+require('datatables.net-bs5');
+
 require('styles/application');
