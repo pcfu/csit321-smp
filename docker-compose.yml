@@ -4,6 +4,8 @@ x-common-env: &common-env
   DATABASE_URL: postgres://postgres:postgres@postgres:5432
   DATABASE_USERNAME: ${PG_USERNAME}
   DATABASE_PASSWORD: ${PG_PASSWORD}
+  BACKEND_HOST: ${DOCKER_IP:-172.17.0.1}
+  SELENIUM_HOST: ${DOCKER_IP:-172.17.0.1}
   SELENIUM_REMOTE_HOST: selenium
   WEBPACKER_DEV_SERVER_HOST: webpacker
 
@@ -58,7 +60,6 @@ services:
     command: bundle exec rspec ${TARGET}
     environment:
       <<: *common-env
-      SELENIUM_HOST: ${DOCKER_IP:-172.17.0.1}
       NODE_ENV: ${NODE_ENV:-test}
       HEADLESS: 'false'
     ports:
