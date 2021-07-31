@@ -1,0 +1,12 @@
+@import "bootstrap/scss/bootstrap";
+@import 'datatables.net-bs5/css/dataTables.bootstrap5';
+
+body {
+  font-family: Helvetica, "Trebuchet MS", Verdana, sans-serif;
+}
+
+.members-container span {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: blue;
+}
