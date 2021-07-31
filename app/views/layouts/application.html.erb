@@ -15,7 +15,41 @@
     <%= yield :assets %>
   </head>
 
-  <body>
+  <body class="d-flex flex-column min-vh-100">
+    <%# Navbar %>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand mr-auto" href="/">App Name</a>
+        <ul class="navbar-nav me-0 mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link 1</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link 2</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link 3</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <%# Yield to page-specific content %>
     <%= yield %>
+
+    <%# Footer %>
+    <footer class="py-3 bg-secondary bg-gradient">
+      <div class="container">
+        <div class="text-center">
+          Common components like navbar and footer can go into
+          <span class="fw-bold">app/views/layouts/application.html.erb</span>
+        </div>
+        <div class="text-center">
+          <% link = 'https://guides.rubyonrails.org/layouts_and_rendering.html' %>
+          See <a href="<%= link %>" class="text-reset" target="_blank">this resource</a>
+          for more information about using layouts.
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
