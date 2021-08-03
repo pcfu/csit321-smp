@@ -10,10 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_02_171107) do
+ActiveRecord::Schema.define(version: 2021_08_03_154632) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "price_histories", force: :cascade do |t|
+    t.integer "stock_id"
+    t.date "date"
+    t.decimal "open"
+    t.decimal "high"
+    t.decimal "low"
+    t.decimal "close"
+    t.integer "volume"
+    t.decimal "change"
+    t.decimal "percent_change"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "stocks", force: :cascade do |t|
     t.string "symbol"
