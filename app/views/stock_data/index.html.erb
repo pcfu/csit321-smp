@@ -37,6 +37,13 @@
             table.buttons().container()
                 .appendTo( '#example_wrapper .col-md-6:eq(0)' );
             } );
+
+
+            jQuery(document).ready(function($) {
+                $(".clickable-row").click(function() {
+                    window.location = $(this).data("href");
+                });
+            });
         </script>
 
         <!-- Page Title -->
@@ -98,7 +105,7 @@
         <!-- SECTION 4 -->
         <div class="container" style="margin-bottom: 20px">
             <h1>STOCKS</h1>
-            <table id="example" class="table table-striped" style="width:100%">
+            <table id="example" class="table table-dark table-hover" style="width:100%">
                     <thead>
                         <tr>
                             <th>Stock Symbol</th>
@@ -110,10 +117,10 @@
                     
                     <tbody>
                         <% @stocks.each do |stock| %>
-                            <tr>
-                                <td><%= stock.symbol %> </td>
-                                <td><%= stock.company %> </td>
-                                <td><%= stock.description %> </td>
+                            <tr role="button" class='clickable-row' data-href='/public/<%= stock.id %>'>
+                                    <td><%= stock.symbol %> </td>
+                                    <td><%= stock.company %> </td>
+                                    <td><%= stock.description %> </td>
                             </tr>
                         <% end %>
                     </tbody>
