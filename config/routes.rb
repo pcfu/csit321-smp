@@ -4,9 +4,8 @@ Rails.application.routes.draw do
 
   root to: 'placeholder#homepage'
   
-  get 'model', to: 'model#list_model'
-  get 'addModel', to: 'model#add_model'
-  get 'modelDetails', to: 'model#view_model'
+  get 'machineModel', to: 'machine_model#machine_model_list'
+  get 'addMachineModel', to: 'machine_model#add_machine_model'
 
 
   #Frontend Public Application
