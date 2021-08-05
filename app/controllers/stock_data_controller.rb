@@ -9,7 +9,6 @@ class StockDataController < ApplicationController
       format.html
       format.json { render json: Stock.all }
 
-  def index
     @stocks = Stock.all
     render layout: 'public_layout'
   end
