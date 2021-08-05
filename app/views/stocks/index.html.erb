@@ -112,7 +112,7 @@
         <div class="container">
             <div class="row mt-5">
                 <div class="col-12">
-                <h2 class="text-center">10 Stocks for Prototype (TBC)</h2>
+                <h1>10 STOCKS (PROTOTYPE) </h1>
 
                 <table class="table">
                     <thead>
@@ -127,7 +127,7 @@
                     </thead>
                     <tbody>
                     <% @shortlist.each_with_index do |stock, i|  %>
-                        <tr role="button" class='clickable-row' data-href='/public/<%= stock.id %>'>
+                        <tr role="button" class='clickable-row' data-href='/stocks/<%= stock.id %>'>
                         <th scope="row"><%= i + 1 %></th>
                         <td><%= stock.symbol %></td>
                         <td><%= stock.name %></td>
@@ -141,35 +141,14 @@
                 </div>
             </div>
 
-            <div class="row mt-5">
-                <div class="col-12">
-                <h2 class="text-center">Stocks List</h2>
-                <table id="stocks-list" class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Symbol</th>
-                        <th>Name</th>
-                        <th>Exchange</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                    </thead>
-                </table>
-                </div>
-            </div>
-            </div>
+        </div>
 
 
 
     
         
 
-        <!-- Section 5 -->
-        <div class="container" style="margin-bottom: 20px">
-            <h1>TOP 10 RECOMMENDATION</h1>
-            <br>
-        </div>
+
         
         
     </body>

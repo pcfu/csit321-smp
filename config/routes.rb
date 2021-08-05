@@ -10,6 +10,6 @@ Rails.application.routes.draw do
 
 
   #Frontend Public Application
-  get 'public', to: "stock_data#index" #Default Homepage
-  get 'public/:id', to: "stock_data#show"   #Stock Detailed Page
+  get 'stocks', to: "stocks#index" #Default Homepage
+  get 'stocks/:id', to: "stocks#show"   #Stock Detailed Page
 end

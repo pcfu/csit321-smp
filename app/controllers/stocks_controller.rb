@@ -1,5 +1,5 @@
-class StockDataController < ApplicationController
-  has_many :price_histories
+class StocksController < ApplicationController
+  #has_many :price_histories
 
   def index
     shortlist = %w[AAPL GOOG FB TWTR WMT]
@@ -9,7 +9,6 @@ class StockDataController < ApplicationController
       format.html
       format.json { render json: Stock.all }
 
-    @stocks = Stock.all
     render layout: 'public_layout'
   end
 
@@ -17,3 +16,5 @@ class StockDataController < ApplicationController
     @stock = Stock.find(params[:id])
   end
 end
+end
+

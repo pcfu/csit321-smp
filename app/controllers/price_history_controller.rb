@@ -1,3 +1,3 @@
 class PriceHistoryController < ApplicationController
-    belongs_to :stock_data
+    #belongs_to :stock
 end
