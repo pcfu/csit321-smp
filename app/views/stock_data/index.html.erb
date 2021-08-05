@@ -38,6 +38,13 @@
             table.buttons().container()
                 .appendTo( '#example_wrapper .col-md-6:eq(0)' );
             } );
+
+
+            jQuery(document).ready(function($) {
+                $(".clickable-row").click(function() {
+                    window.location = $(this).data("href");
+                });
+            });
         </script>
 
         <% content_for :assets do %>
@@ -120,7 +127,7 @@
                     </thead>
                     <tbody>
                     <% @shortlist.each_with_index do |stock, i|  %>
-                        <tr>
+                        <tr role="button" class='clickable-row' data-href='/public/<%= stock.id %>'>
                         <th scope="row"><%= i + 1 %></th>
                         <td><%= stock.symbol %></td>
                         <td><%= stock.name %></td>
