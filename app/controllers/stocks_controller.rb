@@ -1,6 +1,4 @@
 class StocksController < ApplicationController
-  #has_many :price_histories
-
   def index
     shortlist = %w[AAPL GOOG FB TWTR WMT]
     @shortlist = Stock.where(:symbol => shortlist)
@@ -8,13 +6,10 @@ class StocksController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: Stock.all }
-
-    render layout: 'public_layout'
+    end
   end
 
   def show
     @stock = Stock.find(params[:id])
   end
 end
-end
-
