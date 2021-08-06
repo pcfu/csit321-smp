@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root to: 'placeholder#homepage'
   
   get 'model', to: 'model#list_model'
-  get 'addModel', to: 'model#add_model'
+  get 'viewparam', to: 'viewaddparam#view_add_param' #view ML parameters page
+  post 'add_param', to: 'viewaddparam#add_param', as: 'add_param' #add parameters
   get 'modelDetails', to: 'model#view_model'
 end

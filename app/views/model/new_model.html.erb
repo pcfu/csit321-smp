@@ -21,87 +21,55 @@
     <h2>Add New Model</h2>
     <hr/>
 
-    <form>
-      <div class="mb-3">
-        <label for="modelName" class="form-label">Name</label>
-        <input id="modelName" type="email" class="form-control" >
+    <%= form_with url: addModel_path, local: true, method: :post do %>
+      <div class = "mb-3">
+        <%= label_tag(:Name, nil, class: "form-label") %>
+        <%= text_field_tag(:name, nil, class: "form-control") %>
       </div>
 
       <div class="mb-3">
-        <label for="modelType" class="form-label">Machine Model</label>
-        <select id="modelType" class="form-select" aria-label="Default select example">
-          <%# <option selected>Select Model</option> %>
-          <option value="LSTM">LSTM</option>
-          <option value="ANN">ANN</option>
-          <option value="CNN">CNN</option>
-        </select>
+        <%= label_tag(:"Machine Model", nil, class: "form-label") %>
+        <%= select_tag(:machinemodel, options_for_select(["LSTM", "ANN", "CNN"]), prompt: 'Select a model', class: "form-select") %>
       </div>
 
       <div class="mb-3">
-        <label for="para1" class="form-label">Parameter 1</label>
-        <select id="para1" class="form-select" aria-label="Default select example">
-          <%# <option selected>Select Model</option> %>
-          <option value="1">XXX</option>
-          <option value="2">XXX</option>
-          <option value="3">XXX</option>
-        </select>
-      </div>
-      
-      <div class="mb-3">
-        <label for="para2" class="form-label">Parameter 2</label>
-        <select id="para2" class="form-select" aria-label="Default select example">
-          <%# <option selected>Select Model</option> %>
-          <option value="1">XXX</option>
-          <option value="2">XXX</option>
-          <option value="3">XXX</option>
-        </select>
+        <%= label_tag(:"Parameter 1", nil, class: "form-label") %>
+        <%= text_field_tag(:parameter1, nil, class: "form-control") %>
       </div>
 
       <div class="mb-3">
-        <label for="para3" class="form-label">Parameter 3</label>
-        <select id="para3" class="form-select" aria-label="Default select example">
-          <%# <option selected>Select Model</option> %>
-          <option value="1">XXX</option>
-          <option value="2">XXX</option>
-          <option value="3">XXX</option>
-        </select>
-      </div>
-      
-      <div class="mb-3">
-        <label for="dataset" class="form-label">Stock(s) Data Train Set</label>
-        <select id="dataset" class="form-select" aria-label="Default select example">
-          <%# <option selected>Select Model</option> %>
-          <option value="1">Select</option>
-          <option value="2">XXX</option>
-          <option value="3">XXX</option>
-        </select>
+        <%= label_tag(:"Parameter 2", nil, class: "form-label") %>
+        <%= text_field_tag(:parameter2, nil, class: "form-control") %>
       </div>
 
       <div class="mb-3">
-        <label for="start" class="form-label">Start Date</label>
-        <select id="start" class="form-select" aria-label="Default select example">
-          <%# <option selected>Select Model</option> %>
-          <option value="1">Select</option>
-          <option value="2">XXX</option>
-          <option value="3">XXX</option>
-        </select>
+        <%= label_tag(:"Parameter 3", nil, class: "form-label") %>
+        <%= text_field_tag(:parameter3, nil, class: "form-control") %>
       </div>
 
       <div class="mb-3">
-        <label for="end" class="form-label">End Date</label>
-        <select id="end" class="form-select" aria-label="Default select example">
-          <%# <option selected>Select Model</option> %>
-          <option value="1">Select</option>
-          <option value="2">XXX</option>
-          <option value="3">XXX</option>
-        </select>
+        <%= label_tag(:"Data train set", nil, class: "form-label") %>
+        <%= select_tag(:datatrainset, options_for_select(DatasetView::DatasetList), prompt: 'Select a dataset', class: "form-select") %>
+      </div>
+
+      <div class="mb-3">
+        <%= label_tag(:"Start date", nil, class: "form-label") %>
+        <%= text_field_tag(:startdate, nil, class: "form-control") %>
+      </div>
+
+      <div class="mb-3">
+        <%= label_tag(:"End date", nil, class: "form-label") %>
+        <%= text_field_tag(:enddate, nil, class: "form-control") %>
       </div>
 
       <%= link_to "Back", "/model", class: 'btn btn-danger col-1' %>
-      <%= link_to "Add", "/", class: 'btn btn-primary col-1' %>
+      <%= submit_tag(:"Add", class: "btn btn-primary col-1") %>
+      
+      <% if local_assigns.has_key? :status_msg %>
+        <p><%= status_msg %></p>
+      <% end %>
 
-      <%# <button type="submit" class="btn btn-primary">Submit</button> %>
-    </form>
+    <% end %>
 
   </div>
   </body>
