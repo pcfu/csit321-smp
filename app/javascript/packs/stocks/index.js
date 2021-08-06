@@ -1,6 +1,8 @@
 $(document).on('turbolinks:load', function () {
+  let table;
+
   $.get('stocks.json', function (data) {
-    window.$('#stocks-list').DataTable({
+    table = window.$('#stocks-list').DataTable({
       aaData: data,
       columns: [
         { data: 'id' },
@@ -11,9 +13,12 @@ $(document).on('turbolinks:load', function () {
         { data: 'description' },
       ]
     });
-  });
 
-  $(".clickable-row").click(function() {
-    window.location = $(this).data("href");
+    $('#stocks-list tbody').on('click', 'tr', function () {
+      const stockId = table.row(this).data().id;
+      window.location.href = `/stocks/${stockId}`;
+    });
+
+    $('#stocks-list tbody tr').css('cursor', 'pointer');
   });
 });

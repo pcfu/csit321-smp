@@ -48,9 +48,9 @@
   <div class="container">
     <div class="row my-5">
       <div class="col-12">
-        <h1>10 STOCKS (PROTOTYPE) </h1>
+        <h1>STOCKS LIST (PROTOTYPE)</h1>
 
-        <table class="table">
+        <table id="stocks-list" class="table table-striped table-hover">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -61,18 +61,6 @@
               <th scope="col">Description</th>
             </tr>
           </thead>
-          <tbody>
-            <% @shortlist.each_with_index do |stock, i|  %>
-              <tr role="button" class='clickable-row' data-href='/stocks/<%= stock.id %>'>
-                <th scope="row"><%= i + 1 %></th>
-                <td><%= stock.symbol %></td>
-                <td><%= stock.name %></td>
-                <td><%= stock.exchange %></td>
-                <td><%= stock.stock_type %></td>
-                <td><%= stock.description %></td>
-              </tr>
-            <% end  %>
-          </tbody>
         </table>
       </div>
     </div>
