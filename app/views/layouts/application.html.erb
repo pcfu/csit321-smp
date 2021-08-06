@@ -16,8 +16,9 @@
   </head>
 
   <body>
-    <%= render "layouts/header" %>
-    <%= yield %>
+    <div class="min-vh-100 d-flex flex-column">
+      <%= render "layouts/header" %>
+      <%= yield %>
+    </div>
   </body>
 </html>
- 
