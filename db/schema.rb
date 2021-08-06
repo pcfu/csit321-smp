@@ -10,33 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_03_154632) do
+ActiveRecord::Schema.define(version: 2021_08_06_192339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "stocks", force: :cascade do |t|
-    t.string "symbol"
-    t.string "name"
-    t.string "stock_type"
-    t.string "exchange"
+    t.string "symbol", null: false
+    t.string "name", null: false
+    t.string "exchange", null: false
+    t.string "stock_type", null: false
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "price_histories", force: :cascade do |t|
-    t.integer "stock_id"
-    t.date "date"
-    t.decimal "open"
-    t.decimal "high"
-    t.decimal "low"
-    t.decimal "close"
-    t.integer "volume"
-    t.decimal "change"
-    t.decimal "percent_change"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_stocks_on_name"
+    t.index ["symbol"], name: "index_stocks_on_symbol", unique: true
   end
 
 end
