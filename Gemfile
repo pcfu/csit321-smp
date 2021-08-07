@@ -29,9 +29,15 @@ gem 'bootsnap', '>= 1.4.4', require: false
 # Pass variables from controllers to JS via gon
 gem 'gon'
 
+# Auto-strip whitespaces
+gem 'auto_strip_attributes', '~> 2.6'
+
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  # Use FactoryBot for fixtures replacement
+  gem 'factory_bot_rails'
   # RSpec for testing.
   # Include in 'development' so that generators and rake tasks won't need to be preceeded with RAILS_ENV=test
   gem 'rspec-rails', '~> 5.0.0'
