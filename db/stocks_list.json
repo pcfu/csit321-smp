@@ -1,6 +1,6 @@
 [
     {"symbol":"AAPL","exchange":"NAS","name":"Apple Inc","stock_type":"cs"},
     {"symbol":"XOM","exchange":"NYS","name":"Exxon Mobil Corp.","stock_type":"cs"},
-    {"symbol":"MCD","exchange":"NYS","name":"McDonald`s Corp","stock_type":"cs"},
+    {"symbol":"GSK","exchange":"NYS","name":"Glaxosmithkline plc - ADR","stock_type":"ad"},
     {"symbol":"WPM","exchange":"NYS","name":"Wheaton Precious Metals Corp","stock_type":"cs"}
 ]
