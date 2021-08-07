@@ -59,13 +59,11 @@
       <%= f.text_field :end_date, class: "form-control" %>
     </div>
 
-    <%= link_to "Back", "/model", class: 'btn btn-danger col-1' %>
+    <%= link_to "Back", ml_models_path, class: 'btn btn-danger col-1' %>
     <%= f.submit :"Simulate", class: "btn btn-primary col-1" %>
 
     <% if local_assigns.has_key? :status_msg %>
       <p><%= status_msg %></p>
     <% end %>
-
   <% end %>
-
 </div>

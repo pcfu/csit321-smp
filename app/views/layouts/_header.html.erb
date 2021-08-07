@@ -5,10 +5,13 @@
         <a class="nav-link active" aria-current="page" href="#">Schedule</a>
       </li>
       <li class="nav-item">
-        <%= link_to "Prediction/Recommendaton", "/ml_models", class: 'nav-link' %>
+        <%= link_to "Prediction", ml_models_path, class: 'nav-link' %>
       </li>
       <li class="nav-item">
-        <%= link_to "Add Model", "/ml_models/new", class: 'nav-link' %>
+        <%= link_to "Recommendation", ml_models_path, class: 'nav-link' %>
+      </li>
+      <li class="nav-item">
+        <%= link_to "Add Model", "/model_parameters/new", class: 'nav-link' %>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Login</a>
