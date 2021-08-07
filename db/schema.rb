@@ -45,4 +45,5 @@ ActiveRecord::Schema.define(version: 2021_08_07_023247) do
   end
 
   add_foreign_key "price_histories", "stocks"
+
 end

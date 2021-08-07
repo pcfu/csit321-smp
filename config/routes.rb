@@ -11,4 +11,11 @@ Rails.application.routes.draw do
   get 'ml_models',      to: 'machine_learning_models#index'
   get 'ml_models/new',  to: 'machine_learning_models#new'
 
+
+  # Temp
+  get 'model', to: 'model#list_model'
+  get 'viewparam', to: 'viewaddparam#view_add_param' #view ML parameters page
+  post 'add_param', to: 'viewaddparam#add_param', as: 'add_param' #add parameters
+  get 'modelDetails', to: 'model#view_model'
+
 end
