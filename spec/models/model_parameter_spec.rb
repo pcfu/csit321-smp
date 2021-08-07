@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe MlParam, type: :model do
+RSpec.describe ModelParameter, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
 end

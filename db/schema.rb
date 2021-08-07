@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_07_023247) do
+ActiveRecord::Schema.define(version: 2021_08_07_034902) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "model_parameters", force: :cascade do |t|
+    t.string "name"
+    t.string "ml"
+    t.integer "param_one"
+    t.integer "param_two"
+    t.integer "param_three"
+    t.string "train_set"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "price_histories", force: :cascade do |t|
     t.bigint "stock_id", null: false
@@ -45,5 +58,4 @@ ActiveRecord::Schema.define(version: 2021_08_07_023247) do
   end
 
   add_foreign_key "price_histories", "stocks"
-
 end
