@@ -4,6 +4,7 @@
     <div class="row my-5">
         <div class="col-12">
             <h1 id="stockname"><%= @stock.symbol %></h1>
+            <span id="stockexchange"><%=@stock.exchange%></span>
             <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
            
             <script type="text/javascript">
@@ -11,7 +12,7 @@
               {
                 "width": 980,
                 "height": 610,
-                "symbol": "NASDAQ:".concat(document.getElementById('stockname').innerHTML),
+                "symbol": document.getElementById('stockexchange').innerHTML.concat(":",document.getElementById('stockname').innerHTML),
                 "interval": "D",
                 "timezone": "Etc/UTC",
                 "theme": "light",
