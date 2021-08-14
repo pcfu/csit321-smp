@@ -1,3 +1,89 @@
-<h1><%= @stock.symbol %></h1>
 
-<p><%= @stock.description %></p>
+<!-- PRICE CHART -->
+<div class="container">
+    <div class="row my-5">
+        <div class="col-12">
+            <h1 id="stockname"><%= @stock.symbol %></h1>
+            <span id="stockexchange"><%=@stock.exchange%></span>
+            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+           
+            <script type="text/javascript">
+            new TradingView.widget(
+              {
+                "width": 980,
+                "height": 610,
+                "symbol": document.getElementById('stockexchange').innerHTML.concat(":",document.getElementById('stockname').innerHTML),
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": "light",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#f1f3f6",
+                "enable_publishing": false,
+                "allow_symbol_change": true,
+                "container_id": "tradingview_b89a7"
+              }
+            );
+          </script>
+           
+          
+    </div>
+</div>
+
+<!-- PREDICTION FROM ML -->
+<div class="container">
+    <div class="row my-5">
+        <div class="col-12">
+            <h1>PREDICTION</h1>
+            <p> * NEED DUMMY DATA + MODEL FOR RECOMMENDATION ML </p>
+        </div>
+    </div>
+</div>
+
+
+<!-- RECOMMENDATION FROM ML -->
+<div class="container">
+    <div class="row my-5">
+        <div class="col-12">
+            <h1>RECOMMENDATION</h1>
+            <p> COMING SOON - NOT FOR PROTOTYPE </p>
+        </div>
+    </div>
+</div>
+
+<!-- PRICE RELATED DATA -->
+<div class="container">
+    <div class="row my-5">
+        <div class="col-12">
+            <h1>LAST 5 PRICE DATA</h1>     
+
+            <table id="pricehistory-list" class="table table-striped ">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Open</th>
+                        <th>High</th>
+                        <th>Low</th>
+                        <th>Close</th>
+                        <th>Volume</th>
+                        <th>Change</th>
+                        <th>% Change</th>
+                    </tr>
+                    <% @stock.price_histories.order(date: :desc).limit(5).each do |pxhist| %>
+                    <tr>
+                        <td><%= pxhist.date%></td>
+                        <td><%= pxhist.open%></td> 
+                        <td><%= pxhist.high%></td> 
+                        <td><%= pxhist.low%></td> 
+                        <td><%= pxhist.close%></td> 
+                        <td><%= pxhist.volume%></td>
+                        <td><%= pxhist.change%></td> 
+                        <td><%= pxhist.percent_change%></td> 
+                    </tr>
+                    <% end %>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+</div>

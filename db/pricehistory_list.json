@@ -1,0 +1,8 @@
+[
+
+    {"stock_id":"1","date":"2021-08-03","open":145.2,"high":125.6375,"low":102.25,"close":108.9375,"volume":308151200,"change":-0.322, "percent_change":-0.21516},   
+    {"stock_id":"1","date":"2021-08-02","open":143.2,"high":133.6375,"low":110.8925,"close":108.9375,"volume":211251515,"change":-0.366, "percent_change":-0.2114214}, 
+    {"stock_id":"1","date":"2021-07-30","open":142.6,"high":123.6375,"low":109.8925,"close":108.9375,"volume":284719511,"change":-0.2336, "percent_change":-0.213415}, 
+    {"stock_id":"1","date":"2021-07-29","open":144.8,"high":124.6375,"low":132.8925,"close":108.9375,"volume":123142125,"change":-0.2355, "percent_change":-0.12323}, 
+    {"stock_id":"1","date":"2021-07-28","open":124.5,"high":123.6375,"low":111.8925,"close":108.9375,"volume":125515325,"change":-0.3442, "percent_change":-0.12313}   
+]
