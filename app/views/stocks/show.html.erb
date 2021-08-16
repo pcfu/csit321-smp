@@ -1,89 +1,147 @@
+<head>
+<!-- Include chart.js here -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.esm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/helpers.esm.js"></script>
 
-<!-- PRICE CHART -->
-<div class="container">
-    <div class="row my-5">
-        <div class="col-12">
-            <h1 id="stockname"><%= @stock.symbol %></h1>
-            <span id="stockexchange"><%=@stock.exchange%></span>
-            <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-           
-            <script type="text/javascript">
-            new TradingView.widget(
-              {
-                "width": 980,
-                "height": 610,
-                "symbol": document.getElementById('stockexchange').innerHTML.concat(":",document.getElementById('stockname').innerHTML),
-                "interval": "D",
-                "timezone": "Etc/UTC",
-                "theme": "light",
-                "style": "1",
-                "locale": "en",
-                "toolbar_bg": "#f1f3f6",
-                "enable_publishing": false,
-                "allow_symbol_change": true,
-                "container_id": "tradingview_b89a7"
-              }
-            );
-          </script>
-           
-          
-    </div>
-</div>
+</head>
 
-<!-- PREDICTION FROM ML -->
-<div class="container">
-    <div class="row my-5">
-        <div class="col-12">
-            <h1>PREDICTION</h1>
-            <p> * NEED DUMMY DATA + MODEL FOR RECOMMENDATION ML </p>
+<body>
+
+
+    <!-- PRICE CHART -->
+
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-12">
+                <h1 id="stockname"><%= @stock.symbol %></h1>
+                <span id="stockexchange" style="visibility: hidden"><%=@stock.exchange%></span>
+
+                <!-- To Place into JS File -->
+                <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+            
+                <script type="text/javascript">
+            
+                var ex_symbol = document.getElementById('stockexchange').innerHTML
+                var ex_dict = {"NAS":"NASDAQ", "NYS":"NYSE"}
+                var exchange = ex_dict[ex_symbol]
+
+                
+                new TradingView.widget(
+                {
+                    "width": 980,
+                    "height": 610,
+                    "symbol": exchange.concat(":",document.getElementById('stockname').innerHTML),
+                    "interval": "D",
+                    "timezone": "Etc/UTC",
+                    "theme": "light",
+                    "style": "1",
+                    "locale": "en",
+                    "toolbar_bg": "#f1f3f6",
+                    "enable_publishing": false,
+                    "allow_symbol_change": true,
+                    "container_id": "tradingview_b89a7"
+                }
+                );
+            </script>
+            
+            
         </div>
     </div>
-</div>
 
-
-<!-- RECOMMENDATION FROM ML -->
-<div class="container">
-    <div class="row my-5">
-        <div class="col-12">
-            <h1>RECOMMENDATION</h1>
-            <p> COMING SOON - NOT FOR PROTOTYPE </p>
+    <!-- PREDICTION FROM ML -->
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-12">
+                <h1>PREDICTION</h1>
+                
+                <canvas id="line-chart" width="400" height="200"></canvas>
+                <!-- To Place into JS File -->
+                <script>
+                    new Chart(document.getElementById("line-chart"), {
+                    type: 'line',
+                    data: {
+                        labels: ["2 Weeks", "1 Month", "3 Months", "12 Months"],
+                        datasets: [{ 
+                            data: [0,5,10,20,30],
+                            label: "Max",
+                            borderColor: "#61f29d",
+                            backgroundColor: "#61f29d",
+                            fill: true
+                        }, { 
+                            data: [0,0,0,-5,-10],
+                            label: "Expected",
+                            borderColor: "#8e5ea2",
+                            backgroundColor: "#8e5ea2",
+                            fill: true
+                        }, { 
+                            data: [0,-5,-10,-15,-25],
+                            label: "Min",
+                            borderColor: "#f26370",
+                            backgroundColor: "#f26370",
+                            fill: true,
+                        }, 
+                        ]
+                    },
+                    options: {
+                        title: {
+                        display: true,
+                        text: 'Expected Returns Prediction'
+                        }
+                    }
+                    });
+                </script>
+                <p> * NEED DUMMY DATA + MODEL FOR RECOMMENDATION ML </p>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- PRICE RELATED DATA -->
-<div class="container">
-    <div class="row my-5">
-        <div class="col-12">
-            <h1>LAST 5 PRICE DATA</h1>     
 
-            <table id="pricehistory-list" class="table table-striped ">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Open</th>
-                        <th>High</th>
-                        <th>Low</th>
-                        <th>Close</th>
-                        <th>Volume</th>
-                        <th>Change</th>
-                        <th>% Change</th>
-                    </tr>
-                    <% @stock.price_histories.order(date: :desc).limit(5).each do |pxhist| %>
-                    <tr>
-                        <td><%= pxhist.date%></td>
-                        <td><%= pxhist.open%></td> 
-                        <td><%= pxhist.high%></td> 
-                        <td><%= pxhist.low%></td> 
-                        <td><%= pxhist.close%></td> 
-                        <td><%= pxhist.volume%></td>
-                        <td><%= pxhist.change%></td> 
-                        <td><%= pxhist.percent_change%></td> 
-                    </tr>
-                    <% end %>
-                </thead>
-            </table>
+    <!-- RECOMMENDATION FROM ML -->
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-12">
+                <h1>RECOMMENDATION</h1>
+                <p> COMING SOON - NOT FOR PROTOTYPE </p>
+            </div>
         </div>
     </div>
-</div>
-</div>
+
+    <!-- PRICE RELATED DATA -->
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-12">
+                <h1>LAST 5 PRICE DATA</h1>     
+
+                <table id="pricehistory-list" class="table table-striped ">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Open</th>
+                            <th>High</th>
+                            <th>Low</th>
+                            <th>Close</th>
+                            <th>Volume</th>
+                            <th>Change</th>
+                            <th>% Change</th>
+                        </tr>
+                        <% @stock.price_histories.order(date: :desc).limit(5).each do |pxhist| %>
+                        <tr>
+                            <td><%= pxhist.date%></td>
+                            <td><%= pxhist.open%></td> 
+                            <td><%= pxhist.high%></td> 
+                            <td><%= pxhist.low%></td> 
+                            <td><%= pxhist.close%></td> 
+                            <td><%= pxhist.volume%></td>
+                            <td><%= pxhist.change%></td> 
+                            <td><%= pxhist.percent_change%></td> 
+                        </tr>
+                        <% end %>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
