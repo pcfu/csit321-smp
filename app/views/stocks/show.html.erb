@@ -5,6 +5,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/helpers.esm.js"></script>
 
+<% content_for :assets do %>
+    <%= javascript_pack_tag 'stocks/show', 'data-turbolinks-track': 'reload' %>
+  <% end %>
 </head>
 
 <body>
@@ -27,24 +30,23 @@
                 var ex_dict = {"NAS":"NASDAQ", "NYS":"NYSE"}
                 var exchange = ex_dict[ex_symbol]
 
-                
-                new TradingView.widget(
-                {
-                    "width": 980,
-                    "height": 610,
-                    "symbol": exchange.concat(":",document.getElementById('stockname').innerHTML),
-                    "interval": "D",
-                    "timezone": "Etc/UTC",
-                    "theme": "light",
-                    "style": "1",
-                    "locale": "en",
-                    "toolbar_bg": "#f1f3f6",
-                    "enable_publishing": false,
-                    "allow_symbol_change": true,
-                    "container_id": "tradingview_b89a7"
-                }
-                );
-            </script>
+                var fxWidget = new TradingView.widget(
+                    {
+                        "width": 980,
+                        "height": 610,
+                        "symbol": exchange.concat(":",document.getElementById('stockname').innerHTML),
+                        "interval": "D",
+                        "timezone": "Etc/UTC",
+                        "theme": "light",
+                        "style": "1",
+                        "locale": "en",
+                        "toolbar_bg": "#f1f3f6",
+                        "enable_publishing": false,
+                        "allow_symbol_change": true,
+                        "container_id": "tradingview_b89a7"
+                    });
+                </script>
+            <div id="fxWidget"></div>
             
             
         </div>
@@ -57,41 +59,7 @@
                 <h1>PREDICTION</h1>
                 
                 <canvas id="line-chart" width="400" height="200"></canvas>
-                <!-- To Place into JS File -->
-                <script>
-                    new Chart(document.getElementById("line-chart"), {
-                    type: 'line',
-                    data: {
-                        labels: ["2 Weeks", "1 Month", "3 Months", "12 Months"],
-                        datasets: [{ 
-                            data: [0,5,10,20,30],
-                            label: "Max",
-                            borderColor: "#61f29d",
-                            backgroundColor: "#61f29d",
-                            fill: true
-                        }, { 
-                            data: [0,0,0,-5,-10],
-                            label: "Expected",
-                            borderColor: "#8e5ea2",
-                            backgroundColor: "#8e5ea2",
-                            fill: true
-                        }, { 
-                            data: [0,-5,-10,-15,-25],
-                            label: "Min",
-                            borderColor: "#f26370",
-                            backgroundColor: "#f26370",
-                            fill: true,
-                        }, 
-                        ]
-                    },
-                    options: {
-                        title: {
-                        display: true,
-                        text: 'Expected Returns Prediction'
-                        }
-                    }
-                    });
-                </script>
+
                 <p> * NEED DUMMY DATA + MODEL FOR RECOMMENDATION ML </p>
             </div>
         </div>
