@@ -8,6 +8,8 @@
 <% content_for :assets do %>
     <%= javascript_pack_tag 'stocks/show', 'data-turbolinks-track': 'reload' %>
   <% end %>
+
+
 </head>
 
 <body>
@@ -60,7 +62,43 @@
                 
                 <canvas id="line-chart" width="400" height="200"></canvas>
 
-                <p> * NEED DUMMY DATA + MODEL FOR RECOMMENDATION ML </p>
+                <p> * Below is dummy data from model for testing purpose </p>
+                <table id="pricepredict-list" class="table table-striped ">
+                    <thead>
+                        <tr>
+                            <th>Entry Date</th>
+                            <th>Short Term Date</th>
+                            <th>Short Term Max Price</th>
+                            <th>Short Term Exp Price</th>
+                            <th>Short Term Min Price</th>
+                            <th>Mid Term Date</th>
+                            <th>Mid Term Max Price</th>
+                            <th>Mid Term Exp Price</th>
+                            <th>Mid Term Min Price</th>
+                            <th>Long Term Date</th>
+                            <th>Long Term Max Price</th>
+                            <th>Long Term Exp Price</th>
+                            <th>Long Term Min Price</th>
+                        </tr>
+                        <% @stock.price_predicts.order(entry_date: :desc).limit(5).each do |pxPrehist| %>
+                        <tr>
+                            <td><%= pxPrehist.entry_date%></td>
+                            <td><%= pxPrehist.st_date%></td> 
+                            <td><%= pxPrehist.st_max_price%></td>
+                            <td><%= pxPrehist.st_exp_price%></td>
+                            <td><%= pxPrehist.st_min_price%></td> 
+                            <td><%= pxPrehist.mt_date%></td> 
+                            <td><%= pxPrehist.mt_max_price%></td> 
+                            <td><%= pxPrehist.mt_exp_price%></td> 
+                            <td><%= pxPrehist.mt_min_price%></td> 
+                            <td><%= pxPrehist.lt_date%></td>
+                            <td><%= pxPrehist.lt_max_price%></td> 
+                            <td><%= pxPrehist.lt_exp_price%></td> 
+                            <td><%= pxPrehist.lt_min_price%></td> 
+                        </tr>
+                        <% end %>
+                    </thead>
+                </table>
             </div>
         </div>
     </div>

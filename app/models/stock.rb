@@ -1,5 +1,6 @@
 class Stock < ApplicationRecord
   has_many :price_histories, dependent: :destroy
+  has_many :price_predicts, dependent: :destroy
 
   auto_strip_attributes :symbol, :name, :exchange, :stock_type, :description
 

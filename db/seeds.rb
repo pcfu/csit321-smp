@@ -24,3 +24,11 @@ price_data.each do |symbol, prices|
   end
   puts
 end
+
+
+
+puts "=== INSERTING PRICE PREDICTION ==="
+
+filepath = "#{DATA_DIR}/price_predict_list.json"
+price_data = JSON.parse(File.read(filepath))
+price_data.each {|price_predict| PricePredict.create(price_predict)}
