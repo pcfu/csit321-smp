@@ -22,6 +22,7 @@ $(document).on('turbolinks:load', function () {
     $('#stocks-list tbody tr').css('cursor', 'pointer');
     
   });
+  
 });
 
 
