@@ -2,13 +2,13 @@
   <div class="container-fluid">
     <ul class="navbar-nav ms-auto">
       <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
+        <%= link_to "Home", "/stocks", class: 'nav-link' %>
       </li>
       <li class="nav-item">
-        <%= link_to "WatchList (Coming Soon)", "/stocks", class: 'nav-link' %>
+        <%= link_to "WatchList (Coming Soon)", "", class: 'nav-link' %>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Login (Coming Soon)</a>
+        <%= link_to "Login (Coming Soon)", "", class: 'nav-link' %>
       </li>
     </ul>
   </div>

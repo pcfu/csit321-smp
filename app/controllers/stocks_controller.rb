@@ -8,7 +8,9 @@ class StocksController < ApplicationController
 
   def show
     @stock = Stock.find(params[:id])
-
-
+    respond_to do |format|
+      format.html
+      format.json {render :json => Stock.PricePredict.all }
+    end
   end
 end

@@ -1,5 +1,3 @@
-
-
 $(document).on('turbolinks:load', function () {
     // Trading View Chart 
     var ex_symbol = $('#stockexchange').html()
@@ -25,15 +23,6 @@ $(document).on('turbolinks:load', function () {
         //Get the price predict values
         var price_prediction = $('.price_prediction').data('pxpredict');
         $.each(price_prediction, function() {
-           // var key = Object.keys(this)[0];
-           key = Object.keys(this)[4];
-           value = this['st_max_price'];
-           //alert(key + ":" + value);
-           entry_date = this[Object.keys(this)[2]];
-            st_date = this[Object.keys(this)[7]];
-            mt_date = this[Object.keys(this)[11]];
-            lt_date = this[Object.keys(this)[15]];
-            st_price = this[Object.keys(this)[4]];
 
             //Prediction Chart
             new Chart($("#line-chart"), {
@@ -67,12 +56,7 @@ $(document).on('turbolinks:load', function () {
                     text: 'Expected Returns Prediction'
                     }
                 }
-                });
-
+            });
         });
-        
-        
-
-
-
+    
     });

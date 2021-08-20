@@ -1,6 +1,10 @@
-<% content_for :assets do %>
-  <%= javascript_pack_tag 'stocks/index', 'data-turbolinks-track': 'reload' %>
-<% end %>
+  <% content_for :assets do %>
+    <%= javascript_pack_tag 'stocks/index', 'data-turbolinks-track': 'reload' %>
+    
+    <!-- Include trading view chart here -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <% end %>
+
 
 <!-- SECTION 1 -->
 <div class="container-fluid px-0">
@@ -18,31 +22,51 @@
 
 <!-- SECTION 3 -->
 <div class="container" style="margin-bottom: 20px">
-  <h1>STOCK OF THE DAY</h1>
+  <div class="row">
+    <div>
+      <div id="tradingview-chart"></div>
+    
+      <!--TESTING LAYOUT PURPOSE -->
+      <!-- 
+      <table>
+        <tr>
+          <td>
+            <h1>APPL</h1>
+          </td>
+          <td>
+            <h1>ANALYSIS</h1>
+            
+          </td>
+          <td>
+          <button>Click me</button>
+          </td>
+        </tr>
 
-  <div class="tradingview-widget-container">
-    <div id="tradingview_b89a7"></div>
-    <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/NASDAQ-AAPL/" rel="noopener" target="_blank"><span class="blue-text">AAPL Chart</span></a> by TradingView</div>
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <script type="text/javascript">
-      new TradingView.widget(
-        {
-          "width": 980,
-          "height": 610,
-          "symbol": "NASDAQ:AAPL",
-          "interval": "D",
-          "timezone": "Etc/UTC",
-          "theme": "light",
-          "style": "1",
-          "locale": "en",
-          "toolbar_bg": "#f1f3f6",
-          "enable_publishing": false,
-          "allow_symbol_change": true,
-          "container_id": "tradingview_b89a7"
-        }
-      );
-    </script>
+        <tr>
+          <td>
+            <div id="tradingview-chart"></div>
+          </td>
+          <td colspan="2">
+              <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam commodo maximus leo, 
+              quis imperdiet neque pharetra ut. Mauris hendrerit lectus in maximus laoreet. 
+              Ut a erat tincidunt nisi consectetur blandit. Quisque molestie, urna id accumsan molestie, 
+              nisl enim lacinia quam, a condimentum ex leo eget ex. Morbi pharetra blandit augue sit amet ultrices. 
+              Mauris porta nulla aliquam nisl dapibus pharetra. Maecenas volutpat elementum ligula, sed faucibus enim ullamcorper ornare. 
+              Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+              Nam libero dolor, cursus eu erat in, congue facilisis justo. Vestibulum a ultricies est. 
+              Vestibulum eget massa id lacus tincidunt eleifend nec ut lacus. Sed non neque ut tortor malesuada bibendum. 
+              Fusce vel blandit urna. Nulla ultricies, est at eleifend aliquet, lorem dolor aliquam purus, quis molestie ligula arcu ac augue.</p>
+          </td>
+        </tr>
+      </table>
+      -->
+
+    </div>
   </div>
+</div>
+  
+
+  
 
   <!-- SECTION 4 -->
   <div class="container">
@@ -66,3 +90,4 @@
     </div>
   </div>
 </div>
+
