@@ -1,8 +1,6 @@
 module ModelSpecHelpers
-  def blank_strings(include_nil: true)
-    blanks = [ '', '     ' ]
-    blanks += [ nil ] if include_nil
-    return blanks
+  def blank_strings
+    [ nil, '', '     ' ]
   end
 end
 
