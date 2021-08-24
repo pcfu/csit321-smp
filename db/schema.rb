@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_24_082640) do
+ActiveRecord::Schema.define(version: 2021_08_24_141335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,28 +45,29 @@ ActiveRecord::Schema.define(version: 2021_08_24_082640) do
     t.index ["stock_id"], name: "index_price_histories_on_stock_id"
   end
 
-  create_table "price_predicts", force: :cascade do |t|
+  create_table "price_predictions", force: :cascade do |t|
     t.bigint "stock_id", null: false
-    t.date "entry_date"
-    t.date "nd_date"
-    t.decimal "nd_max_price"
-    t.decimal "nd_exp_price"
-    t.decimal "nd_min_price"
-    t.date "st_date"
-    t.decimal "st_max_price"
-    t.decimal "st_exp_price"
-    t.decimal "st_min_price"
-    t.date "mt_date"
-    t.decimal "mt_max_price"
-    t.decimal "mt_exp_price"
-    t.decimal "mt_min_price"
-    t.date "lt_date"
-    t.decimal "lt_max_price"
-    t.decimal "lt_exp_price"
-    t.decimal "lt_min_price"
+    t.date "entry_date", null: false
+    t.date "nd_date", null: false
+    t.decimal "nd_max_price", null: false
+    t.decimal "nd_exp_price", null: false
+    t.decimal "nd_min_price", null: false
+    t.date "st_date", null: false
+    t.decimal "st_max_price", null: false
+    t.decimal "st_exp_price", null: false
+    t.decimal "st_min_price", null: false
+    t.date "mt_date", null: false
+    t.decimal "mt_max_price", null: false
+    t.decimal "mt_exp_price", null: false
+    t.decimal "mt_min_price", null: false
+    t.date "lt_date", null: false
+    t.decimal "lt_max_price", null: false
+    t.decimal "lt_exp_price", null: false
+    t.decimal "lt_min_price", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["stock_id"], name: "index_price_predicts_on_stock_id"
+    t.index ["stock_id", "entry_date"], name: "index_price_predictions_on_stock_id_and_entry_date"
+    t.index ["stock_id"], name: "index_price_predictions_on_stock_id"
   end
 
   create_table "stocks", force: :cascade do |t|
@@ -82,5 +83,5 @@ ActiveRecord::Schema.define(version: 2021_08_24_082640) do
   end
 
   add_foreign_key "price_histories", "stocks"
-  add_foreign_key "price_predicts", "stocks"
+  add_foreign_key "price_predictions", "stocks"
 end
