@@ -1,119 +1,114 @@
 <% content_for :assets do %>
-    <%= javascript_pack_tag 'stocks/show', 'data-turbolinks-track': 'reload' %>
-    <!-- Include chart.js here -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.esm.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/helpers.esm.js"></script>
+  <%= javascript_pack_tag 'stocks/show', 'data-turbolinks-track': 'reload' %>
+  <!-- Include chart.js here -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.esm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.0/dist/helpers.esm.js"></script>
 
-    <!-- Include trading view chart here -->
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <!-- Include trading view chart here -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <% end %>
 
 <!-- PRICE CHART -->
 
 <div class="container">
-    <div class="row my-5">
-        <div class="col-12">
-            <h1 id="stockname"><%= @stock.symbol %></h1>
-            <span id="stockexchange" style="visibility: hidden"><%=@stock.exchange%></span>
-            <div id="tradingview_Chart"></div>
+  <div class="row my-5">
+    <div class="col-12">
+      <h1 id="stockname"><%= @stock.symbol %></h1>
+      <span id="stockexchange" style="visibility: hidden"><%=@stock.exchange%></span>
+      <div id="tradingview_Chart"></div>
     </div>
-</div>
+  </div>
 
-<!-- PREDICTION FROM ML -->
-<div class="container">
-    <div class="row my-5">
-        <div class="col-12">
-            <h1>PREDICTION</h1>
-            <%= content_tag :div, class: "price_prediction", data: {pxpredict: @stock.price_predicts.order(entry_date: :desc).limit(1)} do %>
-                <canvas id="line-chart" width="400" height="200"></canvas>
-            <% end %>
-            <p> * Below is dummy data from model for testing purpose </p>
-            <table id="pricepredict-list" class="table table-striped ">
-                <thead>
-                    <tr>
-                        <th>Entry Date</th>
-                        <th>Short Term Date</th>
-                        <th>Short Term Max Price</th>
-                        <th>Short Term Exp Price</th>
-                        <th>Short Term Min Price</th>
-                        <th>Mid Term Date</th>
-                        <th>Mid Term Max Price</th>
-                        <th>Mid Term Exp Price</th>
-                        <th>Mid Term Min Price</th>
-                        <th>Long Term Date</th>
-                        <th>Long Term Max Price</th>
-                        <th>Long Term Exp Price</th>
-                        <th>Long Term Min Price</th>
-                    </tr>
-                    <% @stock.price_predicts.order(entry_date: :desc).limit(2).each do |pxPrehist| %>
-                    <tr>
-                        <td><%= pxPrehist.entry_date%></td>
-                        <td><%= pxPrehist.st_date%></td> 
-                        <td><%= pxPrehist.st_max_price%></td>
-                        <td><%= pxPrehist.st_exp_price%></td>
-                        <td><%= pxPrehist.st_min_price%></td> 
-                        <td><%= pxPrehist.mt_date%></td> 
-                        <td><%= pxPrehist.mt_max_price%></td> 
-                        <td><%= pxPrehist.mt_exp_price%></td> 
-                        <td><%= pxPrehist.mt_min_price%></td> 
-                        <td><%= pxPrehist.lt_date%></td>
-                        <td><%= pxPrehist.lt_max_price%></td> 
-                        <td><%= pxPrehist.lt_exp_price%></td> 
-                        <td><%= pxPrehist.lt_min_price%></td> 
-                    </tr>
-                    <% end %>
-                </thead>
-            </table>
+  <!-- PREDICTION FROM ML -->
+  <div class="row my-5">
+    <div class="col-12">
+      <h1>PREDICTION</h1>
+      <%= content_tag :div,
+        class: "price_prediction",
+        data: {pxpredict: @stock.price_predictions.order(entry_date: :desc).limit(1)} do
+      %>
+        <canvas id="line-chart" width="400" height="200"></canvas>
+      <% end %>
+
+      <p> * Below is dummy data from model for testing purpose </p>
+      <table id="pricepredict-list" class="table table-striped ">
+        <thead>
+          <tr>
+            <th>Entry Date</th>
+            <th>ND Date</th>
+            <th>ND Max</th>
+            <th>ND Exp</th>
+            <th>Nd Min</th>
+            <th>ST Date</th>
+            <th>ST Max</th>
+            <th>ST Exp</th>
+            <th>ST Min</th>
+            <th>MT Date</th>
+            <th>MT Max</th>
+            <th>MT Exp</th>
+            <th>MT Min</th>
+            <th>LT Date</th>
+            <th>LT Max</th>
+            <th>LT Exp</th>
+            <th>LT Min</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @stock.price_predictions.order(entry_date: :desc).limit(2).each do |pxPrehist| %>
+            <tr>
+              <% pxPrehist.attributes.values_at(*@prediction_attrs).each do |val| %>
+                <td><%= val.class == BigDecimal ? val.to_f.round(3) : val %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
-</div>
+  </div>
 
-
-<!-- RECOMMENDATION FROM ML -->
-<div class="container">
-    <div class="row my-5">
-        <div class="col-12">
-            <h1>RECOMMENDATION</h1>
-            <p> COMING SOON - NOT FOR PROTOTYPE </p>
-            
-        </div>
+  <!-- RECOMMENDATION FROM ML -->
+  <div class="row my-5">
+    <div class="col-12">
+      <h1>RECOMMENDATION</h1>
+      <p> COMING SOON - NOT FOR PROTOTYPE </p>
     </div>
-</div>
+  </div>
 
-<!-- PRICE RELATED DATA -->
-<div class="container">
-    <div class="row my-5">
-        <div class="col-12">
-            <h1>LAST 5 PRICE DATA</h1>     
+  <!-- PRICE RELATED DATA -->
+  <div class="row my-5">
+    <div class="col-12">
+      <h1>LAST 5 PRICE DATA</h1>
 
-            <table id="pricehistory-list" class="table table-striped ">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Open</th>
-                        <th>High</th>
-                        <th>Low</th>
-                        <th>Close</th>
-                        <th>Volume</th>
-                        <th>Change</th>
-                        <th>% Change</th>
-                    </tr>
-                    <% @stock.price_histories.order(date: :desc).limit(5).each do |pxhist| %>
-                    <tr>
-                        <td><%= pxhist.date%></td>
-                        <td><%= pxhist.open%></td> 
-                        <td><%= pxhist.high%></td> 
-                        <td><%= pxhist.low%></td> 
-                        <td><%= pxhist.close%></td> 
-                        <td><%= pxhist.volume%></td>
-                        <td><%= pxhist.change.round(3)%></td> 
-                        <td><%= pxhist.percent_change.round(4)*100%>%</td> 
-                    </tr>
-                    <% end %>
-                </thead>
-            </table>
-        </div>
+      <table id="pricehistory-list" class="table table-striped ">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+            <th>Change</th>
+            <th>% Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @stock.price_histories.order(date: :desc).limit(5).each do |pxhist| %>
+            <tr>
+              <td><%= pxhist.date%></td>
+              <td><%= pxhist.open%></td>
+              <td><%= pxhist.high%></td>
+              <td><%= pxhist.low%></td>
+              <td><%= pxhist.close%></td>
+              <td><%= pxhist.volume%></td>
+              <td><%= pxhist.change.round(3)%></td>
+              <td><%= pxhist.percent_change.round(4)*100%>%</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>
-
