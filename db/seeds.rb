@@ -26,9 +26,16 @@ price_data.each do |symbol, prices|
 end
 
 
+puts "=== INSERTING PRICE PREDICTIONs ==="
 
-puts "=== INSERTING PRICE PREDICTION ==="
+filepath = "#{DATA_DIR}/price_predictions_list.json"
+predictions_data = JSON.parse(File.read(filepath))
+predictions_data.each do |symbol, predictions|
+  stock = Stock.find_by(:symbol => symbol)
 
-filepath = "#{DATA_DIR}/price_predict_list.json"
-price_data = JSON.parse(File.read(filepath))
-price_data.each {|price_predict| PricePredict.create(price_predict)}
+  predictions.each_with_index do |pred, idx|
+    print "\rInserting prediction for #{symbol} (#{idx + 1} of #{predictions.count})"
+    stock.price_predictions.create pred
+  end
+  puts
+end
