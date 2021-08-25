@@ -17,6 +17,12 @@ class PricePrediction < ApplicationRecord
   validates_numericality_of *PRICES, greater_than_or_equal_to: 0
 
 
+  def to_chart_json
+    attributes.symbolize_keys.slice(*ATTRS).merge(
+      { nd_day: 1, st_day: ST_DAYS, mt_day: MT_DAYS, lt_day: LT_DAYS }
+    )
+  end
+
   private
 
     def impute_dates
