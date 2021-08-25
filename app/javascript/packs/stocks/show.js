@@ -1,3 +1,5 @@
+import Chart from 'chart.js/auto';
+
 $(document).on('turbolinks:load', function () {
   // Trading View Chart
   var ex_symbol = $('#stockexchange').html()
@@ -28,7 +30,9 @@ $(document).on('turbolinks:load', function () {
     new Chart($("#line-chart"), {
       type: 'line',
       data: {
-        labels: [this['nd_date'], this['st_date'], this['mt_date'], this['lt_date']],
+        labels: [
+          this['nd_date'], this['st_date'], this['mt_date'], this['lt_date']
+        ],
         datasets: [{
           data: [
             this['nd_max_price'],
