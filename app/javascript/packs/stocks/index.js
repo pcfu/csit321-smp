@@ -20,10 +20,9 @@ $(document).on('turbolinks:load', function () {
     });
 
     $('#stocks-list tbody tr').css('cursor', 'pointer');
-    
   });
-  
-        
+
+
   new TradingView.widget(
     {
       "width": 800,
@@ -40,7 +39,4 @@ $(document).on('turbolinks:load', function () {
       "container_id": "tradingview-chart"
     }
   );
-       
 });
-
-
