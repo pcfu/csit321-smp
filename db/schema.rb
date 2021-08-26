@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_24_141335) do
+ActiveRecord::Schema.define(version: 2021_08_26_085216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "headlines", force: :cascade do |t|
+    t.bigint "stock_id", null: false
+    t.date "date", null: false
+    t.text "title", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["date"], name: "index_headlines_on_date"
+    t.index ["stock_id", "date"], name: "index_headlines_on_stock_id_and_date"
+    t.index ["stock_id"], name: "index_headlines_on_stock_id"
+  end
 
   create_table "model_parameters", force: :cascade do |t|
     t.string "name"
@@ -82,6 +93,7 @@ ActiveRecord::Schema.define(version: 2021_08_24_141335) do
     t.index ["symbol"], name: "index_stocks_on_symbol", unique: true
   end
 
+  add_foreign_key "headlines", "stocks"
   add_foreign_key "price_histories", "stocks"
   add_foreign_key "price_predictions", "stocks"
 end
