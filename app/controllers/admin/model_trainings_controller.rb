@@ -1,5 +1,5 @@
 module Admin
-  class TrainedModelsController < ApplicationController
+  class ModelTrainingsController < ApplicationController
     skip_before_action :verify_authenticity_token, if: -> { request.xhr? }
 
     def create

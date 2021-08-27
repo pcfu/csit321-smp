@@ -4,7 +4,7 @@ $(document).on('turbolinks:load', function () {
   $('#training-button').on('click', function () {
     const alertsContainer = $('#alerts-container');
 
-    $.post('/admin/trained_models', function(data) {
+    $.post('/admin/model_trainings', function(data) {
       Alerts.success(alertsContainer, data.message);
 
     }).fail(function(xhr, status, error) {
