@@ -23,7 +23,17 @@
         <%= render "layouts/header" %>
       <% end %>
 
-      <%= yield %>
+      <div>
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div id="alerts-container"></div>
+            </div>
+          </div>
+        </div>
+
+        <%= yield %>
+      </div>
     </div>
   </body>
 </html>
