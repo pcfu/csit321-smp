@@ -14,6 +14,9 @@ Rails.application.routes.draw do
   get  'model_parameters/new',    to: 'model_parameters#new'
   post 'model_parameters/create', to: 'model_parameters#create'
 
- 
+  namespace :admin do
+    resources :prototype, only: [:index]
+    resources :trained_models, only: [:index, :create]
+  end
 
 end

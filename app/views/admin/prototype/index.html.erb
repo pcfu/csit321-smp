@@ -1,0 +1,14 @@
+<% content_for :assets do %>
+  <%= javascript_pack_tag 'admin/prototype/index', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="my-5 text-center">
+        <button id="training-button" class="btn btn-primary">Train</button>
+        <button id="prediction-button" class="btn btn-primary ms-5">Predict</button>
+      </div>
+    </div>
+  </div>
+</div>
