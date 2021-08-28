@@ -16,6 +16,12 @@ FactoryBot.define do
                     "to connect with friends, work colleagues or people they don't know, online" }
     end
 
+    factory :boilerplate_stock do
+      sequence(:symbol)       {|n| "BOIL#{n}"}
+      sequence(:name)         {|n| "Boilerplate stock #{n}"}
+      sequence(:description)  {|n| "Generate boilerplate stocks starting at index 1"}
+    end
+
     trait :symbol_lowercase do
       symbol { 'goog' }
     end
