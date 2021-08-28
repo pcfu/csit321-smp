@@ -39,3 +39,52 @@ predictions_data.each do |symbol, predictions|
   end
   puts
 end
+
+
+puts "=== INSERTING MODEL CONFIGS ==="
+
+###
+# Params based on the following python code in LSTM_Basic.ipynb
+###
+
+# model=Sequential()
+# model.add(LSTM(50,return_sequences=True,input_shape=(100,1)))
+# model.add(LSTM(50,return_sequences=True))
+# model.add(LSTM(50))
+# model.add(Dense(1))
+# model.compile(loss='mean_squared_error',optimizer='adam')
+
+params = {
+  model: 'sequential',
+  layers: [
+    {
+      type: 'lstm',
+      nodes: 50,
+      return_sequences: true,
+      input_shape: [100, 1]
+    },
+    {
+      type: 'lstm',
+      nodes: 50,
+      return_sequences: true
+    },
+    {
+      type: 'lstm',
+      nodes: 50
+    },
+    {
+      type: 'dense',
+      nodes: 1
+    }
+  ],
+  compile: {
+    loss: 'mean_squared_error',
+    optimizer: 'adam'
+  }
+}
+
+ModelConfig.create(
+  name: "basic LSTM configuration",
+  params: params.to_json,
+  train_percent: 0
+)
