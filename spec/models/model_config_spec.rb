@@ -15,8 +15,8 @@ RSpec.describe ModelConfig, type: :model do
       end
     end
 
-    it "is unique" do
-      config.name = ctrl_config.name
+    it "is case-insensitive unique" do
+      config.name = ctrl_config.name.upcase
       config.valid?
       expect(config.errors[:name]).to include("has already been taken")
     end
@@ -69,6 +69,28 @@ RSpec.describe ModelConfig, type: :model do
       config = build_stubbed(:model_config, :train_percent_above_100)
       config.valid?
       expect(config.errors[:train_percent]).to include("must be less than or equal to 100")
+    end
+  end
+
+  describe "#methods" do
+    describe "set_train_percent" do
+      let(:num_stocks) { 55 }
+      let(:num_done)   { rand(33..44) }
+      subject(:config) { create :model_config }
+
+      it "sets train_percent to ratio of done model_trainings / total modal_trainings" do
+        num_stocks.times do |i|
+          stock = create :boilerplate_stock
+          if i < num_done
+            create(:model_training, :done, model_config_id: config.id, stock_id: stock.id)
+          else
+            create(:model_training, model_config_id: config.id, stock_id: stock.id)
+          end
+        end
+
+        expected = (num_done.to_f / num_stocks * 100).to_i
+        expect(config.set_train_percent.train_percent).to eq(expected)
+      end
     end
   end
 end
