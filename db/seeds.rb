@@ -3,7 +3,6 @@
 
 DATA_DIR = "#{Rails.root}/db/seed_data"
 
-
 puts "=== INSERTING STOCKS ==="
 
 filepath = "#{DATA_DIR}/stocks_list.json"
@@ -54,32 +53,41 @@ puts "=== INSERTING MODEL CONFIGS ==="
 # model.add(Dense(1))
 # model.compile(loss='mean_squared_error',optimizer='adam')
 
+# model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=100,batch_size=64,verbose=1)
+
+
 params = {
   model: 'sequential',
-  layers: [
-    {
-      type: 'lstm',
-      nodes: 50,
-      return_sequences: true,
-      input_shape: [100, 1]
-    },
-    {
-      type: 'lstm',
-      nodes: 50,
-      return_sequences: true
-    },
-    {
-      type: 'lstm',
-      nodes: 50
-    },
-    {
-      type: 'dense',
-      nodes: 1
+  init_options: {
+    layers: [
+      {
+        type: 'lstm',
+        nodes: 50,
+        return_sequences: true,
+        input_shape: [100, 1]
+      },
+      {
+        type: 'lstm',
+        nodes: 50,
+        return_sequences: true
+      },
+      {
+        type: 'lstm',
+        nodes: 50
+      },
+      {
+        type: 'dense',
+        nodes: 1
+      }
+    ],
+    compile: {
+      loss: 'mean_squared_error',
+      optimizer: 'adam'
     }
-  ],
-  compile: {
-    loss: 'mean_squared_error',
-    optimizer: 'adam'
+  },
+  training_options: {
+    epochs: 100,
+    batch_size: 64
   }
 }
 
