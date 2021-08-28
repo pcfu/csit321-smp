@@ -118,7 +118,7 @@ RSpec.describe ModelTraining, type: :model do
   end
 
   describe "#associations" do
-    it "is destroyed when associated model config is destroyed" do
+    it "is destroyed when associated model_config is destroyed" do
       training.save
       config.destroy
       expect(ModelTraining.where(id: training.id)).to_not exist
@@ -128,6 +128,28 @@ RSpec.describe ModelTraining, type: :model do
       training.save
       google.destroy
       expect(ModelTraining.where(id: training.id)).to_not exist
+    end
+  end
+
+  describe "#callbacks" do
+    describe "after update" do
+      let(:num_stocks) { 9 }
+      let(:num_done)   { rand(3..7) }
+      subject(:config) { create :model_config }
+
+      it "updates model_config's train_percent when done" do
+        num_stocks.times do |i|
+          stock = create :boilerplate_stock
+          create(:model_training, :training, model_config_id: config.id, stock_id: stock.id)
+        end
+
+        config.model_trainings.each_with_index do |training, idx|
+          training.update(stage: :done, rmse: 1.0) if idx < num_done
+        end
+
+        expected = (num_done.to_f / num_stocks * 100).to_i
+        expect(config.reload.train_percent).to eq(expected)
+      end
     end
   end
 end

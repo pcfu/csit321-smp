@@ -11,7 +11,8 @@ class ModelTraining < ApplicationRecord
   }
 
   auto_strip_attributes :job_id, :error_message
-  after_initialize :set_defaults
+  after_initialize      :set_defaults
+  after_update          :update_model_config_train_percent
 
   validates :stock_id,      uniqueness: { scope: :model_config_id }
   validates :date_start,    presence: true
@@ -35,5 +36,9 @@ class ModelTraining < ApplicationRecord
       if date_end < date_start
         errors.add(:date_end, "must be after or equal to date_start")
       end
+    end
+
+    def update_model_config_train_percent
+      model_config.set_train_percent
     end
 end
