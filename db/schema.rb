@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_28_042704) do
+ActiveRecord::Schema.define(version: 2021_08_28_105416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_enum :model_training_stage, [
+    "requested",
+    "enqueued",
+    "training",
+    "done",
+    "error",
+  ], force: :cascade
 
   create_table "headlines", force: :cascade do |t|
     t.bigint "stock_id", null: false
@@ -46,6 +54,23 @@ ActiveRecord::Schema.define(version: 2021_08_28_042704) do
     t.date "end_date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "model_trainings", force: :cascade do |t|
+    t.bigint "model_config_id", null: false
+    t.bigint "stock_id", null: false
+    t.date "date_start", null: false
+    t.date "date_end", null: false
+    t.enum "stage", null: false, enum_name: "model_training_stage"
+    t.decimal "rmse"
+    t.string "job_id"
+    t.text "error_message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["model_config_id", "stock_id"], name: "index_model_trainings_on_model_config_id_and_stock_id", unique: true
+    t.index ["model_config_id"], name: "index_model_trainings_on_model_config_id"
+    t.index ["stage"], name: "index_model_trainings_on_stage"
+    t.index ["stock_id"], name: "index_model_trainings_on_stock_id"
   end
 
   create_table "price_histories", force: :cascade do |t|
@@ -103,6 +128,8 @@ ActiveRecord::Schema.define(version: 2021_08_28_042704) do
   end
 
   add_foreign_key "headlines", "stocks"
+  add_foreign_key "model_trainings", "model_configs"
+  add_foreign_key "model_trainings", "stocks"
   add_foreign_key "price_histories", "stocks"
   add_foreign_key "price_predictions", "stocks"
 end
