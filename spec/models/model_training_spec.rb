@@ -86,23 +86,6 @@ RSpec.describe ModelTraining, type: :model do
     end
   end
 
-  describe "#job_id" do
-    context "when enqueued stage or later" do
-      it "is required" do
-        %w[enqueued training done].each do |trait|
-          training = build_stubbed(
-            :model_training, trait,
-            model_config_id: config.id,
-            stock_id: google.id,
-            job_id: nil
-          )
-          training.valid?
-          expect(training.errors[:job_id]).to include("can't be blank")
-        end
-      end
-    end
-  end
-
   describe "#error_message" do
     context "when error" do
       it "is required" do

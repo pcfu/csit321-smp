@@ -10,9 +10,9 @@ class ModelTraining < ApplicationRecord
     error: 'error'
   }
 
-  auto_strip_attributes :job_id, :error_message
+  auto_strip_attributes :error_message
   after_initialize      :set_defaults
-  after_update          :update_model_config_train_percent
+  after_update          :update_model_config_train_percent, if: -> { done? }
 
   validates :stock_id,      uniqueness: { scope: :model_config_id }
   validates :date_start,    presence: true
@@ -22,7 +22,6 @@ class ModelTraining < ApplicationRecord
   validates :rmse,          presence: true, if: -> { done? }
   validates :rmse,          numericality: { allow_nil: true,
                                             greater_than_or_equal_to: 0 }
-  validates :job_id,        presence: true, if: -> { enqueued? or training? or done? }
   validates :error_message, presence: true, if: -> { error? }
 
 
