@@ -1,4 +1,7 @@
 class ModelConfig < ApplicationRecord
+  has_many :model_trainings,  dependent: :destroy
+  has_many :stocks,           through: :model_trainings
+
   auto_strip_attributes :name, :params
 
   validates :name,          presence: true, uniqueness: true
@@ -14,5 +17,4 @@ class ModelConfig < ApplicationRecord
                               greater_than_or_equal_to: 0,
                               less_than_or_equal_to: 100
                             }
-
 end
