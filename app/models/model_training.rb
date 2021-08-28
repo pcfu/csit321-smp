@@ -12,7 +12,8 @@ class ModelTraining < ApplicationRecord
 
   auto_strip_attributes :error_message
   after_initialize      :set_defaults
-  after_update          :update_model_config_train_percent, if: -> { stage_changed? }
+  after_update          :update_model_config_train_percent,
+                        if: -> { saved_change_to_stage? }
 
   validates :stock_id,      uniqueness: { scope: :model_config_id }
   validates :date_start,    presence: true
