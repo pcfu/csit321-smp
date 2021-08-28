@@ -4,8 +4,9 @@ Rails.application.routes.draw do
   root 'stocks#index'
 
   # Public Endpoints
-  get  'stocks',         to: "stocks#index"  #Default Homepage
-  get  'stocks/:id',     to: "stocks#show"   #Stock Detailed Page
+  resources :stocks, only: [:index, :show], shallow: true do
+    resources :price_histories, only: [:index], defaults: { format: :json }
+  end
 
   # System Administrator Endpoints
   ## Note: combine the two controllers
