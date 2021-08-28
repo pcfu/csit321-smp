@@ -74,13 +74,16 @@ RSpec.describe ModelConfig, type: :model do
 
   describe "#methods" do
     describe "set_train_percent" do
-      let(:num_stocks) { 9 }
-      let(:num_done)   { rand(3..7) }
-      subject(:config) { create :model_config }
+      let(:num_stocks)    { 10 }
+      let(:num_trainings) { 9 }
+      let(:num_done)      { rand(3..7) }
+      subject(:config)    { create :model_config }
 
-      it "sets train_percent to ratio of done model_trainings / total modal_trainings" do
+      it "sets train_percent to ratio of done model_trainings / total stocks" do
         num_stocks.times do |i|
           stock = create :boilerplate_stock
+          next if i >= num_trainings
+
           if i < num_done
             create(:model_training, :done, model_config_id: config.id, stock_id: stock.id)
           else

@@ -16,8 +16,7 @@ class ModelConfig < ApplicationRecord
 
   def set_train_percent
     num_done = model_trainings.done.count
-    total = model_trainings.count
-    update(train_percent: (num_done.to_f / total * 100).to_i)
+    update(train_percent: (num_done.to_f / Stock.count * 100).to_i)
     return self
   end
 end

@@ -133,13 +133,16 @@ RSpec.describe ModelTraining, type: :model do
 
   describe "#callbacks" do
     describe "after update" do
-      let(:num_stocks) { 9 }
-      let(:num_done)   { rand(3..7) }
-      subject(:config) { create :model_config }
+      let(:num_stocks)    { 10 }
+      let(:num_trainings) { 9 }
+      let(:num_done)      { rand(3..7) }
+      subject(:config)    { create :model_config }
 
       it "updates model_config's train_percent when done" do
         num_stocks.times do |i|
           stock = create :boilerplate_stock
+          next if i >= num_trainings
+
           create(:model_training, :training, model_config_id: config.id, stock_id: stock.id)
         end
 
