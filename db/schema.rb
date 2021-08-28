@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_26_085216) do
+ActiveRecord::Schema.define(version: 2021_08_28_042704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(version: 2021_08_26_085216) do
     t.index ["date"], name: "index_headlines_on_date"
     t.index ["stock_id", "date"], name: "index_headlines_on_stock_id_and_date"
     t.index ["stock_id"], name: "index_headlines_on_stock_id"
+  end
+
+  create_table "model_configs", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "params", null: false
+    t.integer "train_percent", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_model_configs_on_name", unique: true
   end
 
   create_table "model_parameters", force: :cascade do |t|
