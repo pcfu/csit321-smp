@@ -5,7 +5,7 @@ RSpec.describe ModelTraining, type: :model do
     build(:model_training, model_config_id: config.id, stock_id: google.id)
   end
   let(:ctrl_training) do
-    create(:model_training, model_config_id: config.id, stock_id: facebook.id)
+    create(:full_training, model_config_id: config.id, stock_id: facebook.id)
   end
   let(:config)    { create :model_config }
   let(:google)    { create :google }
@@ -111,6 +111,22 @@ RSpec.describe ModelTraining, type: :model do
       training.save
       google.destroy
       expect(ModelTraining.where(id: training.id)).to_not exist
+    end
+  end
+
+  describe "#methods" do
+    describe "#reset" do
+      it "sets stage to requested" do
+        expect(ctrl_training.reset.requested?).to be true
+      end
+
+      it "sets rmse to nil" do
+        expect(ctrl_training.reset.rmse.nil?).to be true
+      end
+
+      it "sets error_message to nil" do
+        expect(ctrl_training.reset.error_message.nil?).to be true
+      end
     end
   end
 

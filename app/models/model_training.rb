@@ -25,6 +25,11 @@ class ModelTraining < ApplicationRecord
   validates :error_message, presence: true, if: -> { error? }
 
 
+  def reset
+    assign_attributes(stage: :requested, rmse: nil, error_message: nil)
+    self
+  end
+
   private
     def set_defaults
       self.stage ||= :requested
