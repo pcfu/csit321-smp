@@ -5,7 +5,7 @@ module Admin
     def create
       with_error_handling do |flagger|
         params = create_params
-        @model_config = ModelConfig.find_by(id: params[:config_id])
+        @model_config = ModelConfig.find(params[:config_id])
 
         reset_trainings(@model_config, params)
         response = request_backend_to_enqueue_jobs(params)
