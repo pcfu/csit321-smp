@@ -1,6 +1,6 @@
 module Admin
   class ModelTrainingsController < ApplicationController
-    skip_before_action :verify_authenticity_token, if: -> { request.xhr? }
+    skip_before_action :verify_authenticity_token, if: -> { request.format.json? }
 
     def create
       with_error_handling do |flagger|
@@ -8,9 +8,10 @@ module Admin
         @model_config = ModelConfig.find(params[:config_id])
 
         reset_trainings(@model_config, params)
-        response = request_backend_to_enqueue_jobs(params)
-        update_trainings(@model_config, response[:results])
-        render json: response
+        @response = request_backend_to_enqueue_jobs(params)
+        update_trainings(@model_config, @response[:results])
+      end
+    end
       end
     end
 
@@ -18,10 +19,12 @@ module Admin
     private
 
       def create_params
-        # JSON.parse(params.require(:json)).symbolize_keys.merge(stocks: Stock.pluck(:id))
+        id, range = params.require([:config_id, :data_range])
+        #{ config_id: id.to_i, data_range: range }.merge(stocks: Stock.pluck(:id))
 
         # for the prototype, just train on AAPL stock
-        JSON.parse(params.require(:json)).symbolize_keys.merge(stocks: [1])
+        { config_id: id.to_i, data_range: range }.merge(stocks: [1])
+      end
       end
 
       def request_backend_to_enqueue_jobs(params)
