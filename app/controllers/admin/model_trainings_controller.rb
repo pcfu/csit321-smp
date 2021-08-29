@@ -12,6 +12,12 @@ module Admin
         update_trainings(@model_config, @response[:results])
       end
     end
+
+    def update
+      with_error_handling do |flagger|
+        new_data = update_params
+        @model_training = ModelTraining.find(params[:id])
+        @model_training.update!(new_data)
       end
     end
 
@@ -25,6 +31,12 @@ module Admin
         # for the prototype, just train on AAPL stock
         { config_id: id.to_i, data_range: range }.merge(stocks: [1])
       end
+
+      def update_params
+        stage = params.require(:stage)
+        rmse ||= params.require(:rmse) if stage == 'done'
+        error_message ||= params.require(:error_message) if stage == 'error'
+        { stage: stage, rmse: rmse, error_message: error_message }
       end
 
       def request_backend_to_enqueue_jobs(params)

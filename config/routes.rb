@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :prototype, only: [:index]
-    resources :model_trainings, only: [:index, :create]
+    resources :model_trainings, only: [:create, :update]
   end
 
 end
