@@ -7,8 +7,8 @@ module Admin
         params = create_params
         @model_config = ModelConfig.find(params[:config_id])
 
-        reset_trainings(@model_config, params)
-        @response = request_backend_to_enqueue_jobs(params)
+        training_list = reset_trainings(@model_config, params)
+        @response = request_job_enqueue_job(training_list, params[:data_range])
         update_trainings(@model_config, @response[:results])
       end
     end
@@ -39,8 +39,9 @@ module Admin
         { stage: stage, rmse: rmse, error_message: error_message }
       end
 
-      def request_backend_to_enqueue_jobs(params)
-        res = BackendClient.post('/ml/model_training', params)
+      def request_job_enqueue_job(training_list, data_range)
+        data = { training_list: training_list, data_range: data_range }
+        res = BackendClient.post('/ml/model_training', data)
         res_body = JSON.parse(res.body).symbolize_keys
         flagger.flag(res_body) if res_body[:status] != 'ok'
         res_body
@@ -51,12 +52,16 @@ module Admin
         date_end = params[:data_range][1]
         stock_ids = params[:stocks]
         model_config.reset_trainings(date_start, date_end, stock_ids)
+
+        trng_list = model_config.model_trainings.where(stock_id: stock_ids).map do |t|
+          { training_id: t.id, config_id: t.model_config_id, stock_id: t.stock_id }
+        end
       end
 
       def update_trainings(model_config, results)
         results.each do |result|
           result.symbolize_keys!
-          trng = model_config.model_trainings.find_by(stock_id: result[:stock_id])
+          trng = ModelTraining.find(result[:training_id])
 
           if result[:status] == 'ok'
             trng.update(stage: :enqueued)
