@@ -9,7 +9,7 @@ $(document).on('turbolinks:load', function () {
       data_range: ['2020-01-01', '2021-01-01']
     };
 
-    $.post('/admin/model_trainings.json', data, function(data) {
+    $.post('/admin/model_trainings', data, function(data) {
       Alerts.success(alertsContainer, data.message);
 
     }).fail(function(xhr, status, error) {

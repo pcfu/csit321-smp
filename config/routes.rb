@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :prototype, only: [:index]
-    resources :model_trainings, only: [:create, :update]
+    resources :model_trainings, only: [:create, :update], defaults: { format: 'json' }
   end
 
 end
