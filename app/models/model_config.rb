@@ -15,6 +15,10 @@ class ModelConfig < ApplicationRecord
                                             less_than_or_equal_to: 100 }
 
 
+  def parse_params
+    JSON.parse(params, symbolize_names: true)
+  end
+
   def set_train_percent
     num_done = model_trainings.done.count
     update(train_percent: (num_done.to_f / Stock.count * 100).to_i)

@@ -8,7 +8,10 @@ module Admin
         @model_config = ModelConfig.find(params[:config_id])
 
         training_list = reset_trainings(@model_config, params)
-        @response = request_job_enqueue_job(training_list, params[:data_range])
+        @response = request_job_enqueue(
+          training_list, @model_config.parse_params, params[:data_range]
+        )
+        flagger.flag(@response) if @response[:status] != 'ok'
         update_trainings(@model_config, @response[:results])
       end
     end
@@ -39,12 +42,10 @@ module Admin
         { stage: stage, rmse: rmse, error_message: error_message }
       end
 
-      def request_job_enqueue_job(training_list, data_range)
-        data = { training_list: training_list, data_range: data_range }
+      def request_job_enqueue(list, params, range)
+        data = { training_list: list, model_params: params, data_range: range }
         res = BackendClient.post('/ml/model_training', data)
-        res_body = JSON.parse(res.body).symbolize_keys
-        flagger.flag(res_body) if res_body[:status] != 'ok'
-        res_body
+        JSON.parse(res.body, symbolize_names: true)
       end
 
       def reset_trainings(model_config, params)
