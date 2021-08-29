@@ -1,9 +1,7 @@
 export default class Alerts {
   static #buildAlert(context, message) {
-    const wrapper = $('<div>', { class: 'mt-3'} );
-
     const alert = $('<div>', {
-      class: `alert alert-${context} alert-dismissible fade show`,
+      class: `alert alert-${context} alert-dismissible fade show mt-3`,
       role: 'alert'
     })
 
@@ -15,14 +13,29 @@ export default class Alerts {
     });
 
     alert.append(message).append(closeBtn);
-    return wrapper.append(alert);
+    return alert;
   }
 
-  static success(container, message) {
-    container.append(Alerts.#buildAlert('success', message));
+  static #addAlert(alert, container, maxDisplay) {
+    const alerts = container.children()
+    if (alerts.length >= maxDisplay) {
+      alerts[0].remove();
+    }
+    container.append(alert);
   }
 
-  static danger(container, message) {
-    container.append(Alerts.#buildAlert('danger', message));
+  static success(container, message, maxDisplay = 5) {
+    const alert = Alerts.#buildAlert('success', message);
+    Alerts.#addAlert(alert, container, maxDisplay);
+  }
+
+  static danger(container, message, maxDisplay = 5) {
+    const alert = Alerts.#buildAlert('danger', message);
+    Alerts.#addAlert(alert, container, maxDisplay);
+  }
+
+  static primary(container, message, maxDisplay = 5) {
+    const alert = Alerts.#buildAlert('primary', message);
+    Alerts.#addAlert(alert, container, maxDisplay);
   }
 }
