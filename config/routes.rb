@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   post 'model_parameters/create', to: 'model_parameters#create'
 
   namespace :admin do
-    resources :prototype, only: [:index]
+    resources :prototype, only: [:index, :ws_test]
     resources :model_trainings, only: [:create, :update], defaults: { format: 'json' }
   end
 
