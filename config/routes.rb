@@ -17,7 +17,9 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :prototype, only: [:index]
-    resources :model_trainings, only: [:create, :update], defaults: { format: 'json' }
+    resources :model_trainings, only: [:update], defaults: { format: 'json' } do
+      post 'batch_enqueue', on: :collection, defaults: { format: 'json' }
+    end
   end
 
   mount ActionCable.server => '/websocket/:id', constraints: { id: /[\w\-\.]+/ }

@@ -4,19 +4,17 @@ module Admin
 
     skip_before_action :verify_authenticity_token, if: -> { request.format.json? }
 
-    def create
+    def batch_enqueue
       with_error_handling do |flagger|
-        params = create_params
-        @model_config = ModelConfig.find(params[:config_id])
+        params = batch_enqueue_params
+        config = ModelConfig.find(params[:config_id])
 
-        training_list = reset_trainings(@model_config, params)
-        @response = request_job_enqueue(
-          training_list, @model_config.parse_params, params[:data_range]
+        training_list = reset_trainings(config, params)
         @response = enqueue_training_jobs(
           training_list, config.parse_params, params[:data_range]
         )
         flagger.flag(@response) if @response[:status] != 'ok'
-        update_trainings(@model_config, @response[:results])
+        update_trainings(config, @response[:results])
       end
     end
 
@@ -31,12 +29,12 @@ module Admin
 
     private
 
-      def create_params
-        id, range = params.require([:config_id, :data_range])
-        #{ config_id: id.to_i, data_range: range }.merge(stocks: Stock.pluck(:id))
+      def batch_enqueue_params
+        id, date_s, date_e = params.require([:config_id, :date_start, :date_end])
+        #{ config_id: id.to_i, data_range: [date_s, date_e] }.merge(stocks: Stock.pluck(:id))
 
         # for the prototype, just train on AAPL stock
-        { config_id: id.to_i, data_range: range }.merge(stocks: [1])
+        { config_id: id.to_i, data_range: [date_s, date_e] }.merge(stocks: [1])
       end
 
       def update_params
@@ -52,7 +50,7 @@ module Admin
         stock_ids = params[:stocks]
         model_config.reset_trainings(date_start, date_end, stock_ids)
 
-        trng_list = model_config.model_trainings.where(stock_id: stock_ids).map do |t|
+        model_config.model_trainings.where(stock_id: stock_ids).map do |t|
           { training_id: t.id, config_id: t.model_config_id, stock_id: t.stock_id }
         end
       end

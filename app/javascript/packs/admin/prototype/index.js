@@ -14,10 +14,11 @@ $(document).on('turbolinks:load', function () {
 
     const data = {
       config_id: 1,
-      data_range: ['2020-01-01', '2021-01-01']
+      date_start: '2020-01-01',
+      date_end: '2021-01-01',
     };
 
-    $.post('/admin/model_trainings', data, function(data) {
+    $.post('/admin/model_trainings/batch_enqueue', data, function(data) {
       Alerts.success(alertsContainer, data.message);
 
     }).fail(function(xhr, status, error) {
