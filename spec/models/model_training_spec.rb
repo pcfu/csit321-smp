@@ -13,11 +13,13 @@ RSpec.describe ModelTraining, type: :model do
 
   it { is_expected.to be_valid }
 
+
   it "is unique per model config and stock" do
     training.stock_id = ctrl_training.stock_id
     training.valid?
     expect(training.errors[:stock_id]).to include("has already been taken")
   end
+
 
   describe "#date_start" do
     it "is required" do
@@ -26,6 +28,7 @@ RSpec.describe ModelTraining, type: :model do
       expect(training.errors[:date_start]).to include("can't be blank")
     end
   end
+
 
   describe "#date_end" do
     it "is required" do
@@ -40,6 +43,7 @@ RSpec.describe ModelTraining, type: :model do
       expect(training.errors[:date_end]).to include("must be after or equal to date_start")
     end
   end
+
 
   describe "#stage" do
     it "is required" do
@@ -68,6 +72,7 @@ RSpec.describe ModelTraining, type: :model do
     end
   end
 
+
   describe "#rmse" do
     context "when present" do
       it "is greater than or equal to 0" do
@@ -86,6 +91,7 @@ RSpec.describe ModelTraining, type: :model do
     end
   end
 
+
   describe "#error_message" do
     context "when error" do
       it "is required" do
@@ -99,6 +105,7 @@ RSpec.describe ModelTraining, type: :model do
       end
     end
   end
+
 
   describe "#associations" do
     it "is destroyed when associated model_config is destroyed" do
@@ -114,21 +121,43 @@ RSpec.describe ModelTraining, type: :model do
     end
   end
 
+
   describe "#methods" do
     describe "#reset" do
+      it "returns itself" do
+        expect(ctrl_training.reset).to eq(ctrl_training)
+      end
+
       it "sets stage to requested" do
-        expect(ctrl_training.reset.requested?).to be true
+        ctrl_training.reset
+        expect(ctrl_training.requested?).to be true
       end
 
       it "sets rmse to nil" do
-        expect(ctrl_training.reset.rmse.nil?).to be true
+        ctrl_training.reset
+        expect(ctrl_training.rmse.nil?).to be true
       end
 
       it "sets error_message to nil" do
-        expect(ctrl_training.reset.error_message.nil?).to be true
+        ctrl_training.reset
+        expect(ctrl_training.error_message.nil?).to be true
+      end
+
+      it "does not update" do
+        ctrl_training.save
+        expect(ctrl_training.reset.saved_change_to_updated_at?).to be false
+      end
+    end
+
+
+    describe "#reset!" do
+      it "updates" do
+        ctrl_training.save
+        expect(ctrl_training.reset!.saved_change_to_updated_at?).to be true
       end
     end
   end
+
 
   describe "#callbacks" do
     describe "after update" do

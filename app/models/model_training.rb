@@ -31,7 +31,14 @@ class ModelTraining < ApplicationRecord
     self
   end
 
+  def reset!
+    reset.save
+    self
+  end
+
+
   private
+
     def set_defaults
       self.stage ||= :requested
     end
