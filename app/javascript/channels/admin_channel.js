@@ -1,5 +1,4 @@
 import { createConsumer } from "@rails/actioncable";
-import Alerts from 'common/alerts';
 
 
 class AdminChannel {
