@@ -51,6 +51,6 @@ class ModelTraining < ApplicationRecord
     end
 
     def update_model_config_train_percent
-      model_config.set_train_percent
+      model_config.set_train_percent!
     end
 end

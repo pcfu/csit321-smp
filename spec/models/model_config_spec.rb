@@ -22,6 +22,7 @@ RSpec.describe ModelConfig, type: :model do
     end
   end
 
+
   describe "#params" do
     it "is required" do
       blank_strings.each do |params|
@@ -52,6 +53,7 @@ RSpec.describe ModelConfig, type: :model do
     end
   end
 
+
   describe "#train_percent" do
     it "is required" do
       config.train_percent = nil
@@ -72,11 +74,16 @@ RSpec.describe ModelConfig, type: :model do
     end
   end
 
+
   describe "#methods" do
     describe "set_train_percent" do
       let(:num_stocks)    { 10 }
       let(:num_trainings) { 9 }
       let(:num_done)      { rand(3..7) }
+
+      it "returns itself" do
+        expect(ctrl_config.set_train_percent).to eq(ctrl_config)
+      end
 
       it "sets train_percent to ratio of done model_trainings / total stocks" do
         num_stocks.times do |i|
@@ -93,7 +100,21 @@ RSpec.describe ModelConfig, type: :model do
         expected = (num_done.to_f / num_stocks * 100).to_i
         expect(ctrl_config.set_train_percent.train_percent).to eq(expected)
       end
+
+      it "does not update" do
+        ctrl_config.save
+        expect(ctrl_config.set_train_percent.saved_change_to_train_percent?).to be false
+      end
     end
+
+
+    describe "set_train_percent!" do
+      it "updates" do
+        ctrl_config.save
+        expect(ctrl_config.set_train_percent!.saved_change_to_train_percent?).to be true
+      end
+    end
+
 
     describe "reset_trainings" do
       before do

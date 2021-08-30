@@ -22,9 +22,14 @@ class ModelConfig < ApplicationRecord
   end
 
   def set_train_percent
-    num_done = model_trainings.done.count
-    update(train_percent: (num_done.to_f / Stock.count * 100).to_i)
-    return self
+    percent = model_trainings.done.count.to_f / Stock.count * 100 || 0
+    assign_attributes(train_percent: percent.nan? ? 0 : percent.to_i)
+    self
+  end
+
+  def set_train_percent!
+    set_train_percent.save
+    self
   end
 
   def reset_trainings(date_start, date_end, stock_ids = nil)
