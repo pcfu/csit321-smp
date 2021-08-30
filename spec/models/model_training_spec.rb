@@ -116,16 +116,35 @@ RSpec.describe ModelTraining, type: :model do
 
   describe "#methods" do
     describe "#reset" do
+      it "returns itself" do
+        expect(ctrl_training.reset).to eq(ctrl_training)
+      end
+
       it "sets stage to requested" do
-        expect(ctrl_training.reset.requested?).to be true
+        ctrl_training.reset
+        expect(ctrl_training.requested?).to be true
       end
 
       it "sets rmse to nil" do
-        expect(ctrl_training.reset.rmse.nil?).to be true
+        ctrl_training.reset
+        expect(ctrl_training.rmse.nil?).to be true
       end
 
       it "sets error_message to nil" do
-        expect(ctrl_training.reset.error_message.nil?).to be true
+        ctrl_training.reset
+        expect(ctrl_training.error_message.nil?).to be true
+      end
+
+      it "does not update" do
+        ctrl_training.save
+        expect(ctrl_training.reset.saved_change_to_updated_at?).to be false
+      end
+    end
+
+    describe "#reset!" do
+      it "updates" do
+        ctrl_training.save
+        expect(ctrl_training.reset!.saved_change_to_updated_at?).to be true
       end
     end
   end
