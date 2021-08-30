@@ -1,6 +1,7 @@
 module Admin
   class ModelTrainingsController < ApplicationController
     include BackendJobsEnqueuing
+    include DateFormatChecking
 
     skip_before_action :verify_authenticity_token, if: -> { request.format.json? }
 
@@ -31,6 +32,7 @@ module Admin
 
       def batch_enqueue_params
         id, date_s, date_e = params.require([:config_id, :date_start, :date_end])
+        ensure_valid_dates!(date_s, date_e)
         #{ config_id: id.to_i, data_range: [date_s, date_e] }.merge(stocks: Stock.pluck(:id))
 
         # for the prototype, just train on AAPL stock
