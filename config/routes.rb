@@ -16,8 +16,9 @@ Rails.application.routes.draw do
   post 'model_parameters/create', to: 'model_parameters#create'
 
   namespace :admin do
-    resources :prototype, only: [:index, :ws_test]
+    resources :prototype, only: [:index]
     resources :model_trainings, only: [:create, :update], defaults: { format: 'json' }
   end
 
+  mount ActionCable.server => '/websocket/:id', constraints: { id: /[\w\-\.]+/ }
 end
