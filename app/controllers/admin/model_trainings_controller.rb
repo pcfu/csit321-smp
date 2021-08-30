@@ -1,5 +1,7 @@
 module Admin
   class ModelTrainingsController < ApplicationController
+    include BackendJobsEnqueuing
+
     skip_before_action :verify_authenticity_token, if: -> { request.format.json? }
 
     def create
@@ -10,6 +12,8 @@ module Admin
         training_list = reset_trainings(@model_config, params)
         @response = request_job_enqueue(
           training_list, @model_config.parse_params, params[:data_range]
+        @response = enqueue_training_jobs(
+          training_list, config.parse_params, params[:data_range]
         )
         flagger.flag(@response) if @response[:status] != 'ok'
         update_trainings(@model_config, @response[:results])
@@ -40,12 +44,6 @@ module Admin
         rmse ||= params.require(:rmse) if stage == 'done'
         error_message ||= params.require(:error_message) if stage == 'error'
         { stage: stage, rmse: rmse, error_message: error_message }
-      end
-
-      def request_job_enqueue(list, params, range)
-        data = { training_list: list, model_params: params, data_range: range }
-        res = BackendClient.post('/ml/model_training', data)
-        JSON.parse(res.body, symbolize_names: true)
       end
 
       def reset_trainings(model_config, params)
