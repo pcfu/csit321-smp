@@ -1,6 +1,14 @@
-import Alerts from '../../../common/alerts';
+import Alerts from 'common/alerts';
+import AdminChannel from 'channels/admin_channel';
+
 
 $(document).on('turbolinks:load', function () {
+  const channel = new AdminChannel().subscribe();
+  channel.onReceiveCallback(function (data) {
+    const alertsContainer = $('#alerts-container');
+    Alerts[data.context ? data.context : 'primary'](alertsContainer, data.body);
+  });
+
   $('#training-button').on('click', function () {
     const alertsContainer = $('#alerts-container');
 
