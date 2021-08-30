@@ -3,6 +3,8 @@ class ModelConfig < ApplicationRecord
   has_many :stocks,           through: :model_trainings
 
   auto_strip_attributes :name, :params
+  after_update :broadcast_training_progress,
+               if: -> { train_percent_before_last_save < train_percent }
 
   validates :name,          presence: true, uniqueness: { case_sensitive: false }
   validates :params,        presence: true,
@@ -26,7 +28,7 @@ class ModelConfig < ApplicationRecord
   end
 
   def reset_trainings(date_start, date_end, stock_ids = nil)
-    self.train_percent = 0.0
+    self.train_percent = 0
 
     stock_ids ||= Stock.pluck(:id)
     stock_ids.each do |sid|
@@ -38,4 +40,13 @@ class ModelConfig < ApplicationRecord
     save
   end
 
+
+  private
+
+    def broadcast_training_progress
+      num_done = model_trainings.done.count
+      msg = "#{name} is #{train_percent}% trained (#{num_done}/#{Stock.count} stocks)"
+      context = train_percent == 100 ? 'success' : 'primary'
+      AdminChannel.broadcast({ context: context, body: msg })
+    end
 end
