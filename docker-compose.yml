@@ -4,6 +4,7 @@ x-common-env: &common-env
   DATABASE_URL: postgres://postgres:postgres@postgres:5432
   DATABASE_USERNAME: ${PG_USERNAME}
   DATABASE_PASSWORD: ${PG_PASSWORD}
+  REDIS_URL: redis://redis:6379/
   BACKEND_HOST: ${DOCKER_IP:-172.17.0.1}
   SELENIUM_HOST: ${DOCKER_IP:-172.17.0.1}
   SELENIUM_REMOTE_HOST: selenium
@@ -40,6 +41,8 @@ services:
       - packs:/${PROJECT_NAME}/public/packs
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   rails:
@@ -91,6 +94,18 @@ services:
       test: pg_isready -U ${PG_USERNAME} -h 127.0.0.1
       interval: 5s
 
+  redis:
+    image: redis:${REDIS_VERS}-alpine
+    ports:
+      - 6379
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: redis-cli ping
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
   selenium:
     image: selenium/standalone-chrome
     ports:
@@ -119,6 +134,7 @@ services:
 
 volumes:
   postgres:
+  redis:
   bundle:
     external:
       name: ${PROJECT_NAME}_${GEMSET_VERS}_bundle
