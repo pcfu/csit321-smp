@@ -13,7 +13,7 @@ class ModelTraining < ApplicationRecord
   auto_strip_attributes :error_message
   after_initialize      :set_defaults
   after_update          :update_model_config_train_percent,
-                        if: -> { saved_change_to_stage? }
+                        if: -> { stage_changed_to_or_from_done? }
 
   validates :stock_id,      uniqueness: { scope: :model_config_id }
   validates :date_start,    presence: true
@@ -52,5 +52,10 @@ class ModelTraining < ApplicationRecord
 
     def update_model_config_train_percent
       model_config.set_train_percent!
+    end
+
+    def stage_changed_to_or_from_done?
+      return false unless saved_change_to_stage?
+      stage_before_last_save == 'done' || done?
     end
 end
