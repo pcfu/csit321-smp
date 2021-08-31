@@ -11,6 +11,19 @@ FactoryBot.define do
       rmse        { 1.0 }
     end
 
+    factory :rmse_negative do
+      stage         { :done }
+      rmse          { -0.001 }
+      error_message { nil}
+    end
+
+    factory :error_with_no_message do
+      stage         { :error }
+      rmse          { nil }
+      error_message { nil }
+    end
+
+
     ### stage traits
 
     trait :requested do
@@ -35,15 +48,10 @@ FactoryBot.define do
       error_message { 'unknown error occurred' }
     end
 
-    trait :error_with_no_message do
-      stage         { :error }
-      error_message { nil }
-    end
+    ### throws error on initialization!
 
-    ### rmse traits
-
-    trait :rmse_negative do
-      rmse  { -0.001 }
+    trait :invalid do
+      stage { :invalid }
     end
   end
 end
