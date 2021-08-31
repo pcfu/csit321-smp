@@ -10,10 +10,8 @@ module Admin
         params = batch_enqueue_params
         config = ModelConfig.find(params[:config_id])
 
-        training_list = reset_trainings(config, params)
-        @response = enqueue_training_jobs(
-          training_list, config.parse_params, params[:data_range]
-        )
+        trngs = reset_trainings(config, params)
+        @response = enqueue_training_jobs(trngs, config.parse_params, params[:data_range])
         flagger.flag(@response) if @response[:status] != 'ok'
         update_trainings(config, @response[:results])
       end
@@ -47,11 +45,8 @@ module Admin
       end
 
       def reset_trainings(model_config, params)
-        date_start = params[:data_range][0]
-        date_end = params[:data_range][1]
-        stock_ids = params[:stocks]
-        model_config.reset_trainings(date_start, date_end, stock_ids)
-
+        date_s, date_e, stock_ids = *params[:data_range], params[:stocks]
+        model_config.reset_trainings(date_s, date_e, stock_ids)
         model_config.model_trainings.where(stock_id: stock_ids).map do |t|
           { training_id: t.id, config_id: t.model_config_id, stock_id: t.stock_id }
         end
@@ -61,12 +56,7 @@ module Admin
         results.each do |result|
           result.symbolize_keys!
           trng = ModelTraining.find(result[:training_id])
-
-          if result[:status] == 'ok'
-            trng.update(stage: :enqueued)
-          else
-            trng.update(stage: :error, error_message: result[:error_message])
-          end
+          trng.update(result.slice(:stage, :error_message))
         end
       end
   end
