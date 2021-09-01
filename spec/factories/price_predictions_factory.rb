@@ -25,5 +25,28 @@ FactoryBot.define do
     lt_min_price  { base_lt * 0.9 }
     lt_exp_price  { base_lt }
     lt_max_price  { base_lt * 1.1 }
+
+
+    ### date traits
+
+    trait :entry_date_nil do
+      entry_date { nil }
+    end
+
+    trait :nd_date_nil do
+      nd_date { nil }
+    end
+
+    trait :st_date_nil do
+      st_date { nil }
+    end
+
+    trait :mt_date_nil do
+      mt_date { nil }
+    end
+
+    trait :lt_date_nil do
+      lt_date { nil }
+    end
   end
 end

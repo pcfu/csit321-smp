@@ -1,9 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe PricePrediction, type: :model do
-  let(:neg)   { -0.001 }
-  let(:stock) { create :stock }
-  subject(:prediction) { build_stubbed(:price_prediction, :stock_id => stock.id) }
+  subject                 { prediction }
+  let(:prediction)        { build_stubbed(:price_prediction, *traits, stock: stock) }
+  let(:prediction_in_db)  { create(:price_prediction, stock: stock) }
+  let(:stock)             { use_db ? create(:stock) : build_stubbed(:stock) }
+  let(:use_db)            { false }
+  let(:traits)            { [] }
+  let(:neg)               { -0.001 }
 
   it { is_expected.to be_valid }
 
@@ -16,18 +20,21 @@ RSpec.describe PricePrediction, type: :model do
   end
 
   describe "#nd_date" do
-    before { prediction.nd_date = nil }
+    context "when no entry_date" do
+      let(:traits) { [:entry_date_nil, :nd_date_nil] }
 
-    it "is required" do
-      prediction.entry_date = nil
-      prediction.valid?
-      expect(prediction.errors[:nd_date]).to include("can't be blank")
+      it "is required" do
+        prediction.valid?
+        expect(prediction.errors[:nd_date]).to include("can't be blank")
+      end
     end
 
     context "when blank and entry_date present" do
-      it "is imputed to 1 day after entry date" do
-        expect(prediction).to be_valid
-        expect(prediction.nd_date).to eq prediction.entry_date.advance(days: 1)
+      let(:traits) { [:nd_date_nil] }
+
+      it "is imputed to 1 day after entry date on validation" do
+        date = prediction.entry_date.advance(days: 1)
+        expect { prediction.valid? }.to change { prediction.nd_date }.from(nil).to(date)
       end
     end
   end
@@ -75,19 +82,21 @@ RSpec.describe PricePrediction, type: :model do
   end
 
   describe "#st_date" do
-    before { prediction.st_date = nil }
+    context "when no entry_date" do
+      let(:traits) { [:entry_date_nil, :st_date_nil] }
 
-    it "is required" do
-      prediction.entry_date = nil
-      prediction.valid?
-      expect(prediction.errors[:st_date]).to include("can't be blank")
+      it "is required" do
+        prediction.valid?
+        expect(prediction.errors[:st_date]).to include("can't be blank")
+      end
     end
 
     context "when blank and entry_date present" do
-      it "is imputed to #{PricePrediction::ST_DAYS} days after entry date" do
-        expect(prediction).to be_valid
-        imputed_date = prediction.entry_date.advance(days: PricePrediction::ST_DAYS)
-        expect(prediction.st_date).to eq imputed_date
+      let(:traits) { [:st_date_nil] }
+
+      it "is imputed to #{PricePrediction::ST_DAYS} days after entry date on valiidation" do
+        date = prediction.entry_date.advance(days: PricePrediction::ST_DAYS)
+        expect { prediction.valid? }.to change { prediction.st_date }.from(nil).to(date)
       end
     end
   end
@@ -135,19 +144,21 @@ RSpec.describe PricePrediction, type: :model do
   end
 
   describe "#mt_date" do
-    before { prediction.mt_date = nil }
+    context "when no entry_date" do
+      let(:traits) { [:entry_date_nil, :mt_date_nil] }
 
-    it "is required" do
-      prediction.entry_date = nil
-      prediction.valid?
-      expect(prediction.errors[:mt_date]).to include("can't be blank")
+      it "is required" do
+        prediction.valid?
+        expect(prediction.errors[:mt_date]).to include("can't be blank")
+      end
     end
 
     context "when blank and entry_date present" do
-      it "is imputed to #{PricePrediction::MT_DAYS} days after entry date" do
-        expect(prediction).to be_valid
-        imputed_date = prediction.entry_date.advance(days: PricePrediction::MT_DAYS)
-        expect(prediction.mt_date).to eq imputed_date
+      let(:traits) { [:mt_date_nil] }
+
+      it "is imputed to #{PricePrediction::MT_DAYS} days after entry date on validation" do
+        date = prediction.entry_date.advance(days: PricePrediction::MT_DAYS)
+        expect { prediction.valid? }.to change { prediction.mt_date }.from(nil).to(date)
       end
     end
   end
@@ -195,19 +206,21 @@ RSpec.describe PricePrediction, type: :model do
   end
 
   describe "#lt_date" do
-    before { prediction.lt_date = nil }
+    context "when no entry_date" do
+      let(:traits) { [:entry_date_nil, :lt_date_nil] }
 
-    it "is required" do
-      prediction.entry_date = nil
-      prediction.valid?
-      expect(prediction.errors[:lt_date]).to include("can't be blank")
+      it "is required" do
+        prediction.valid?
+        expect(prediction.errors[:lt_date]).to include("can't be blank")
+      end
     end
 
     context "when blank and entry_date present" do
-      it "is imputed to #{PricePrediction::LT_DAYS} days after entry date" do
-        expect(prediction).to be_valid
-        imputed_date = prediction.entry_date.advance(days: PricePrediction::LT_DAYS)
-        expect(prediction.lt_date).to eq imputed_date
+      let(:traits) { [:lt_date_nil] }
+
+      it "is imputed to #{PricePrediction::LT_DAYS} days after entry date on validation" do
+        date = prediction.entry_date.advance(days: PricePrediction::LT_DAYS)
+        expect { prediction.valid? }.to change { prediction.lt_date }.from(nil).to(date)
       end
     end
   end
@@ -255,10 +268,12 @@ RSpec.describe PricePrediction, type: :model do
   end
 
   describe "#associations" do
+    let(:use_db)  { true }
+
     it "is destroyed when associated stock is destroyed" do
-      prediction = create(:price_prediction, :stock_id => stock.id)
-      stock.destroy
-      expect(PricePrediction.where(:id => prediction.id)).to_not exist
+      expect { stock.destroy }.to change {
+        PricePrediction.where(:id => prediction_in_db.id).count
+      }.from(1).to(0)
     end
   end
 end
