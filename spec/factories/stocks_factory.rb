@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :stock, aliases: [:base_stock, :google] do
+  factory :stock, aliases: [:google] do
     symbol      { 'GOOG' }
     name        { "Alphabet Inc - Class C" }
     exchange    { "NAS" }

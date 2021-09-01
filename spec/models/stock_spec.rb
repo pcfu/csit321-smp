@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Stock, type: :model do
-  subject(:stock)   { build_stubbed :google }
-  let(:ctrl_stock)  { create :facebook }
+  subject                 { stock }
+  let(:stock)             { build_stubbed :google, *traits }
+  let(:traits)            { [] }
+  let(:stock_in_db)       { create :facebook }
 
   it { is_expected.to be_valid }
 
@@ -16,15 +18,17 @@ RSpec.describe Stock, type: :model do
     end
 
     it "is unique" do
-      stock.symbol = ctrl_stock.symbol
+      stock.symbol = stock_in_db.symbol
       stock.valid?
       expect(stock.errors[:symbol]).to include("has already been taken")
     end
 
-    it "is upcased on validate" do
-      stock = build_stubbed(:google, :symbol_lowercase)
-      stock.valid?
-      expect(stock.symbol).to eq(stock.symbol.upcase)
+    context "when lowercase" do
+      let(:traits) { [:symbol_lowercase] }
+
+      it "is upcased on validate" do
+        expect { stock.validate }.to change { stock.symbol }.from('goog').to('GOOG')
+      end
     end
   end
 
