@@ -11,18 +11,13 @@ FactoryBot.define do
       rmse        { 1.0 }
     end
 
-    factory :rmse_negative do
-      stage         { :done }
-      rmse          { -0.001 }
-      error_message { nil}
-    end
 
-    factory :error_with_no_message do
-      stage         { :error }
-      rmse          { nil }
-      error_message { nil }
-    end
+    ### date traits
 
+    trait :date_end_before_date_start do
+      date_start  { Date.parse("2020-01-01") }
+      date_end    { date_start.advance(days: -1) }
+    end
 
     ### stage traits
 
@@ -50,8 +45,28 @@ FactoryBot.define do
 
     ### throws error on initialization!
 
-    trait :invalid do
+    trait :invalid_stage do
       stage { :invalid }
     end
+
+    ### rmse traits
+
+    trait :rmse_nil do
+      stage { :done }
+      rmse  { nil }
+    end
+
+    trait :rmse_negative do
+      stage { :done }
+      rmse  { -0.001 }
+    end
+
+    ### error_message traits
+
+    trait :error_with_no_message do
+      stage         { :error }
+      error_message { nil }
+    end
+
   end
 end
