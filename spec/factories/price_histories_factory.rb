@@ -14,9 +14,10 @@ FactoryBot.define do
     change  { prc_close - prc_open }
     percent_change  { (prc_close - prc_open) / 100 }
 
+
     factory :ctrl_history do
       transient do
-        ctrl_open   { prc_open }
+        ctrl_open   { prc_close }
         ctrl_close  { 98.7 }
       end
 
