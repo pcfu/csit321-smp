@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :model_training, aliases: [:minimum_training] do
+  factory :model_training, aliases: [:minimum_training, :initial_training] do
     date_start  { Date.parse("2020-01-01") }
     date_end    { Date.parse("2021-01-01") }
     stage       { :requested }
