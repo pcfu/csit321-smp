@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Headline, type: :model do
-  let(:stock)         { create :stock }
-  subject(:headline)  { build_stubbed(:headline, :stock_id => stock.id) }
+  subject               { headline }
+  let(:headline)        { build_stubbed(:headline, stock: google) }
+  let(:headline_in_db)  { create(:headline, stock: google) }
+  let(:google)          { create :google }
 
   it { is_expected.to be_valid }
 
@@ -26,8 +28,8 @@ RSpec.describe Headline, type: :model do
 
   describe "#associations" do
     it "is destroyed when associated stock is destroyed" do
-      headline = create(:price_history, :stock_id => stock.id)
-      stock.destroy
+      id = headline_in_db.id
+      google.destroy
       expect(Headline.where(:id => headline.id)).to_not exist
     end
   end
