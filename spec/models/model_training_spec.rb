@@ -161,8 +161,24 @@ RSpec.describe ModelTraining, type: :model do
     end
 
     describe "on updating stage" do
+      context "when stage changed from error to others" do
+        let(:traits) { [:error] }
+
+        it "sets error_message to nil" do
+          expect {
+            trng_in_db.enqueued!
+          }.to change { trng_in_db.error_message.nil? }.from(false).to(true)
+        end
+      end
+
       context "when stage changed from done to others" do
         let(:traits) { [:done] }
+
+        it "sets rmse to nil" do
+          expect {
+            trng_in_db.requested!
+          }.to change { trng_in_db.rmse.nil? }.from(false).to(true)
+        end
 
         it "updates model_config's train_percent" do
           expect {

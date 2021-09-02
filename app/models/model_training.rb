@@ -12,6 +12,8 @@ class ModelTraining < ApplicationRecord
 
   auto_strip_attributes :error_message
   after_initialize      :set_defaults
+  before_update         :set_rmse_and_error_message_to_nil,
+                        if: -> { requested? or enqueued? or training? }
   after_update          :update_model_config_train_percent,
                         if: -> { stage_changed_to_or_from_done? }
 
@@ -41,6 +43,11 @@ class ModelTraining < ApplicationRecord
 
     def set_defaults
       self.stage ||= :requested
+    end
+
+    def set_rmse_and_error_message_to_nil
+      self.rmse = nil
+      self.error_message = nil
     end
 
     def date_start_before_date_end
