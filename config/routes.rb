@@ -20,6 +20,9 @@ Rails.application.routes.draw do
     resources :model_trainings, only: [:update], defaults: { format: 'json' } do
       post 'batch_enqueue', on: :collection, defaults: { format: 'json' }
     end
+    resources :price_predictions do
+      post 'enqueue', on: :collection, defaults: { format: 'json' }
+    end
   end
 
   mount ActionCable.server => '/websocket/:id', constraints: { id: /[\w\-\.]+/ }
