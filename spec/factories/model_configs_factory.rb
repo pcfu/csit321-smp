@@ -1,16 +1,16 @@
 FactoryBot.define do
-  factory :model_config, aliases: [ :full_trained_config ] do
+  factory :model_config, aliases: [ :full_trained ] do
     name          { "price prediction model configuration" }
     params        { "{\"n_layers\": 3}" }
     train_percent { 100 }
 
-    factory :ctrl_config, aliases: [ :half_trained_config ] do
+    factory :ctrl_config, aliases: [ :half_trained ] do
       name          { "stock recommendation model configuration" }
       params        { "{\"n_nodes\": 100}" }
       train_percent { 50 }
     end
 
-    factory :untrained_config do
+    factory :untrained do
       name          { "untrained model configuration "}
       train_percent { 0 }
     end
