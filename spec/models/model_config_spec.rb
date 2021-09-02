@@ -1,4 +1,10 @@
 require 'rails_helper'
+require './spec/support/spec_helpers/model_config_spec_helpers'
+
+RSpec.configure do |config|
+  config.include ModelConfigSpecHelpers, :group => :methods
+end
+
 
 RSpec.describe ModelConfig, type: :model do
   subject(:config)  { full_trained }
@@ -8,11 +14,9 @@ RSpec.describe ModelConfig, type: :model do
   let(:half_trained) do
     use_db ? create(:half_trained, *traits) : build_stubbed(:half_trained, *traits)
   end
-  let(:untrained) do
-    use_db ? create(:untrained, *traits) : build_stubbed(:untrained, *traits)
-  end
   let(:traits)      { [] }
   let(:use_db)      { false }
+
 
   it { is_expected.to be_valid }
 
@@ -89,143 +93,119 @@ RSpec.describe ModelConfig, type: :model do
     end
   end
 
+  describe "#train_percent" do
+    it "is required" do
+      config.train_percent = nil
+      config.valid?
+      expect(config.errors[:train_percent]).to include("can't be blank")
+    end
 
-  # describe "#train_percent" do
-  #   it "is required" do
-  #     full.train_percent = nil
-  #     full.valid?
-  #     expect(full.errors[:train_percent]).to include("can't be blank")
-  #   end
+    context "when less than 0" do
+      let(:traits) { [:train_percent_under_0]}
 
-  #   it "is at least 0" do
-  #     full = build_stubbed(:model_config, :train_percent_under_0)
-  #     full.valid?
-  #     expect(full.errors[:train_percent]).to include("must be greater than or equal to 0")
-  #   end
+      it "is invalid" do
+        config.valid?
+        expect(config.errors[:train_percent]).to include("must be greater than or equal to 0")
+      end
+    end
 
-  #   it "is at most 100" do
-  #     full = build_stubbed(:model_config, :train_percent_above_100)
-  #     full.valid?
-  #     expect(full.errors[:train_percent]).to include("must be less than or equal to 100")
-  #   end
-  # end
+    context "when more than 100" do
+      let(:traits) { [:train_percent_above_100] }
 
+      it "is invalid" do
+        config.valid?
+        expect(config.errors[:train_percent]).to include("must be less than or equal to 100")
+      end
+    end
+  end
 
-  # describe "#methods" do
-  #   let(:num_stocks)        { 10 }
-  #   let(:num_trainings)     { 9 }
-  #   let(:num_done)          { rand(3..7) }
-  #   let(:expected_percent)  { (num_done.to_f / num_stocks * 100).to_i }
-  #   let(:stocks)            { create_list(:boilerplate_stock, num_stocks) }
-  #   let(:stock)             { stocks.first }
+  describe "#methods", :group => :methods do
+    let(:training)      { create(:completed_training, model_config: config, stock: stock) }
+    let(:stocks)        { create_list(:boilerplate_stock, num_stocks) }
+    let(:stock)         { create :stock }
+    let(:num_stocks)    { 10 }
+    let(:num_trainings) { 9 }
+    let(:num_done)      { rand(3..7) }
+    let(:use_db)        { true }
 
+    describe "set_train_percent" do
+      it "returns the model" do
+        expect(config.set_train_percent).to eq(config)
+      end
 
-  #   describe "set_train_percent" do
-  #     it "returns itself" do
-  #       expect(untrained.set_train_percent).to eq(untrained)
-  #     end
+      it "does not update the model" do
+        config.reload
+        expect(config.set_train_percent.saved_change_to_train_percent?).to be false
+      end
 
-  #     it "sets train_percent to ratio of done model_trainings / total stocks" do
-  #       num_trainings.times do |i|
-  #         refs = { model_config_id: untrained.id, stock_id: stocks[i].id }
-  #         i < num_done ? create(:completed_training, refs) : create(:model_training, refs)
-  #       end
+      it "sets train_percent to ratio of completed model_trainings / total stocks" do
+        create_completed_and_requested_trainings(config, stocks, num_stocks, num_done)
+        config.update(train_percent: 0)
+        expect {
+          config.set_train_percent
+        }.to change { config.train_percent }.to expected_train_percent(num_stocks, num_done)
+      end
+    end
 
-  #       untrained.update(train_percent: 0)
-  #       expect {
-  #         untrained.set_train_percent
-  #       }.to change { untrained.train_percent }.to expected_percent
-  #     end
+    describe "set_train_percent!" do
+      it "updates the model" do
+        config.reload
+        expect(config.set_train_percent!.saved_change_to_train_percent?).to be true
+      end
+    end
 
-  #     it "does not update the model" do
-  #       create(:completed_training, model_config_id: untrained.id, stock_id: stocks[0].id )
-  #       untrained.update(train_percent: 0)
-  #       expect(untrained.set_train_percent.saved_change_to_train_percent?).to be false
-  #     end
-  #   end
+    describe "reset_trainings" do
+      let(:date_s)    { Date.new(2020, 1, 1) }
+      let(:date_e)    { Date.new(2021, 1, 1) }
 
+      it "sets train percent to 0" do
+        expect {
+          config.reset_trainings(date_s, date_e)
+        }.to change { config.train_percent }.from(100).to(0)
+      end
 
-  #   describe "set_train_percent!" do
-  #     it "updates the model" do
-  #       create(:completed_training, model_config_id: untrained.id, stock_id: stocks[0].id )
-  #       untrained.update(train_percent: 0)
-  #       expect(untrained.set_train_percent!.saved_change_to_train_percent?).to be true
-  #     end
-  #   end
+      it "creates model_trainings if they don't exist" do
+        expect {
+          config.reset_trainings(date_s, date_e, [stock.id])
+        }.to change(ModelTraining, :count).by 1
+      end
 
+      it "does not create model_trainings if they exist" do
+        config.update(model_trainings: [training])
+        expect {
+          config.reset_trainings(date_s, date_e, [stock.id])
+        }.to change(ModelTraining, :count).by 0
+      end
 
-  #   describe "reset_trainings" do
-  #     let(:date_s)    { Date.new(2020, 1, 1) }
-  #     let(:date_e)    { Date.new(2021, 1, 1) }
-  #     let(:stock_ids) { stocks[0...5].pluck :id }
-  #     let(:refs)      { Hash[model_config_id: half.id, stock_id: stock.id] }
+      context "for specified stocks" do
+        let(:reset_stock_ids) { stocks[0...5].pluck(:id) }
 
-  #     it "sets train percent to 0" do
-  #       expect {
-  #         half.reset_trainings(date_s, date_e)
-  #       }.to change { half.train_percent }.from(50).to(0)
-  #     end
+        it "resets model_trainings to default states" do
+          create_completed_trainings(config, stocks, stocks.count)
+          config.reset_trainings(date_s, date_e, reset_stock_ids)
+          expect_training_attrs(reset_stock_ids, :requested, nil, nil)
+        end
+      end
 
-  #     it "creates model_trainings if they don't exist" do
-  #       expect {
-  #         half.reset_trainings(date_s, date_e, [stock.id])
-  #       }.to change(ModelTraining, :count).by 1
-  #     end
+      context "for stocks not in specified list" do
+        let(:reset_stock_ids) { stocks[0...5].pluck(:id) }
+        let(:completed_stock_ids) { stocks[5...-1].pluck(:id) }
 
-  #     it "does not create model_trainings if they exist" do
-  #       create(:full_training, refs)
-  #       expect {
-  #         half.reset_trainings(date_s, date_e, [stock.id])
-  #       }.to change(ModelTraining, :count).by 0
-  #     end
+        it "does not reset model_training" do
+          create_completed_trainings(config, stocks, stocks.count)
+          config.reset_trainings(date_s, date_e, reset_stock_ids)
+          attrs = attributes_for(:completed_training)
+          expect_training_attrs(completed_stock_ids, attrs[:stage], attrs[:rmse], nil)
+        end
+      end
 
-  #     context "for specified stocks" do
-  #       it "resets model_trainings to default states" do
-  #         stocks.each do |stock|
-  #           create(:full_training, model_config_id: half.id, stock_id: stock.id)
-  #         end
-
-  #         half.reset_trainings(date_s, date_e, stock_ids[0...5])
-  #         ModelTraining.where(stock_id: stock_ids[0...5]).each do |trng|
-  #           expect(trng.requested?).to be true
-  #           expect(trng.rmse.nil?).to be true
-  #           expect(trng.error_message.nil?).to be true
-  #         end
-  #       end
-  #     end
-
-  #     context "for stocks not in specified list" do
-  #       it "does not reset model_training" do
-  #         stocks.each do |stock|
-  #           create(:full_training, model_config_id: half.id, stock_id: stock.id)
-  #         end
-
-  #         half.reset_trainings(date_s, date_e, stock_ids[0...5])
-  #         done_attrs = attributes_for(:completed_training)
-
-  #         ModelTraining.where.not(stock_id: stock_ids[0...5]).each do |trng|
-  #           expect(trng.stage.to_s).to eq(done_attrs[:stage].to_s)
-  #           expect(trng.rmse).to eq(done_attrs[:rmse])
-  #           expect(trng.error_message).to eq(done_attrs[:error_message])
-  #         end
-  #       end
-  #     end
-
-  #     context "when stocks ids not specified" do
-  #       it "resets model_trainings for all stocks" do
-  #         Stock.pluck(:id).each do |sid|
-  #           create(:full_training, model_config_id: half.id, stock_id: sid)
-  #         end
-
-  #         half.reset_trainings(date_s, date_e)
-
-  #         ModelTraining.all.each do |trng|
-  #           expect(trng.requested?).to be true
-  #           expect(trng.rmse.nil?).to be true
-  #           expect(trng.error_message.nil?).to be true
-  #         end
-  #       end
-  #     end
-  #   end
-  # end
+      context "when stocks ids not specified" do
+        it "resets model_trainings for all stocks" do
+          create_completed_trainings(config, stocks, stocks.count)
+          config.reset_trainings(date_s, date_e)
+          expect_training_attrs(Stock.pluck(:id), :requested, nil, nil)
+        end
+      end
+    end
+  end
 end
