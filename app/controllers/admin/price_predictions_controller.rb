@@ -10,7 +10,7 @@ module Admin
         params = enqueue_params
         trng = find_training(*params.values_at(:model_config_id, :stock_id))
         @response = enqueue_prediction_job(trng.id, trng.stock_id, params[:data_range])
-        flagger.flag(@response) if @response[:status] != 'ok'
+        flagger.flag(@response) if @response[:status] == 'error'
       end
     end
 
