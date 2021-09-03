@@ -48,7 +48,7 @@ module Admin
         date_s, date_e, stock_ids = *params[:data_range], params[:stocks]
         model_config.reset_trainings(date_s, date_e, stock_ids)
         model_config.model_trainings.where(stock_id: stock_ids).map do |t|
-          { training_id: t.id, config_id: t.model_config_id, stock_id: t.stock_id }
+          { training_id: t.id, stock_id: t.stock_id }
         end
       end
 
