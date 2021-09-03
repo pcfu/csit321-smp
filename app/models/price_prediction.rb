@@ -7,7 +7,7 @@ class PricePrediction < ApplicationRecord
   SUFFIX = %i(date max_price exp_price min_price)
   ATTRS = [:entry_date] + PREFIX.product(SUFFIX).map {|p, s| "#{p}_#{s}".to_sym}
   PRICES = ATTRS.select {|attr| attr.to_s.include? 'price'}
-  private_constant :PREFIX, :SUFFIX, :ATTRS, :PRICES
+  private_constant :PREFIX, :SUFFIX, :PRICES
 
   belongs_to :stock
 
