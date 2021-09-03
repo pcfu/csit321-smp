@@ -12,7 +12,7 @@ module Admin
 
         trngs = reset_trainings(config, params)
         @response = enqueue_training_jobs(trngs, config.parse_params, params[:data_range])
-        flagger.flag(@response) if @response[:status] != 'ok'
+        flagger.flag(@response) if @response[:status] == 'error'
         update_trainings(config, @response[:results])
       end
     end
