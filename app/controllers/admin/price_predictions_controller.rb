@@ -15,7 +15,10 @@ module Admin
     end
 
     def create
-      render json: { status: 'ok' }
+      with_error_handling do |flagger|
+        PricePrediction.create! create_params
+        render json: { status: 'ok' }
+      end
     end
 
 
@@ -25,6 +28,10 @@ module Admin
         cid, sid, date_s, date_e = params.require %i[config_id stock_id date_start date_end]
         ensure_valid_dates!(date_s, date_e)
         { model_config_id: cid.to_i, stock_id: sid.to_i, data_range: [date_s, date_e] }
+      end
+
+      def create_params
+        params.require(:price_prediction).permit(:stock_id, *PricePrediction::ATTRS)
       end
 
       def find_training(cid, sid)
