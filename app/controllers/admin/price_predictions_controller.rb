@@ -9,11 +9,8 @@ module Admin
       with_error_handling do |flagger|
         params = enqueue_params
         trng = find_training(*params.values_at(:model_config_id, :stock_id))
-
-        msg = "Prediction requested for " +
-              "Model: #{params[:model_config_id]} Stock: #{params[:stock_id]} " +
-              "from: #{params[:data_range][0]} to: #{params[:data_range][1]}"
-        render json: { status: 'ok', message: msg }
+        @response = enqueue_prediction_job(trng.id, trng.stock_id, params[:data_range])
+        flagger.flag(@response) if @response[:status] != 'ok'
       end
     end
 
