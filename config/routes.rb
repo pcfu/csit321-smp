@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     resources :model_trainings, only: [:update], defaults: { format: 'json' } do
       post 'batch_enqueue', on: :collection, defaults: { format: 'json' }
     end
-    resources :price_predictions do
+    resources :price_predictions, only: [:create], defaults: { format: 'json' } do
       post 'enqueue', on: :collection, defaults: { format: 'json' }
     end
   end

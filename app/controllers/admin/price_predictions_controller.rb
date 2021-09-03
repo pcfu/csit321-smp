@@ -14,6 +14,10 @@ module Admin
       end
     end
 
+    def create
+      render json: { status: 'ok' }
+    end
+
 
     private
 
