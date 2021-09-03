@@ -24,17 +24,22 @@ export default class Alerts {
     container.append(alert);
   }
 
-  static success(container, message, maxDisplay = 5) {
+  static success(container, message, maxDisplay = 3) {
     const alert = Alerts.#buildAlert('success', message);
     Alerts.#addAlert(alert, container, maxDisplay);
   }
 
-  static danger(container, message, maxDisplay = 5) {
+  static warning(container, message, maxDisplay = 3) {
+    const alert = Alerts.#buildAlert('warning', message);
+    Alerts.#addAlert(alert, container, maxDisplay);
+  }
+
+  static danger(container, message, maxDisplay = 3) {
     const alert = Alerts.#buildAlert('danger', message);
     Alerts.#addAlert(alert, container, maxDisplay);
   }
 
-  static primary(container, message, maxDisplay = 5) {
+  static primary(container, message, maxDisplay = 3) {
     const alert = Alerts.#buildAlert('primary', message);
     Alerts.#addAlert(alert, container, maxDisplay);
   }
