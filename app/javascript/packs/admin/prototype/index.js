@@ -1,4 +1,5 @@
 import Alerts from 'common/alerts';
+import blink from 'common/blink';
 import AdminChannel from 'channels/admin_channel';
 
 let alertsContainer;
@@ -72,15 +73,4 @@ function updateModelConfigTable(progress, timestamp) {
   $(progCol).html(progress);
   $(tsCol).html(timestamp);
   blink($(progCol).parent());
-}
-
-function blink(...elements) {
-  elements.forEach(e => {
-    e.addClass('blinking');
-
-    let timeout = setTimeout(function () {
-      e.removeClass('blinking');
-      clearTimeout(timeout);
-    }, 1000);
-  });
 }
