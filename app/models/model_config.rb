@@ -33,9 +33,10 @@ class ModelConfig < ApplicationRecord
   end
 
   def reset_trainings(date_start, date_end, stock_ids = nil)
-    update(train_percent: 0)
     stock_ids ||= Stock.pluck(:id)
     stock_ids.each {|sid| reset_training(date_start, date_end, sid)}
+    update(train_percent: 0)
+    broadcast_training_progress
   end
 
 
@@ -49,9 +50,6 @@ class ModelConfig < ApplicationRecord
     end
 
     def broadcast_training_progress
-      num_done = model_trainings.done.count
-      msg = "#{name} is #{train_percent}% trained (#{num_done}/#{Stock.count} stocks)"
-      context = train_percent == 100 ? 'success' : 'primary'
-      AdminChannel.broadcast({ context: context, body: msg })
+      AdminChannel.broadcast EventMessages.model_config_training_progress(self)
     end
 end
