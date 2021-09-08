@@ -13,7 +13,6 @@ module Admin
         trngs = reset_trainings(config, params)
         @response = enqueue_training_jobs(trngs, config.parse_params, params[:data_range])
         flagger.flag(@response) if @response[:status] == 'error'
-        update_trainings(config, @response[:results])
       end
     end
 
@@ -49,14 +48,6 @@ module Admin
         model_config.reset_trainings(date_s, date_e, stock_ids)
         model_config.model_trainings.where(stock_id: stock_ids).map do |t|
           { training_id: t.id, stock_id: t.stock_id }
-        end
-      end
-
-      def update_trainings(model_config, results)
-        results.each do |result|
-          result.symbolize_keys!
-          trng = ModelTraining.find(result[:training_id])
-          trng.update(result.slice(:stage, :error_message))
         end
       end
   end
