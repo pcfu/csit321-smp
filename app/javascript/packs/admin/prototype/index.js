@@ -71,4 +71,16 @@ function updateModelConfigTable(progress, timestamp) {
   const [_, progCol, tsCol] = $('#model-config-table').find('td');
   $(progCol).html(progress);
   $(tsCol).html(timestamp);
+  blink($(progCol).parent());
+}
+
+function blink(...elements) {
+  elements.forEach(e => {
+    e.addClass('blinking');
+
+    let timeout = setTimeout(function () {
+      e.removeClass('blinking');
+      clearTimeout(timeout);
+    }, 1000);
+  });
 }

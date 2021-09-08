@@ -10,3 +10,12 @@ body {
   font-weight: bold;
   color: blue;
 }
+
+@keyframes blinker {
+  50% {
+    background-color: #b6effb;
+  }
+}
+.blinking {
+  animation: blinker 0.5s infinite;
+}
