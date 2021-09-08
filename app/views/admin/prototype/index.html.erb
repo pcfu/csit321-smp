@@ -9,6 +9,25 @@
         <button id="training-button" class="btn btn-primary">Train</button>
         <button id="prediction-button" class="btn btn-primary ms-5">Predict</button>
       </div>
+
+      <div class="my-5">
+        <table id="model-config-table" class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Model Name</th>
+              <th scope="col">Training Progress</th>
+              <th scope="col">Updated At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td scope="col"><%= @config.name %></th>
+              <td scope="col"><%= @config.train_percent %></th>
+              <td scope="col"><%= @config.updated_at.strftime("%Y-%m-%d %H:%M:%S.%3N") %></th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

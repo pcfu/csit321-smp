@@ -14,7 +14,9 @@ $(document).on('turbolinks:load', function () {
 function setupWebSocket() {
   const channel = new AdminChannel().subscribe();
   channel.onReceiveCallback(function (data) {
-    Alerts[data.context ? data.context : 'primary'](alertsContainer, data.body);
+    if (data.subject === 'model_config') {
+      handleModelConfigMessage(data);
+    }
   });
 }
 
@@ -56,4 +58,17 @@ function sendPostRequest(endpoint, data) {
 
 function getErrorMessage(response) {
   return response ? response.message : "Unknown error occurred";
+}
+
+function handleModelConfigMessage(data) {
+  if (data.context === 'success') {
+    Alerts.success(alertsContainer, data.body.message);
+  }
+  updateModelConfigTable(data.body.train_percent, data.body.updated_at);
+}
+
+function updateModelConfigTable(progress, timestamp) {
+  const [_, progCol, tsCol] = $('#model-config-table').find('td');
+  $(progCol).html(progress);
+  $(tsCol).html(timestamp);
 }
