@@ -12,16 +12,18 @@ class PricePrediction < ApplicationRecord
   belongs_to :stock
 
   before_validation :impute_dates
+  after_create      :broadcast_new_prediction
 
   validates_presence_of *ATTRS
   validates_numericality_of *PRICES, greater_than_or_equal_to: 0
 
 
   def to_chart_json
-    attributes.symbolize_keys.slice(*ATTRS).merge(
-      { nd_day: 1, st_day: ST_DAYS, mt_day: MT_DAYS, lt_day: LT_DAYS }
-    )
+    attrs = attributes.symbolize_keys.slice(*ATTRS)
+    json = attrs.each {|k, v| attrs[k] = v.to_f.round(3) if v.is_a? BigDecimal }
+    json.merge({ nd_day: 1, st_day: ST_DAYS, mt_day: MT_DAYS, lt_day: LT_DAYS })
   end
+
 
   private
 
@@ -32,5 +34,9 @@ class PricePrediction < ApplicationRecord
         self.mt_date = entry_date.advance(days: MT_DAYS) if mt_date.nil?
         self.lt_date = entry_date.advance(days: LT_DAYS) if lt_date.nil?
       end
+    end
+
+    def broadcast_new_prediction
+      AdminChannel.broadcast EventMessages.price_prediction_creation(self)
     end
 end

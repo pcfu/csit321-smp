@@ -49,17 +49,18 @@
           </thead>
           <tbody>
             <% @predictions.each do |p| %>
+              <% prices = p.to_chart_json %>
               <tr>
                 <td><%= p.stock.symbol %></td>
-                <td><%= p.entry_date %></td>
-                <td><%= p.nd_date %></td>
-                <td><%= p.nd_max_price.to_f.round(3) %></td>
-                <td><%= p.nd_exp_price.to_f.round(3) %></td>
-                <td><%= p.nd_min_price.to_f.round(3) %></td>
-                <td><%= p.st_date %></td>
-                <td><%= p.st_max_price.to_f.round(3) %></td>
-                <td><%= p.st_exp_price.to_f.round(3) %></td>
-                <td><%= p.st_min_price.to_f.round(3) %></td>
+                <td><%= prices[:entry_date] %></td>
+                <td><%= prices[:nd_date] %></td>
+                <td><%= prices[:nd_max_price] %></td>
+                <td><%= prices[:nd_exp_price] %></td>
+                <td><%= prices[:nd_min_price] %></td>
+                <td><%= prices[:st_date] %></td>
+                <td><%= prices[:st_max_price] %></td>
+                <td><%= prices[:st_exp_price] %></td>
+                <td><%= prices[:st_min_price] %></td>
               </tr>
             <% end %>
           </tbody>

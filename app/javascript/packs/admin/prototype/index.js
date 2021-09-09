@@ -17,6 +17,8 @@ function setupWebSocket() {
   channel.onReceiveCallback(function (data) {
     if (data.subject === 'model_config') {
       handleModelConfigMessage(data);
+    } else if (data.subject === 'price_prediction') {
+      handlePredictionMessage(data.body);
     }
   });
 }
@@ -61,6 +63,7 @@ function getErrorMessage(response) {
   return response ? response.message : "Unknown error occurred";
 }
 
+
 function handleModelConfigMessage(data) {
   if (data.context === 'success') {
     Alerts.success(alertsContainer, data.body.message);
@@ -73,4 +76,36 @@ function updateModelConfigTable(progress, timestamp) {
   $(progCol).html(progress);
   $(tsCol).html(timestamp);
   blink($(progCol).parent());
+}
+
+
+function handlePredictionMessage(data) {
+  let rows = $('#predictions-table tbody tr');
+  while (rows.length >= 5) {
+    rows.last().remove();
+    rows = $('#predictions-table tbody tr');
+  }
+
+  const newRow = buildRow(data);
+  $('#predictions-table tbody').prepend(newRow);
+  blink(newRow);
+
+  Alerts.success(alertsContainer, data.message);
+}
+
+function buildRow(data) {
+  const keys = [
+    'symbol', 'entry_date', 'nd_date', 'nd_max_price', 'nd_exp_price',
+    'nd_min_price', 'st_date', 'st_max_price', 'st_exp_price', 'st_min_price'
+  ];
+
+  const tr = $('<tr>');
+  Object.entries(data).forEach(([k, v]) => {
+    if (keys.includes(k)) {
+      const td = $('<td>')
+      td.text(v);
+      tr.append(td);
+    }
+  })
+  return tr;
 }

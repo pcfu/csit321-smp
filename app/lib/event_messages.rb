@@ -4,6 +4,13 @@ class EventMessages
     training_progress_message(config.name, config.train_percent, ts)
   end
 
+  def self.price_prediction_creation(prediction)
+    symbol = prediction.stock.symbol
+    prices = prediction.to_chart_json
+    message = "New prediction for #{symbol} stock"
+    new_prediction_message(symbol, prices, message)
+  end
+
 
   private
 
@@ -20,6 +27,14 @@ class EventMessages
         subject: 'model_config',
         context: percent == 100 ? 'success' : 'primary',
         body: { train_percent: percent, updated_at: timestamp }
+      }
+    end
+
+    def self.new_prediction_message(symbol, prices, message)
+      {
+        subject: 'price_prediction',
+        context: 'success',
+        body: { symbol: symbol, message: message }.merge(prices)
       }
     end
 
