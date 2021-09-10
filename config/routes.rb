@@ -18,8 +18,12 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :prototype, only: [:index]
     resources :model_trainings, only: [:update], defaults: { format: 'json' } do
+
+    resources :model_configs, only: [:show], defaults: { format: 'json' }
+
       post 'batch_enqueue', on: :collection, defaults: { format: 'json' }
     end
+
     resources :price_predictions, only: [:create], defaults: { format: 'json' } do
       post 'enqueue', on: :collection, defaults: { format: 'json' }
     end
