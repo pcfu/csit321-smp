@@ -21,7 +21,7 @@
       <h1>PREDICTION</h1>
       <%= content_tag :div,
         class: "price_prediction",
-        data: { pxpredict: @recent_predictions.first.to_chart_json } do
+        data: { pxpredict: @recent_predictions.first } do
       %>
         <canvas id="line-chart" width="400" height="200"></canvas>
       <% end %>
@@ -52,8 +52,8 @@
         <tbody>
           <% @recent_predictions.each do |pxPrehist| %>
             <tr>
-              <% pxPrehist.attributes.values_at(*@prediction_attrs).each do |val| %>
-                <td><%= val.class == BigDecimal ? val.to_f.round(3) : val %></td>
+              <% pxPrehist.values[0...-4].each do |val| %>
+                <td><%= val %></td>
               <% end %>
             </tr>
           <% end %>

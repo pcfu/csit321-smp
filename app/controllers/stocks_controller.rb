@@ -9,11 +9,10 @@ class StocksController < ApplicationController
   def show
     @stock = Stock.find(params[:id])
     @recent_predictions = @stock.price_predictions.order(entry_date: :desc).limit(2)
-    @prediction_attrs = PricePrediction.const_get(:ATTRS).map &:to_s
+                                .map {|s| s.to_chart_json }
 
     respond_to do |format|
       format.html
-      #format.json {render :json => Stock.PricePredict.all }
     end
   end
 end
