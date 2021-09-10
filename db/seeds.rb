@@ -42,42 +42,36 @@ end
 
 puts "=== INSERTING MODEL CONFIGS ==="
 
-###
-# Params based on the following python code in LSTM_Basic.ipynb
-###
-
-# model=Sequential()
-# model.add(LSTM(50,return_sequences=True,input_shape=(100,1)))
-# model.add(LSTM(50,return_sequences=True))
-# model.add(LSTM(50))
-# model.add(Dense(1))
-# model.compile(loss='mean_squared_error',optimizer='adam')
-
-# model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=100,batch_size=64,verbose=1)
-
-
 params = {
-  model: 'sequential',
+  model_class: 'PricePredictionLSTM',
   init_options: {
     layers: [
       {
         type: 'lstm',
-        nodes: 50,
-        return_sequences: true,
-        input_shape: [100, 1]
+        settings: {
+          units: 50,
+          return_sequences: true,
+          input_shape: [100, 1]
+        }
       },
       {
         type: 'lstm',
-        nodes: 50,
-        return_sequences: true
+        settings: {
+          units: 50,
+          return_sequences: true
+        }
       },
       {
         type: 'lstm',
-        nodes: 50
+        settings: {
+          units: 50
+        }
       },
       {
         type: 'dense',
-        nodes: 1
+        settings: {
+          units: 1
+        }
       }
     ],
     compile: {
@@ -88,7 +82,8 @@ params = {
   training_options: {
     epochs: 100,
     batch_size: 64
-  }
+  },
+  data_fields: ['close']
 }
 
 ModelConfig.create(
