@@ -12,20 +12,23 @@ stocks.each {|stock| Stock.create(stock)}
 
 puts "=== INSERTING PRICE HISTORIES ==="
 
-filepath = "#{DATA_DIR}/price_histories_list.json"
-price_data = JSON.parse(File.read(filepath))
-price_data.each do |symbol, prices|
-  stock = Stock.find_by(:symbol => symbol)
+keys = %w[date open high low close volume change]
+filenames = "#{DATA_DIR}/price_histories/*.json"
 
-  prices.each_with_index do |prc, idx|
-    print "\rInserting price for #{symbol} (#{idx + 1} of #{prices.count})"
-    stock.price_histories.create prc
+Dir.glob(filenames) do |filepath|
+  prices = JSON.parse(File.read(filepath))
+  stock = Stock.find_by(:symbol => prices.first['symbol'])
+
+  prices.each_with_index do |price, idx|
+    print "\rInserting price for #{stock.symbol} (#{idx + 1} of #{prices.count})"
+    params = price.slice(*keys).merge({ percent_change: price['changePercent'] })
+    stock.price_histories.create! params
   end
   puts
 end
 
 
-puts "=== INSERTING PRICE PREDICTIONs ==="
+puts "=== INSERTING PRICE PREDICTIONS ==="
 
 filepath = "#{DATA_DIR}/price_predictions_list.json"
 predictions_data = JSON.parse(File.read(filepath))
