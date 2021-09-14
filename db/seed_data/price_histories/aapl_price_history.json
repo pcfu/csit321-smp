@@ -103766,5 +103766,33 @@
         "label": "Sep 10, 21",
         "change": -5.099999999999994,
         "changePercent": -0.0331
+    },
+    {
+        "close": 149.55,
+        "high": 151.42,
+        "low": 148.75,
+        "open": 150.63,
+        "symbol": "AAPL",
+        "volume": 102404329,
+        "id": "HISTORICAL_PRICES",
+        "key": "AAPL",
+        "subkey": "",
+        "date": "2021-09-13",
+        "updated": 1631580586000,
+        "changeOverTime": 0,
+        "marketChangeOverTime": 0,
+        "uOpen": 150.63,
+        "uClose": 149.55,
+        "uHigh": 151.42,
+        "uLow": 148.75,
+        "uVolume": 102404329,
+        "fOpen": 150.63,
+        "fClose": 149.55,
+        "fHigh": 151.42,
+        "fLow": 148.75,
+        "fVolume": 102404329,
+        "label": "Sep 13, 21",
+        "change": 0,
+        "changePercent": 0
     }
 ]
