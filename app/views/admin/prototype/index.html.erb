@@ -24,7 +24,16 @@
 
         <div class="col-6">
           <h3>Select stock for prediction</h3>
-          <button id="prediction-button" class="btn btn-primary ms-5">Predict</button>
+          <%= radio_button_tag(:stock_id, 1, true, id: :radio_aapl, class: 'prediction-option') %>
+            <%= label_tag(:radio_aapl, "AAPL", class: 'prediction-option-label') %>
+          <%= radio_button_tag(:stock_id, 2, false, id: :radio_xom, class: 'prediction-option') %>
+            <%= label_tag(:radio_xom, "XOM", class: 'prediction-option-label') %>
+          <%= radio_button_tag(:stock_id, 3, false, id: :radio_gsk, class: 'prediction-option') %>
+            <%= label_tag(:radio_gsk, "GSK", class: 'prediction-option-label') %>
+          <%= radio_button_tag(:stock_id, 4, false, id: :radio_wpm, class: 'prediction-option') %>
+            <%= label_tag(:radio_wpm, "WPM", class: 'prediction-option-label') %>
+
+          <button id="prediction-button" class="btn btn-primary">Predict</button>
         </div>
       </div>
 
@@ -89,7 +98,7 @@
 </div>
 
 <style>
-  .training-option-label {
+  .training-option-label, .prediction-option-label {
     margin-right: 15px;
   }
 </style>
