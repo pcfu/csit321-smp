@@ -29,13 +29,13 @@ function addTrainingClickListeners() {
     if (stockIds.length <= 0) {
       Alerts.warning(alertsContainer, "Select at least 1 stock for the model to train on");
     } else {
-      console.log(stockIds);
-      /* const data = {
-       *   config_id: 1,
-       *   date_start: '2006-01-01',
-       *   date_end: '2021-12-31',
-       * };
-       * sendPostRequest("/admin/model_trainings/batch_enqueue", data); */
+      const data = {
+        config_id: 1,
+        stock_ids: stockIds,
+        // date_start: '2006-01-01',
+        // date_end: '2021-12-31',
+      };
+      sendPostRequest("/admin/model_trainings/batch_enqueue", data);
     }
   });
 

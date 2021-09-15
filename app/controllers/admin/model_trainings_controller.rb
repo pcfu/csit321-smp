@@ -7,14 +7,12 @@ module Admin
 
     def batch_enqueue
       with_error_handling do |flagger|
+        params = batch_enqueue_params
+        config = ModelConfig.find(params[:config_id])
 
-        return render json: { status: 'ok' }
-        # params = batch_enqueue_params
-        # config = ModelConfig.find(params[:config_id])
-
-        # trngs = reset_trainings(config, params)
-        # @response = enqueue_training_jobs(trngs, config.parse_params, params[:data_range])
-        # flagger.flag(@response) if @response[:status] == 'error'
+        trngs = reset_trainings(config, params)
+        @response = enqueue_training_jobs(trngs, config.parse_params, params[:data_range])
+        flagger.flag(@response) if @response[:status] == 'error'
       end
     end
 
@@ -30,12 +28,11 @@ module Admin
     private
 
       def batch_enqueue_params
-        id, date_s, date_e = params.require([:config_id, :date_start, :date_end])
+        config_id, stock_ids = params.require([:config_id, :stock_ids])
+        date_e = params[:date_end] || Date.today.to_s
+        date_s = params[:date_start] || Date.today.advance(years: -15).to_s
         ensure_valid_dates!(date_s, date_e)
-        #{ config_id: id.to_i, data_range: [date_s, date_e] }.merge(stocks: Stock.pluck(:id))
-
-        # for the prototype, just train on AAPL stock
-        { config_id: id.to_i, data_range: [date_s, date_e] }.merge(stocks: [1])
+        { config_id: config_id.to_i, stocks: stock_ids, data_range: [date_s, date_e] }
       end
 
       def update_params
