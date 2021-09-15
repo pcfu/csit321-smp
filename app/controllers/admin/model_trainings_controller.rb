@@ -7,12 +7,14 @@ module Admin
 
     def batch_enqueue
       with_error_handling do |flagger|
-        params = batch_enqueue_params
-        config = ModelConfig.find(params[:config_id])
 
-        trngs = reset_trainings(config, params)
-        @response = enqueue_training_jobs(trngs, config.parse_params, params[:data_range])
-        flagger.flag(@response) if @response[:status] == 'error'
+        return render json: { status: 'ok' }
+        # params = batch_enqueue_params
+        # config = ModelConfig.find(params[:config_id])
+
+        # trngs = reset_trainings(config, params)
+        # @response = enqueue_training_jobs(trngs, config.parse_params, params[:data_range])
+        # flagger.flag(@response) if @response[:status] == 'error'
       end
     end
 

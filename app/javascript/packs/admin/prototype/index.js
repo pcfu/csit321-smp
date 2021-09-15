@@ -34,6 +34,10 @@ function addTrainingClickListener() {
   });
 }
 
+function checkTrainingSelections() {
+
+}
+
 function addPredictionClickListener() {
   $('#prediction-button').on('click', function () {
     let today = new Date();

@@ -5,9 +5,25 @@
 <div class="container">
   <div class="row">
     <div class="col-12">
-      <div class="my-5 text-center">
-        <button id="training-button" class="btn btn-primary">Train</button>
-        <button id="prediction-button" class="btn btn-primary ms-5">Predict</button>
+      <div class="my-5 text-center d-flex">
+        <div class="col-6">
+          <h3>Select stocks for training</h3>
+          <%= check_box_tag(:AAPL, 1) %>
+            <%= label_tag(:AAPL, "AAPL") %>
+          <%= check_box_tag(:XOM, 2) %>
+            <%= label_tag(:XOM, "XOM") %>
+          <%= check_box_tag(:GSK, 3) %>
+            <%= label_tag(:GSK, "GSK") %>
+          <%= check_box_tag(:WPM, 4) %>
+            <%= label_tag(:WPM, "WPM") %>
+
+          <button id="training-button" class="btn btn-primary">Train</button>
+        </div>
+
+        <div class="col-6">
+          <h3>Select stock for prediction</h3>
+          <button id="prediction-button" class="btn btn-primary ms-5">Predict</button>
+        </div>
       </div>
 
       <h2>Model Training Status</h2>
