@@ -7,7 +7,7 @@ let alertsContainer;
 $(document).on('turbolinks:load', function () {
   alertsContainer = $('#alerts-container');
   setupWebSocket();
-  addTrainingClickListener();
+  addTrainingClickListeners();
   addPredictionClickListener();
 });
 
@@ -23,19 +23,39 @@ function setupWebSocket() {
   });
 }
 
-function addTrainingClickListener() {
+function addTrainingClickListeners() {
   $('#training-button').on('click', function () {
-    const data = {
-      config_id: 1,
-      date_start: '2006-01-01',
-      date_end: '2021-12-31',
-    };
-    sendPostRequest("/admin/model_trainings/batch_enqueue", data);
+    const stockIds = getTrainingSelections();
+    if (stockIds.length <= 0) {
+      Alerts.warning(alertsContainer, "Select at least 1 stock for the model to train on");
+    } else {
+      console.log(stockIds);
+      /* const data = {
+       *   config_id: 1,
+       *   date_start: '2006-01-01',
+       *   date_end: '2021-12-31',
+       * };
+       * sendPostRequest("/admin/model_trainings/batch_enqueue", data); */
+    }
   });
+
+  $('#ALL').on('change', function () {
+    const checked = $(this).is(':checked');
+    $('.model-training-option').prop('checked', checked);
+  })
 }
 
-function checkTrainingSelections() {
+function getTrainingSelections() {
+  const stockIds = [];
 
+  $('.model-training-option').each(function () {
+    const checkbox = $(this);
+    if (checkbox.is(':checked')) {
+      stockIds.push(checkbox.val());
+    };
+  });
+
+  return stockIds;
 }
 
 function addPredictionClickListener() {

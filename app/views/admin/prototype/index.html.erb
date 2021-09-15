@@ -8,14 +8,16 @@
       <div class="my-5 text-center d-flex">
         <div class="col-6">
           <h3>Select stocks for training</h3>
-          <%= check_box_tag(:AAPL, 1) %>
-            <%= label_tag(:AAPL, "AAPL") %>
-          <%= check_box_tag(:XOM, 2) %>
-            <%= label_tag(:XOM, "XOM") %>
-          <%= check_box_tag(:GSK, 3) %>
-            <%= label_tag(:GSK, "GSK") %>
-          <%= check_box_tag(:WPM, 4) %>
-            <%= label_tag(:WPM, "WPM") %>
+          <%= check_box_tag(:AAPL, 1, false, class: 'model-training-option') %>
+            <%= label_tag(:AAPL, "AAPL", class: 'training-option-label') %>
+          <%= check_box_tag(:XOM, 2, false, class: 'model-training-option') %>
+            <%= label_tag(:XOM, "XOM", class: 'training-option-label') %>
+          <%= check_box_tag(:GSK, 3, false, class: 'model-training-option') %>
+            <%= label_tag(:GSK, "GSK", class: 'training-option-label') %>
+          <%= check_box_tag(:WPM, 4, false, class: 'model-training-option') %>
+            <%= label_tag(:WPM, "WPM", class: 'training-option-label') %>
+          <%= check_box_tag(:ALL, :ALL) %>
+            <%= label_tag(:ALL, "All", class: 'training-option-label') %>
 
           <button id="training-button" class="btn btn-primary">Train</button>
         </div>
@@ -85,3 +87,9 @@
     </div>
   </div>
 </div>
+
+<style>
+  .training-option-label {
+    margin-right: 15px;
+  }
+</style>
