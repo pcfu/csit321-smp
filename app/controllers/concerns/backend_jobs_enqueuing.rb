@@ -16,11 +16,10 @@ module BackendJobsEnqueuing
     JSON.parse(res.body, symbolize_names: true)
   end
 
-  def enqueue_prediction_job(training_id, stock_id, data_range)
+  def enqueue_prediction_job(training_id, stock_id)
     data = {
       training_id: training_id,
       stock_id: stock_id,
-      data_range: data_range
     }
     res = BackendClient.get(PREDICTION_ENDPOINT, data)
     JSON.parse(res.body, symbolize_names: true)

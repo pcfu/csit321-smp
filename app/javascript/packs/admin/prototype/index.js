@@ -60,22 +60,9 @@ function getTrainingSelections() {
 
 function addPredictionClickListener() {
   $('#prediction-button').on('click', function () {
-    let today = new Date();
-    today = `${today.getFullYear()}-` +
-            `${(today.getMonth() + 1).toString().padStart(2, '0')}-` +
-            `${today.getDate().toString().padStart(2, '0')}`;
-
-    let yearAgo = new Date();
-    yearAgo.setDate(yearAgo.getDate() - 365);
-    yearAgo = `${yearAgo.getFullYear()}-` +
-              `${(yearAgo.getMonth() + 1).toString().padStart(2, '0')}-` +
-              `${yearAgo.getDate().toString().padStart(2, '0')}`;
-
     const data = {
       config_id: 1,
-      stock_id: 1,
-      date_start: yearAgo,
-      date_end: today
+      stock_id: $('input[name="stock_id"]:checked').val(),
     };
     sendPostRequest("/admin/price_predictions/enqueue", data);
   });
