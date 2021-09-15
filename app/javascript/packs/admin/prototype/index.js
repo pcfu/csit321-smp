@@ -39,7 +39,7 @@ function addTrainingClickListeners() {
     }
   });
 
-  $('#ALL').on('change', function () {
+  $('#cb_all').on('change', function () {
     const checked = $(this).is(':checked');
     $('.model-training-option').prop('checked', checked);
   })

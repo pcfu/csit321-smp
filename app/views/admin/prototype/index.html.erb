@@ -8,16 +8,16 @@
       <div class="my-5 text-center d-flex">
         <div class="col-6">
           <h3>Select stocks for training</h3>
-          <%= check_box_tag(:AAPL, 1, false, class: 'model-training-option') %>
-            <%= label_tag(:AAPL, "AAPL", class: 'training-option-label') %>
-          <%= check_box_tag(:XOM, 2, false, class: 'model-training-option') %>
-            <%= label_tag(:XOM, "XOM", class: 'training-option-label') %>
-          <%= check_box_tag(:GSK, 3, false, class: 'model-training-option') %>
-            <%= label_tag(:GSK, "GSK", class: 'training-option-label') %>
-          <%= check_box_tag(:WPM, 4, false, class: 'model-training-option') %>
-            <%= label_tag(:WPM, "WPM", class: 'training-option-label') %>
-          <%= check_box_tag(:ALL, :ALL) %>
-            <%= label_tag(:ALL, "All", class: 'training-option-label') %>
+          <%= check_box_tag(:cb_aapl, 1, false, class: 'model-training-option') %>
+            <%= label_tag(:cb_aapl, "AAPL", class: 'training-option-label') %>
+          <%= check_box_tag(:cb_xom, 2, false, class: 'model-training-option') %>
+            <%= label_tag(:cb_xom, "XOM", class: 'training-option-label') %>
+          <%= check_box_tag(:cb_gsk, 3, false, class: 'model-training-option') %>
+            <%= label_tag(:cb_gsk, "GSK", class: 'training-option-label') %>
+          <%= check_box_tag(:cb_wpm, 4, false, class: 'model-training-option') %>
+            <%= label_tag(:cb_wpm, "WPM", class: 'training-option-label') %>
+          <%= check_box_tag(:cb_all, :ALL) %>
+            <%= label_tag(:cb_all, "All", class: 'training-option-label') %>
 
           <button id="training-button" class="btn btn-primary">Train</button>
         </div>
