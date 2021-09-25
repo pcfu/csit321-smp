@@ -1,0 +1,14 @@
+<div id="login-form" class="panel">
+  <div class="form-wrapper">
+    <div class="form-title">Welcome back!</div>
+    <%=
+      locals = {
+        model: @session,
+        method: 'post',
+        form_type: 'login',
+        submit_text: 'Login'
+      }
+      render partial: 'forms/user_form', locals: locals
+    %>
+  </div>
+</div>

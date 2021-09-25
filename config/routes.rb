@@ -8,6 +8,10 @@ Rails.application.routes.draw do
     resources :users, path: 'register', only: [:new, :create]
   end
 
+  scope(path_names: { new: '/' }) do
+    resources :sessions, path: 'login', only: [:new, :create]
+  end
+
   resources :stocks, only: [:index, :show], shallow: true do
     resources :price_histories, only: [:index], defaults: { format: :json }
   end
