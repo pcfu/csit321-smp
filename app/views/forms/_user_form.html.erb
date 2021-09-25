@@ -1,0 +1,34 @@
+<%= form_with model: model, method: method do |f| %>
+  <% if form_type == 'register' %>
+    <div class="row">
+      <div class="col-6 form-group">
+        <%= form_label_with_error(f, :first_name, model) %>
+        <%= f.text_field :first_name, class: "form-control" %>
+      </div>
+
+      <div class="col-6 form-group">
+        <%= form_label_with_error(f, :last_name, model) %>
+        <%= f.text_field :last_name, class: "form-control" %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form_label_with_error(f, :email, model) %>
+    <%= f.text_field :email, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form_label_with_error(f, :password, model) %>
+    <%= f.password_field :password, class: "form-control" %>
+  </div>
+
+  <% if form_type == 'register' %>
+    <div class="form-group">
+      <%= form_label_with_error(f, :password_confirmation, model) %>
+      <%= f.password_field :password_confirmation, class: "form-control" %>
+    </div>
+  <% end %>
+
+  <%= f.submit submit_text, class: "btn btn-primary" %>
+<% end %>

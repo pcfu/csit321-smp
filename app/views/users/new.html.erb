@@ -7,8 +7,13 @@
   <div class="form-wrapper">
     <div class="form-title">Create an account</div>
     <%=
-      locals = { user: @user, method: 'post', submit_text: 'Register' }
-      render partial: 'user_form', locals: locals
+      locals = {
+        model: @user,
+        method: 'post',
+        form_type: 'register',
+        submit_text: 'Register'
+      }
+      render partial: 'forms/user_form', locals: locals
     %>
   </div>
 </div>
