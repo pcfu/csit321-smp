@@ -5,7 +5,7 @@
 
 <div id="login-form" class="panel">
   <div class="form-wrapper">
-    <div class="form-title">Welcome back!</div>
+    <div class="form-title">Welcome back</div>
     <%=
       locals = {
         model: @session,
@@ -15,5 +15,10 @@
       }
       render partial: 'forms/user_form', locals: locals
     %>
+
+    <small class="form-text">
+      New to EZML?
+      <a href=<%= '/register' %>>Register now!</a>
+    </small>
   </div>
 </div>
