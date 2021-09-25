@@ -220,4 +220,13 @@ RSpec.describe User, type: :model do
       expect { user }.to raise_error(ArgumentError).with_message(/is not a valid role/)
     end
   end
+
+  describe "#methods" do
+    describe "#full_name" do
+      it "returns first and last name with first letters capitalized" do
+        name = "#{user.first_name.capitalize} #{user.last_name.capitalize}"
+        expect(user.full_name).to eq(name)
+      end
+    end
+  end
 end

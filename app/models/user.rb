@@ -29,6 +29,11 @@ class User < ApplicationRecord
   validates :role,        presence: true
 
 
+  def full_name
+    "#{first_name} #{last_name}".titleize
+  end
+
+
   private
 
     def downcase_names_and_email
