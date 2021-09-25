@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      keys = %i[first_name last_name email password password_confirmation]
+      keys = %i[first_name last_name email password password_confirmation role]
       params.require(:user).permit(*keys)
     end
 end
