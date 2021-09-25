@@ -1,3 +1,8 @@
+<% content_for :assets do %>
+  <%= javascript_pack_tag 'sessions/login', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_pack_tag 'sessions/login', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
 <div id="login-form" class="panel">
   <div class="form-wrapper">
     <div class="form-title">Welcome back!</div>

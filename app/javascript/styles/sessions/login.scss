@@ -1,0 +1,15 @@
+#main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#login-form {
+  width: 400px;
+  height: min-content;
+}
+
+form > input[type="submit"] {
+  margin-top: 10px;
+  width: 100% !important;
+}
