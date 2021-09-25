@@ -4,6 +4,12 @@ body {
   font-family: Helvetica, "Trebuchet MS", Verdana, sans-serif;
 }
 
+.panel {
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 2px 6px 0 rgba(0,0,0,.2);
+}
+
 @keyframes blinker {
   50% {
     background-color: #b6effb;

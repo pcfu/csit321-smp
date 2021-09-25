@@ -1,0 +1,27 @@
+.form-title {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-label-group {
+  font-size: 0.9rem;
+
+  label {
+    text-transform: uppercase;
+  }
+
+  .field-error-message {
+    text-transform: lowercase;
+    color: red;
+  }
+}
+
+.field_with_errors > input {
+  border-color: red;
+}

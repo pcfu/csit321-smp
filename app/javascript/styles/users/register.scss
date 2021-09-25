@@ -1,0 +1,15 @@
+#main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#user-form {
+  width: 475px;
+  height: min-content;
+}
+
+form > input[type="submit"] {
+  margin-top: 10px;
+  width: 100% !important;
+}
