@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_11_173758) do
+ActiveRecord::Schema.define(version: 2021_09_25_010908) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,12 @@ ActiveRecord::Schema.define(version: 2021_09_11_173758) do
     "training",
     "done",
     "error",
+  ], force: :cascade
+
+  create_enum :user_role, [
+    "regular",
+    "admin",
+    "banned",
   ], force: :cascade
 
   create_table "headlines", force: :cascade do |t|
@@ -124,6 +130,16 @@ ActiveRecord::Schema.define(version: 2021_09_11_173758) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_stocks_on_name"
     t.index ["symbol"], name: "index_stocks_on_symbol", unique: true
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "email", null: false
+    t.string "password_digest", null: false
+    t.enum "role", null: false, enum_name: "user_role"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "headlines", "stocks"
