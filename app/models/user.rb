@@ -14,6 +14,7 @@ class User < ApplicationRecord
   has_secure_password
   auto_strip_attributes :first_name, :last_name, :email
 
+  after_initialize  :set_defaults
   before_validation :downcase_names_and_email
 
   validates :first_name,  presence: true,
@@ -35,6 +36,10 @@ class User < ApplicationRecord
 
 
   private
+
+    def set_defaults
+      self.role ||= :regular
+    end
 
     def downcase_names_and_email
       self.first_name.downcase! if first_name.present?
