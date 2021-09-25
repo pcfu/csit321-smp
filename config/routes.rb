@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   root 'stocks#index'
 
   # Public Endpoints
+  scope(path_names: { new: '/' }) do
+    resources :users, path: 'register', only: [:new, :create]
+  end
+
   resources :stocks, only: [:index, :show], shallow: true do
     resources :price_histories, only: [:index], defaults: { format: :json }
   end
