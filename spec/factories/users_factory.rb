@@ -11,6 +11,12 @@ FactoryBot.define do
     password_confirmation { password }
     role                  { 'regular' }
 
+    factory :control_user, aliases: [:admin] do
+      email { 'admin@email.com' }
+      role  { 'admin' }
+    end
+
+
     ### first_name traits
 
     trait :first_name_with_spaces do
@@ -102,6 +108,11 @@ FactoryBot.define do
 
     trait :pw_no_special_chars do
       password { 'Passw0rd' }
+    end
+
+    trait :new_password do
+      password              { 'p@55worD' }
+      password_confirmation { 'p@55worD' }
     end
 
     ### password_confirmation traits

@@ -26,7 +26,8 @@ class User < ApplicationRecord
                           uniqueness: true
   validates :password,    presence: true,
                           length: { in: PW_MIN_LEN..PW_MAX_LEN },
-                          format: { with: PW_REGEX }
+                          format: { with: PW_REGEX },
+                          if: :validate_password?
   validates :role,        presence: true
 
 
@@ -43,6 +44,10 @@ class User < ApplicationRecord
 
     def set_defaults
       self.role ||= :regular
+    end
+
+    def validate_password?
+      return new_record? || password.present?
     end
 
     def downcase_names_and_email

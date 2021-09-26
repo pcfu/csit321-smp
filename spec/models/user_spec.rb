@@ -5,7 +5,6 @@ RSpec.describe User, type: :model do
   let(:user)        { build_stubbed(:user, *traits) }
   let(:user_in_db)  { create(:user, *traits) }
   let(:traits)      { [] }
-  let(:use_db)      { false }
 
   it { is_expected.to be_valid }
 
@@ -149,11 +148,27 @@ RSpec.describe User, type: :model do
   end
 
   describe "#password" do
-    it "is required" do
-      blank_strings.each do |password|
-        user.password = password
-        user.valid?
-        expect(user.errors[:password]).to include("can't be blank")
+    context "when creating user" do
+      it "is required" do
+        user = User.new attributes_for(:user)
+        blank_strings.each do |password|
+          user.password = password
+          user.valid?
+          expect(user.errors[:password]).to include("can't be blank")
+        end
+      end
+    end
+
+    context "when updating user" do
+      it "does not validate password if password not specified" do
+        attrs = attributes_for(:admin).slice(:email, :role)
+        expect(user_in_db.update attrs).to be true
+      end
+
+      it "validates password if password is specified" do
+        traits = [:new_password, :pw_not_equal_confirmation]
+        attrs = attributes_for(:user, *traits)
+        expect(user_in_db.update attrs).to be false
       end
     end
 
