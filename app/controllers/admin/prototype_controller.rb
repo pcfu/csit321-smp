@@ -1,6 +1,6 @@
 module Admin
   class PrototypeController < ApplicationController
-    before_action :redirect_to_root_if_not_admin
+    before_action :redirect_if_not_admin
 
     def index
       @config = ModelConfig.find(1)

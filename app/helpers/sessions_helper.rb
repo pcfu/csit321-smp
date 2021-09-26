@@ -18,7 +18,8 @@ module SessionsHelper
     end
   end
 
-  def redirect_to_root_if_not_admin
-    redirect_to root_url unless logged_in? and current_user.admin?
+  def redirect_if_not_admin
+    return redirect_to sessions_url if !logged_in?       # login page if not logged in
+    return redirect_to root_url if !current_user.admin?  # landing page if regular user
   end
 end
