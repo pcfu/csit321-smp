@@ -11,8 +11,9 @@
     <%= include_gon(:camel_case => true) %>
 
     <% page_js = yield(:page_js).split("\n").map &:strip %>
-    <%= stylesheet_pack_tag 'application', media: 'all' %>
+    <% page_css = yield(:page_css).split("\n").map &:strip %>
     <%= javascript_pack_tag 'application', *page_js %>
+    <%= stylesheet_pack_tag 'application', *page_css, media: 'all' %>
     <%= yield :assets %>
   </head>
 
