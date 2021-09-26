@@ -2,7 +2,9 @@
   <div id="username"><%= current_user.full_name %></div>
   <div id="user-email"><%= current_user.email %></div>
 
-  <div class="text-center">
-    <a href="/logout" id="logout-btn" class="btn btn-primary">Log out</a>
-  </div>
+  <%= form_with url: '/logout' do |f| %>
+    <div class="text-center">
+      <%= f.submit 'Log out', id: 'logout-btn', class: "btn btn-primary" %>
+    </div>
+  <% end %>
 </div>

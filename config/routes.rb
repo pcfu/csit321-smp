@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   scope(path_names: { new: '/' }) do
     resources :sessions, path: 'login', only: [:new, :create]
   end
+  post 'logout', to: 'sessions#destroy'
+
 
   resources :stocks, only: [:index, :show], shallow: true do
     resources :price_histories, only: [:index], defaults: { format: :json }

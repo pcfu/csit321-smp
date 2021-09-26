@@ -1,9 +1,9 @@
 const HIDDEN = 'd-none';
 
-let panel;
-
 function handleAvatarClicks() {
   $('#avatar').click(function () {
+    const panel = $('.control-panel');
+
     if (panel.hasClass(HIDDEN)) {
       panel.removeClass(HIDDEN);
     } else {
@@ -14,6 +14,8 @@ function handleAvatarClicks() {
 
 function handleDocumentClicks() {
   $(document).click(function(e) {
+    const panel = $('.control-panel');
+
     if (shouldHidePanel(e, panel)) {
       panel.addClass(HIDDEN);
     }
@@ -36,7 +38,9 @@ function clickedOutsideControlPanel(event, panel) {
 }
 
 function shouldHidePanel(event, panel) {
-  return !panel.hasClass(HIDDEN) &&
+  const panelOpened = panel.length > 0 && !panel.hasClass(HIDDEN);
+
+  return panelOpened &&
          !clickedOnAvatar($(event.target)) &&
          clickedOutsideControlPanel(event, panel);
 }
@@ -45,7 +49,6 @@ function shouldHidePanel(event, panel) {
 /* Main */
 
 $(document).on('turbolinks:load', function () {
-  panel = $('.control-panel');
   handleAvatarClicks();
   handleDocumentClicks();
 });

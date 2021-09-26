@@ -11,6 +11,10 @@ class Session
   validate :account_exists, :correct_password
 
 
+  def get_user
+    user
+  end
+
   def authenticate?
     valid?
   end
