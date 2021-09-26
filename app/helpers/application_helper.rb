@@ -1,4 +1,10 @@
 module ApplicationHelper
+  def full_title(page_title = '')
+    title = 'EZML'
+    title += " | #{page_title}" if page_title.present?
+    title
+  end
+
   def form_label_with_error(form, field, model)
     content_tag(:div, class: "form-label-group d-flex justify-content-between") do
       concat(form.label field)
