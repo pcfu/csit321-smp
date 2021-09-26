@@ -129,7 +129,7 @@ function tooltipOptions() {
 let chart = null;
 
 
-$(document).on('turbolinks:load', function () {
+$(document).ready(function () {
   // Trading View Chart
   var ex_symbol = $('#stockexchange').html()
   var ex_dict = {"NAS":"NASDAQ", "NYS":"NYSE"}
@@ -171,10 +171,4 @@ $(document).on('turbolinks:load', function () {
     data: chartData,
     options: options
   });
-});
-
-
-$(document).on('turbolinks:before-visit', function (){
-  if (chart) chart.destroy();
-  chart = null;
 });

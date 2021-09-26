@@ -1,9 +1,11 @@
-<% content_for :assets do %>
-  <%= javascript_pack_tag 'stocks/show', 'data-turbolinks-track': 'reload' %>
+<% content_for :page_js do %>
+  stocks/show
+<% end %>
 
-  <!-- Include trading view chart here -->
+<% content_for :assets do %>
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <% end %>
+
 
 <div class="container">
   <!-- PRICE CHART -->

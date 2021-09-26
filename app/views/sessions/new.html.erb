@@ -1,6 +1,5 @@
-<% content_for :assets do %>
-  <%= javascript_pack_tag 'sessions/login', 'data-turbolinks-track': 'reload' %>
-  <%= stylesheet_pack_tag 'sessions/login', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% content_for :page_js do %>
+  sessions/login
 <% end %>
 
 <div id="login-form" class="panel">

@@ -48,7 +48,7 @@ function shouldHidePanel(event, panel) {
 
 /* Main */
 
-$(document).on('turbolinks:load', function () {
+$(document).ready(function () {
   handleAvatarClicks();
   handleDocumentClicks();
 });

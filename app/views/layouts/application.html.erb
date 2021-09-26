@@ -10,8 +10,9 @@
     <%= Gon::Base.render_data %>
     <%= include_gon(:camel_case => true) %>
 
-    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <% page_js = yield(:page_js).split("\n").map &:strip %>
+    <%= stylesheet_pack_tag 'application', media: 'all' %>
+    <%= javascript_pack_tag 'application', *page_js %>
     <%= yield :assets %>
   </head>
 

@@ -1,6 +1,5 @@
-<% content_for :assets do %>
-  <%= javascript_pack_tag 'users/register', 'data-turbolinks-track': 'reload' %>
-  <%= stylesheet_pack_tag 'users/register', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% content_for :page_js do %>
+  users/register
 <% end %>
 
 <div id="user-form" class="panel">

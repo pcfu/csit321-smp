@@ -4,7 +4,7 @@ import AdminChannel from 'channels/admin_channel';
 
 let alertsContainer;
 
-$(document).on('turbolinks:load', function () {
+$(document).ready(function () {
   alertsContainer = $('#alerts-container');
   setupWebSocket();
   addTrainingClickListeners();

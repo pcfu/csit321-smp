@@ -1,4 +1,4 @@
-$(document).on('turbolinks:load', function () {
+$(document).ready(function () {
   let table;
 
   $.get('stocks.json', function (data) {
