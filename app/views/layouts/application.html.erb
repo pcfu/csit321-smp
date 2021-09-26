@@ -17,11 +17,7 @@
 
   <body>
     <div class="min-vh-100 d-flex flex-column">
-      <% if controller_name == 'stocks' %>
-        <%= render "layouts/public_header" %>
-      <% else %>
-        <%= render "layouts/header" %>
-      <% end %>
+      <%= render "navbar/navbar" %>
 
       <div class="container">
         <div class="row">
