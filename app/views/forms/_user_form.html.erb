@@ -30,5 +30,9 @@
     </div>
   <% end %>
 
+  <% if form_type == 'login' %>
+    <%= f.hidden_field :url_after_login %>
+  <% end  %>
+
   <%= f.submit submit_text, class: "btn btn-primary" %>
 <% end %>

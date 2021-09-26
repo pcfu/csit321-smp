@@ -3,7 +3,7 @@ class Session
   include ActiveModel::Validations
   include ActiveRecord::Callbacks
 
-  attr_accessor :email, :password
+  attr_accessor :email, :password, :url_after_login
 
   before_validation :set_user
 
