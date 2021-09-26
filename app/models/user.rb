@@ -34,6 +34,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}".titleize
   end
 
+  def initials
+    "#{first_name.first}#{last_name.first}".upcase
+  end
+
 
   private
 

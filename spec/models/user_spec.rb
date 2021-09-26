@@ -228,5 +228,12 @@ RSpec.describe User, type: :model do
         expect(user.full_name).to eq(name)
       end
     end
+
+    describe "#initials" do
+      it "returns first characters of first_name and last_name capitalized" do
+        initials = user.first_name[0].upcase + user.last_name[0].upcase
+        expect(user.initials).to eq(initials)
+      end
+    end
   end
 end
