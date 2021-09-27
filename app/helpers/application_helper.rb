@@ -1,7 +1,7 @@
 module ApplicationHelper
   def full_title(page_title = '')
     title = 'EZML'
-    title += " | #{page_title}" if page_title.present?
+    title += " | #{page_title.titleize}" if page_title.present?
     title
   end
 
