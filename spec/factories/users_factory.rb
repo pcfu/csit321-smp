@@ -16,11 +16,19 @@ FactoryBot.define do
       role  { 'admin' }
     end
 
+    factory :invalid_user do
+      first_name_with_spaces
+      last_name_with_number
+      email_no_username
+      pw_too_short
+      pw_not_equal_confirmation
+    end
+
 
     ### first_name traits
 
     trait :first_name_with_spaces do
-      first_name { 'j o h n ' }
+      first_name { 'j o h n' }
     end
 
     trait :first_name_with_number do
