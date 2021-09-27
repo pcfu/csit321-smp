@@ -82,4 +82,19 @@ RSpec.describe "UserLogin", type: :system do
       expect_field_with_no_error('session_password')
     end
   end
+
+  describe "logging out", js: true do
+    let!(:user) { create :user }
+
+    before do
+      gui_login_user(valid_credentials, navigate_to_login: true)
+      find('#avatar').click
+      find('#logout-btn').click
+    end
+
+    it "logs user out and redirects to homepage" do
+      expect(page).to have_no_css '#user-initials'
+      expect(page).to have_current_path '/'
+    end
+  end
 end
