@@ -23,6 +23,9 @@ FactoryBot.define do
     submit      { 'Login' }
     new_to_ezml { 'New to EZML?' }
     register    { "Register now!" }
+    errors      {
+      Hash[email: "not recognised", password: "incorrect password"]
+    }
 
     initialize_with { attributes }
   end

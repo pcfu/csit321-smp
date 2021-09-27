@@ -53,7 +53,7 @@ RSpec.describe "UserRegistration", type: :system do
 
     it "displays error messages for invalid fields" do
       find('input[type="submit"]').click
-      invalid_input.keys.each {|key| expect_field_with_errors("user_#{key}")}
+      invalid_input.keys.each {|key| expect_field_with_error("user_#{key}")}
     end
 
     it "preloads first_name, last_name, and email with previous input" do

@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe "UserLogin", type: :system do
   let(:form)              { build :login_form }
   let(:valid_credentials) { attributes_for(:user).slice(:email, :password) }
+  let(:wrong_email)       { valid_credentials.merge(email: 'unknown') }
+  let(:wrong_password)    { valid_credentials.merge(password: 'incorrect') }
 
   describe "page display" do
     before { visit '/login' }
@@ -39,4 +41,45 @@ RSpec.describe "UserLogin", type: :system do
     end
   end
 
+  context "when account does not exist", js: true do
+    before do
+      create :user
+      gui_login_user(wrong_email, navigate_to_login: true)
+    end
+
+    it "does not log in" do
+      expect(page).to have_css('.nav-link[href="/login"]', text: 'Login')
+    end
+
+    it "displays an error message on email field" do
+      expect_field_with_error('session_email')
+      expect(page).to have_css('.field-error-message', text: form[:errors][:email])
+    end
+
+    it "clears email field errors on value change" do
+      refill_field 'session_email', text: valid_credentials[:email]
+      expect_field_with_no_error('session_email')
+    end
+  end
+
+  context "when incorrect password", js: true do
+    before do
+      create :user
+      gui_login_user(wrong_password, navigate_to_login: true)
+    end
+
+    it "does not log in" do
+      expect(page).to have_css('.nav-link[href="/login"]', text: 'Login')
+    end
+
+    it "displays an error message on password field" do
+      expect_field_with_error('session_password')
+      expect(page).to have_css('.field-error-message', text: form[:errors][:password])
+    end
+
+    it "clears password field errors on value change" do
+      refill_field 'session_password', text: valid_credentials[:password]
+      expect_field_with_no_error('session_password')
+    end
+  end
 end
