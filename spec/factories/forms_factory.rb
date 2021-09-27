@@ -13,4 +13,17 @@ FactoryBot.define do
 
     initialize_with { attributes }
   end
+
+  factory :login_form, class: Hash do
+    title       { "Welcome back" }
+    fields      {[
+      { field: :session_email, label: 'EMAIL' },
+      { field: :session_password, label: 'PASSWORD' },
+    ]}
+    submit      { 'Login' }
+    new_to_ezml { 'New to EZML?' }
+    register    { "Register now!" }
+
+    initialize_with { attributes }
+  end
 end
