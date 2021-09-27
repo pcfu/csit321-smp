@@ -24,6 +24,7 @@ RSpec.describe "UserLogin", type: :system do
     end
   end
 
+
   context "when valid credentials", js: true do
     let!(:user) { create :user }
 
@@ -40,6 +41,7 @@ RSpec.describe "UserLogin", type: :system do
       }.to change { current_path }.from('/login').to('/')
     end
   end
+
 
   context "when account does not exist", js: true do
     before do
@@ -62,6 +64,7 @@ RSpec.describe "UserLogin", type: :system do
     end
   end
 
+
   context "when incorrect password", js: true do
     before do
       create :user
@@ -82,6 +85,7 @@ RSpec.describe "UserLogin", type: :system do
       expect_field_with_no_error('session_password')
     end
   end
+
 
   describe "logging out", js: true do
     let!(:user) { create :user }

@@ -42,31 +42,35 @@ RSpec.describe "UserRegistration", type: :system do
 
 
   context "when invalid input", js: true do
-    before do
+    before do |example|
       visit '/register'
       invalid_input.each {|key, val| fill_in "user_#{key}", with: val }
+      find('input[type="submit"]').click unless example.metadata[:skip_submit]
     end
 
-    it "does not create a user account" do
+    it "does not create a user account", :skip_submit do
       expect { find('input[type="submit"]').click }.to_not change(User, :count)
     end
 
     it "displays error messages for invalid fields" do
-      find('input[type="submit"]').click
       invalid_input.keys.each {|key| expect_field_with_error("user_#{key}")}
+    end
+
+    it "clears field errors on value change" do
+      invalid_input.keys.each do |key|
+        refill_field "user_#{key}", text: valid_input[key]
+        expect_field_with_no_error "user_#{key}"
+      end
     end
 
     it "preloads first_name, last_name, and email with previous input" do
       fields = [:first_name, :last_name, :email]
-
-      find('input[type="submit"]').click
       invalid_input.slice(*fields).each do |key, val|
         expect(page).to have_field("user[#{key}]", with: val)
       end
     end
 
     it "does not preload password fields" do
-      find('input[type="submit"]').click
       expect(page).to have_field("user[password]", with: '')
       expect(page).to have_field("user[password_confirmation]", with: '')
     end
