@@ -21,4 +21,22 @@ RSpec.describe "UserLogin", type: :system do
       end
     end
   end
+
+  context "when valid credentials", js: true do
+    let!(:user) { create :user }
+
+    before { visit '/login' }
+
+    it "logs in user" do
+      gui_login_user valid_credentials
+      expect(page).to have_css('#user-initials', text: user.initials)
+    end
+
+    it "redirects to homepage" do
+      expect {
+        gui_login_user valid_credentials
+      }.to change { current_path }.from('/login').to('/')
+    end
+  end
+
 end
