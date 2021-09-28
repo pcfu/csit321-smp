@@ -13,7 +13,7 @@ RSpec.describe "UserLogin", type: :system do
       expect(page).to have_title('EZML | Login', exact: true)
     end
 
-    it "has correct form elements", js: true do
+    it "has correct form elements", :js do
       within '#login-form' do
         expect(page).to have_css('.form-title', text: form[:title])
         form[:fields].each {|field| expect_field_with_label *field.values}
@@ -25,7 +25,7 @@ RSpec.describe "UserLogin", type: :system do
   end
 
 
-  context "when valid credentials", js: true do
+  context "when valid credentials", :js do
     let!(:user) { create :user }
 
     before { visit '/login' }
@@ -43,7 +43,7 @@ RSpec.describe "UserLogin", type: :system do
   end
 
 
-  context "when account does not exist", js: true do
+  context "when account does not exist", :js do
     before do
       create :user
       gui_login_user(wrong_email, navigate_to_login: true)
@@ -65,7 +65,7 @@ RSpec.describe "UserLogin", type: :system do
   end
 
 
-  context "when incorrect password", js: true do
+  context "when incorrect password", :js do
     before do
       create :user
       gui_login_user(wrong_password, navigate_to_login: true)
@@ -87,7 +87,7 @@ RSpec.describe "UserLogin", type: :system do
   end
 
 
-  describe "logging out", js: true do
+  describe "logging out", :js do
     let!(:user) { create :user }
 
     before do

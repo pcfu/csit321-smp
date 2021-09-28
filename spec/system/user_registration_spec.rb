@@ -12,7 +12,7 @@ RSpec.describe "UserRegistration", type: :system do
       expect(page).to have_title('EZML | Registration', exact: true)
     end
 
-    it "has correct form elements", js: true do
+    it "has correct form elements", :js do
       within '#user-form' do
         expect(page).to have_css('.form-title', text: form[:title])
         form[:fields].each {|field| expect_field_with_label *field.values}
@@ -23,7 +23,7 @@ RSpec.describe "UserRegistration", type: :system do
   end
 
 
-  context "when valid input", js: true do
+  context "when valid input", :js do
     before do
       visit '/register'
       valid_input.each {|key, val| fill_in "user_#{key}", with: val }
@@ -41,7 +41,7 @@ RSpec.describe "UserRegistration", type: :system do
   end
 
 
-  context "when invalid input", js: true do
+  context "when invalid input", :js do
     before do |example|
       visit '/register'
       invalid_input.each {|key, val| fill_in "user_#{key}", with: val }
