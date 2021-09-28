@@ -1,10 +1,16 @@
 Capybara.register_driver :remote_chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new(
+    { args: ["--window-size=1600,900"] }
+  )
+
   Capybara::Selenium::Driver.new(app,
     browser: :remote,
     url: "http://#{ENV['SELENIUM_HOST']}:9515",
-    desired_capabilities: :chrome
+    desired_capabilities: :chrome,
+    options: options
   )
 end
+
 
 Capybara.register_driver :remote_chrome_headless do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
@@ -17,6 +23,7 @@ Capybara.register_driver :remote_chrome_headless do |app|
     desired_capabilities: capabilities
   )
 end
+
 
 RSpec.configure do |config|
   headless = ENV['HEADLESS'] == 'true'
