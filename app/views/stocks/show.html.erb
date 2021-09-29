@@ -11,7 +11,11 @@
   <div class="row my-5">
     <div class="col-12">
       <h1 id="stockname"><%= @stock.symbol %></h1>   
-      <%= link_to favorite_text, favorites_update_path(stock:@stock), id:'favorite_link', remote: true %>   
+      <% if logged_in? %>
+        <%= link_to favorite_text, favorites_update_path(stock:@stock), id:'favorite_link', remote: true %>   
+      <% else %>
+        <%= link_to "Log in to add", sessions_path %>
+      <% end %>
       <span id="stockexchange" style="visibility: hidden"><%=@stock.exchange%></span>
       <div id="tradingview_Chart"></div>
     </div>
