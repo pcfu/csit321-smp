@@ -1,4 +1,6 @@
 class StocksController < ApplicationController
+
+
   def index
     respond_to do |format|
       format.html
@@ -11,6 +13,7 @@ class StocksController < ApplicationController
     @recent_predictions = @stock.price_predictions.order(entry_date: :desc).limit(2)
                                 .map {|s| s.to_chart_json }
 
+    @favorite_exists = Favorite.where(stock: @stock, user:current_user) == [] ? false : true
     respond_to do |format|
       format.html
     end

@@ -6,12 +6,12 @@
   <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <% end %>
 
-
 <div class="container">
   <!-- PRICE CHART -->
   <div class="row my-5">
     <div class="col-12">
-      <h1 id="stockname"><%= @stock.symbol %></h1>
+      <h1 id="stockname"><%= @stock.symbol %></h1>   
+      <%= link_to favorite_text, favorites_update_path(stock:@stock), id:'favorite_link', remote: true %>   
       <span id="stockexchange" style="visibility: hidden"><%=@stock.exchange%></span>
       <div id="tradingview_Chart"></div>
     </div>
