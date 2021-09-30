@@ -55,4 +55,6 @@ class User < ApplicationRecord
       self.last_name.downcase! if last_name.present?
       self.email.downcase! if email.present?
     end
+
+    has_many :favorites,    dependent: :destroy
 end

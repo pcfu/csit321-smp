@@ -1,19 +1,12 @@
 class FavoritesController < ApplicationController
- #Temporary Method to define a fixed
-  #To replace current_user with the authenticated user from PC
-  def current_user
-    current_user = User.find(1)
-    return current_user
+  def index
+    
+
+    respond_to do |format|
+      format.html
+    end
   end
 
-  
-  def add_favorite:
-    
-       # do something
-    else
-       redirect_to root_url
-    end
- end
 
   def update
     if logged_in?
@@ -26,6 +19,7 @@ class FavoritesController < ApplicationController
         favorite.destroy_all
         @favorite_exists = false
       end
+    end
     
     respond_to do |format|
       format.html{}

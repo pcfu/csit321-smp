@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   ## Note: combine the two controllers
   get  'ml_models',      to: 'machine_learning_models#index'
   get  'ml_models/new',  to: 'machine_learning_models#new'
+  get 'portfolio', to: 'favorites#index'
   get  'model_parameters/new',    to: 'model_parameters#new'
   post 'model_parameters/create', to: 'model_parameters#create'
 
