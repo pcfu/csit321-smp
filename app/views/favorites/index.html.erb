@@ -1,0 +1,36 @@
+
+  <% content_for :page_js do %>
+    favorites/index
+  <% end %>
+  
+
+<!-- SECTION 1 -->
+<!-- PRICE RELATED DATA -->
+  <div class="row my-5">
+    <div class="col-12">
+      <h1>PORTFOLIO STOCKS</h1>
+
+      <table id="fav-list" class="table table-striped ">
+        <thead>
+          <tr>
+          <th scope="col">Symbol</th>
+          <th scope="col">Name</th>
+          <th scope="col">Exchange</th>
+          <th scope="col">Type</th>
+          <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% current_user.favorites.each do |fav| %>
+            <tr>
+              <td><%= fav.stock.symbol %></td>
+              <td><%= fav.stock.name %></td>
+              <td><%= fav.stock.exchange %></td>
+              <td><%= fav.stock.stock_type %></td>
+              <td><%= fav.stock.description %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
