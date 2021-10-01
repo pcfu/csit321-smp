@@ -9,6 +9,13 @@
   <div class="row my-5">
     <div class="col-12">
       <h1>PORTFOLIO STOCKS</h1>
+      <p> Add Stocks into Portfolio </p> <input type="text" placeholder="Stock Symbol"></input>
+      <button> Add </button>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+        <label class="form-check-label" for="flexSwitchCheckDefault">Alert</label>
+      </div>
+      <br><br>
 
       <table id="fav-list" class="table table-striped ">
         <thead>
@@ -18,16 +25,25 @@
           <th scope="col">Exchange</th>
           <th scope="col">Type</th>
           <th scope="col">Description</th>
+          <th scope="col">Buy Threshold</th>
+          <th scope="col">Sell Threshold</th>
+          <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
           <% current_user.favorites.each do |fav| %>
             <tr>
-              <td><%= fav.stock.symbol %></td>
+              <td data-link ="<%= stock_path(fav.stock.id) %>"><%= fav.stock.symbol %></td>
               <td><%= fav.stock.name %></td>
               <td><%= fav.stock.exchange %></td>
               <td><%= fav.stock.stock_type %></td>
               <td><%= fav.stock.description %></td>
+              <td>192</td>
+              <td>200</td>
+              <td>
+                <button>Threshold</button>
+                <button>Remove</button>
+              </td>
             </tr>
           <% end %>
         </tbody>
