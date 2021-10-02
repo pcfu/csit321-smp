@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'favorites/update'
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   root 'stocks#index'
@@ -19,11 +19,14 @@ Rails.application.routes.draw do
     resources :price_histories, only: [:index], defaults: { format: :json }
   end
 
+  resources :favorites, path: '/portfolio', only: [:index, :create, :delete, :update]
+
+  get 'favorites/update'
+  
   # System Administrator Endpoints
   ## Note: combine the two controllers
   get  'ml_models',      to: 'machine_learning_models#index'
   get  'ml_models/new',  to: 'machine_learning_models#new'
-  get 'portfolio', to: 'favorites#index'
   get  'model_parameters/new',    to: 'model_parameters#new'
   post 'model_parameters/create', to: 'model_parameters#create'
 

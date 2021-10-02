@@ -29,16 +29,18 @@ class FavoritesController < ApplicationController
 
   def create
     if Favorite.create(stock: Stock, user: current_user)
+      flash[:notice]="Stock added to favorites"
       @favorite_exists = true
     else
-      redirect_to @stock, alert: 'Something went wrong...*sad panda*'
+      flash[:alert]="Something went wrong"
       @favorite_exists = false
     end
   end
   
   def destroy
-    Favorite.where(favorited_id: @project.id, user_id: current_user.id).first.destroy
-    redirect_to @project, notice: 'Project is no longer in favorites'
+    Favorite.where(stock: Stock.find(params[:stock]),user:current_user).first.destroy
+    flash[:alert]="Stock deleted from portfolio"
+    @favorite_exists = false
   end
 
 end
