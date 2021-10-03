@@ -38,9 +38,16 @@ class FavoritesController < ApplicationController
   end
   
   def destroy
-    Favorite.where(stock: Stock.find(params[:stock]),user:current_user).first.destroy
-    flash[:alert]="Stock deleted from portfolio"
+    @fav = Favorite.find(params[:id])
+    logger.debug "Favorite should not be valid: #{@fav.valid?}"
+    @fav.destroy
     @favorite_exists = false
+      
+    redirect_to favorites_path, :alert=>"Favorite has been deleted"
+    respond_to do |format|
+      format.html{}
+      format.js{}
+    end
   end
 
 end

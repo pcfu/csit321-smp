@@ -16,6 +16,10 @@
         <label class="form-check-label" for="flexSwitchCheckDefault">Alert</label>
       </div>
       <br><br>
+      
+      <% if flash[:error].present? %>
+        <div class="alert alert-danger"><%= flash[:error] %></div>
+      <% end %>
 
       <table id="fav-list" class="table table-striped ">
         <thead>
@@ -42,7 +46,7 @@
               <td>200</td>
               <td>
                 <button>Threshold</button>
-                <button>Remove</button>
+                <%= button_to "Delete", fav,  :method => :destroy , data: { confirm: 'Are you sure?'}%>
               </td>
             </tr>
           <% end %>
