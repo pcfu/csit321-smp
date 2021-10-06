@@ -3,19 +3,28 @@ Rails.application.routes.draw do
 
   root 'stocks#index'
 
-  # Public Endpoints
+  # Registration
   scope(path_names: { new: '/' }) do
     resources :users, path: 'register', only: [:new, :create]
   end
 
+  # Login
   scope(path_names: { new: '/' }) do
     resources :sessions, path: 'login', only: [:new, :create]
   end
   post 'logout', to: 'sessions#destroy'
 
-
+  # Stocks and Prices
   resources :stocks, only: [:index, :show], shallow: true do
-    resources :price_histories, only: [:index], defaults: { format: :json }
+    collection do
+      resources :price_histories do
+        post 'batch_create', on: :collection, defaults: { format: :json }
+      end
+    end
+
+    member do
+      resources :price_histories, only: [:index], defaults: { format: :json }
+    end
   end
 
   # System Administrator Endpoints
