@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_25_010908) do
+ActiveRecord::Schema.define(version: 2021_10_07_131400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,15 @@ ActiveRecord::Schema.define(version: 2021_09_25_010908) do
     "admin",
     "banned",
   ], force: :cascade
+
+  create_table "favorites", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "stock_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stock_id"], name: "index_favorites_on_stock_id"
+    t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
 
   create_table "headlines", force: :cascade do |t|
     t.bigint "stock_id", null: false
@@ -132,6 +141,17 @@ ActiveRecord::Schema.define(version: 2021_09_25_010908) do
     t.index ["symbol"], name: "index_stocks_on_symbol", unique: true
   end
 
+  create_table "technical_indicators", force: :cascade do |t|
+    t.bigint "stock_id", null: false
+    t.date "date", null: false
+    t.decimal "sma"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["date"], name: "index_technical_indicators_on_date"
+    t.index ["stock_id", "date"], name: "index_technical_indicators_on_stock_id_and_date", unique: true
+    t.index ["stock_id"], name: "index_technical_indicators_on_stock_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name", null: false
@@ -142,9 +162,12 @@ ActiveRecord::Schema.define(version: 2021_09_25_010908) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "favorites", "stocks"
+  add_foreign_key "favorites", "users"
   add_foreign_key "headlines", "stocks"
   add_foreign_key "model_trainings", "model_configs"
   add_foreign_key "model_trainings", "stocks"
   add_foreign_key "price_histories", "stocks"
   add_foreign_key "price_predictions", "stocks"
+  add_foreign_key "technical_indicators", "stocks"
 end
