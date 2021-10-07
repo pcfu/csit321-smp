@@ -1,12 +1,15 @@
 class FavoritesController < ApplicationController
   def index
-    
+    @favorites = Favorite.all
 
     respond_to do |format|
       format.html
     end
   end
 
+  def show
+    @favorites = Favorite.find(params[:id])
+  end
 
   def update
     if logged_in?
@@ -49,5 +52,6 @@ class FavoritesController < ApplicationController
       format.js{}
     end
   end
+
 
 end

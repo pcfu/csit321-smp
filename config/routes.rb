@@ -19,11 +19,14 @@ Rails.application.routes.draw do
     resources :price_histories, only: [:index], defaults: { format: :json }
   end
 
-  resources :favorites, only: [:index], :path => 'portfolio'
+  resources :favorites, only: [:index, :show], :path => 'portfolio'
   resources :favorite
   get 'favorites/update'
-  post 'favorite/:id', to: 'favorites#destroy'
+  post 'portfolio/:id', to: 'favorites#destroy'
   
+
+  resources :threshold, only: [:create, :destroy]
+  post 'threshold/update'
   
   # System Administrator Endpoints
   ## Note: combine the two controllers

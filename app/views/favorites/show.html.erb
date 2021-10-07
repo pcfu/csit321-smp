@@ -1,0 +1,23 @@
+This is the favorites show page
+
+<p><%= @favorites.id %></p>
+<% if @favorites.threshold.nil? %>
+
+<p> Threshold ID: None </p>
+<%= form_for :threshold, :url => { :controller=> "threshold", :action => "create", :favoriteid =>@favorites.id }, :html => {:class => "threshold_form"} do |form| %>
+    <%= form.number_field :buythreshold %>
+    <%= form.number_field :sellthreshold %>
+    <%= form.submit %>
+  <% end %>
+
+  <% else %>
+  <p>Threshold ID: <%= @favorites.threshold.id %></p>
+
+
+  <%= form_for :threshold, :url => { :controller=> "threshold", :action => "update",  :thresholdid => @favorites.threshold.id  }, :html => {:class => "threshold_form"} do |form| %>
+      <%= form.number_field :buythreshold %>
+      <%= form.number_field :sellthreshold %>
+      
+      <%= form.submit %>
+    <% end %>
+<% end %>
