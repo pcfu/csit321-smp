@@ -1,7 +1,10 @@
 class FavoritesController < ApplicationController
   def index
-    @favorites = Favorite.all
-
+    if logged_in?
+      @favorites = Favorite.where(user:current_user)
+    else 
+      redirect_to sessions_url
+    end
     respond_to do |format|
       format.html
     end
@@ -9,6 +12,9 @@ class FavoritesController < ApplicationController
 
   def show
     @favorites = Favorite.find(params[:id])
+    respond_to do |format|
+      format.html
+    end
   end
 
   def update
@@ -17,11 +23,15 @@ class FavoritesController < ApplicationController
       if favorite == []
         #Create the favorite
         Favorite.create(stock: Stock.find(params[:stock]),user:current_user)
+        #flash[:notice] ="Stock added to favorites"
         @favorite_exists = true
       else
         favorite.destroy_all
+        #flash[:notice] ="Stock removed from favorites"
         @favorite_exists = false
       end
+    else 
+      redirect_to sessions_url
     end
     
     respond_to do |format|
@@ -31,12 +41,23 @@ class FavoritesController < ApplicationController
   end
 
   def create
-    if Favorite.create(stock: Stock, user: current_user)
-      flash[:notice]="Stock added to favorites"
-      @favorite_exists = true
+    @favorite  = Favorite.where(stock:Stock.find_by(symbol:params[:favorite][:stocksymbol]), user: current_user)
+    if Stock.where(symbol:params[:favorite][:stocksymbol]).exists?
+      if @favorite == [] 
+      #Create favorite
+        Favorite.create(stock:Stock.find_by(symbol:params[:favorite][:stocksymbol]), user: current_user)
+        redirect_to favorites_path, flash: {notice: "Stock added to favorites"}
+
+        @favorite_exists = true
+      else
+        #Stock already existing
+        redirect_to favorites_path, flash: {notice: "Stock already exists in favorites"}
+
+      end
     else
-      flash[:alert]="Something went wrong"
-      @favorite_exists = false
+      #No such stock symbol
+      redirect_to favorites_path, flash: {notice: "Stock does not exist"}
+
     end
   end
   

@@ -4,70 +4,79 @@
   <% end %>
   
 
-<!-- SECTION 1 -->
-<!-- PRICE RELATED DATA -->
-  <div class="row my-5">
-    <div class="col-12">
-      <h1>PORTFOLIO STOCKS</h1>
-      <p> Add Stocks into Portfolio </p> <input type="text" placeholder="Stock Symbol"></input>
-      <button> Add </button>
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-        <label class="form-check-label" for="flexSwitchCheckDefault">Alert</label>
-      </div>
-      <br><br>
-      
-      <% if flash[:error].present? %>
-        <div class="alert alert-danger"><%= flash[:error] %></div>
-      <% end %>
 
-      <table id="fav-list" class="table table-striped ">
-        <thead>
-          <tr>
-          <th scope="col">Symbol</th>
-          <th scope="col">Name</th>
-          <th scope="col">Exchange</th>
-          <th scope="col">Close</th>
-          <th scope="col">Volume</th>
-          <th scope="col">Change</th>
-          <th scope="col">% Change</th>
-          <th scope="col">Buy Threshold</th>
-          <th scope="col">Sell Threshold</th>
-          <th scope="col" >Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @favorites.each do |fav| %>
+  <% flash.each do |type, msg| %>
+    <%= content_tag :div, class: "alert alert-info" do -%>
+      <%= msg %>
+    <% end -%>
+  <% end %>
+
+  <div class="container">    
+  <!-- SECTION 1 -->
+  <!-- PRICE RELATED DATA -->
+    <div class="row my-5">
+      <div class="col-12">
+        <h1>PORTFOLIO</h1>
+        <p> Add Stocks into Portfolio 
+        <%= form_for :favorite, :url => { :controller=> "favorites", :action => "create" }, :html => {:class => "favorite_form"} do |f| %>
+          <%= f.text_field :stocksymbol %>
+          <%= f.submit %>
+        <% end %>
+        <br><br>
+        
+        <% if flash[:error].present? %>
+          <div class="alert alert-danger"><%= flash[:error] %></div>
+        <% end %>
+
+        <table id="fav-list" class="table table-striped ">
+          <thead>
             <tr>
-              <td data-link ="<%= stock_path(fav.stock.id) %>"><%= fav.stock.symbol %></td>
-              <td><%= fav.stock.name %></td>
-              <td><%= fav.stock.exchange %></td>
-              <% fav.stock.price_histories.order(date: :desc).limit(1).each do |pxhist| %>
-                  <td><%= pxhist.close%></td>
-                  <td><%= pxhist.volume%></td>
-                  <td><%= pxhist.change.round(3)%></td>
-                  <td><%= pxhist.percent_change.round(4)*100%>%</td>
-              <% end %>
-              <% if fav.threshold.nil? %>
-                <td> - </td>
-                <td> - </td>
-
-              <% else %>
-                <td><%= fav.threshold.buythreshold %></td>
-                <td><%= fav.threshold.sellthreshold %></td>
-               
-              <% end %>
-              
-
-                <td>
-                <button> <a href="/portfolio/<%= fav.id %>">
-                Threshold
-                </a> </button>
-                <%= button_to "Unfavorite", fav,  :method => :destroy , data: { confirm: 'Confirm unfavoriting stock from portfolio?'}%>
-              </td>
+            <th scope="col">Symbol</th>
+            <th scope="col">Name</th>
+            <th scope="col">Exchange</th>
+            <th scope="col">Close</th>
+            <th scope="col">Volume</th>
+            <th scope="col">Change</th>
+            <th scope="col">% Change</th>
+            <th scope="col">Buy Threshold</th>
+            <th scope="col">Sell Threshold</th>
+            <th scope="col" >Action</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% @favorites.each do |fav| %>
+              <tr>
+                <td data-link ="<%= stock_path(fav.stock.id) %>"><%= fav.stock.symbol %></td>
+                <td><%= fav.stock.name %></td>
+                <td><%= fav.stock.exchange %></td>
+                <% fav.stock.price_histories.order(date: :desc).limit(1).each do |pxhist| %>
+                    <td><%= pxhist.close%></td>
+                    <td><%= pxhist.volume%></td>
+                    <td><%= pxhist.change.round(3)%></td>
+                    <td><%= pxhist.percent_change.round(4)*100%>%</td>
+                <% end %>
+                <% if fav.threshold.nil? %>
+                  <td> - </td>
+                  <td> - </td>
+
+                <% else %>
+                  <td><%= fav.threshold.buythreshold %></td>
+                  <td><%= fav.threshold.sellthreshold %></td>
+                
+                <% end %>
+                
+
+                  <td>
+                  <button> <a href="/portfolio/<%= fav.id %>">
+                  Threshold
+                  </a> </button>
+                  <%= button_to "Unfavorite", fav,  :method => :destroy , data: { confirm: 'Confirm unfavoriting stock from portfolio?'}%>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
+

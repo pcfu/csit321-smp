@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     resources :price_histories, only: [:index], defaults: { format: :json }
   end
 
-  resources :favorites, only: [:index, :show], :path => 'portfolio'
+  resources :favorites, only: [:index, :show, :create], :path => 'portfolio'
   resources :favorite
   get 'favorites/update'
   post 'portfolio/:id', to: 'favorites#destroy'
