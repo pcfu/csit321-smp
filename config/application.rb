@@ -15,6 +15,7 @@ require "action_cable/engine"
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -23,6 +24,9 @@ module Csit321Smp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
+
+    #define route for errors
+    config.exceptions_app = self.routes
 
     # Configuration for the application, engines, and railties goes here.
     #

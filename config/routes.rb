@@ -27,6 +27,10 @@ Rails.application.routes.draw do
 
   resources :threshold, only: [:create, :destroy]
   post 'threshold/update'
+
+ 
+
+  
   
   # System Administrator Endpoints
   ## Note: combine the two controllers
@@ -48,4 +52,14 @@ Rails.application.routes.draw do
   end
 
   mount ActionCable.server => '/websocket/:id', constraints: { id: /[\w\-\.]+/ }
+
+   #Errors Custom Routes
+  match '/404', via: :all, to: 'errors#not_found'
+  match "/(*url)", via: :all, to: 'errors#not_found'
+  match '/422', via: :all, to: 'errors#unprocessable_entity'
+  match '/500', via: :all, to: 'errors#server_error'
+  #get   '*path', to: sessions_url
+  
 end
+
+

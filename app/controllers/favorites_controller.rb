@@ -1,4 +1,5 @@
 class FavoritesController < ApplicationController
+  before_action :logged_in_user
   def index
     if logged_in?
       @favorites = Favorite.where(user:current_user)
@@ -41,11 +42,12 @@ class FavoritesController < ApplicationController
   end
 
   def create
-    @favorite  = Favorite.where(stock:Stock.find_by(symbol:params[:favorite][:stocksymbol]), user: current_user)
-    if Stock.where(symbol:params[:favorite][:stocksymbol]).exists?
+    @stocksymbol = params[:favorite][:stocksymbol].upcase
+    @favorite  = Favorite.where(stock:Stock.find_by(symbol:@stocksymbol), user: current_user)
+    if Stock.where(symbol:@stocksymbol).exists?
       if @favorite == [] 
       #Create favorite
-        Favorite.create(stock:Stock.find_by(symbol:params[:favorite][:stocksymbol]), user: current_user)
+        Favorite.create(stock:Stock.find_by(symbol:@stocksymbol), user: current_user)
         redirect_to favorites_path, flash: {notice: "Stock added to favorites"}
 
         @favorite_exists = true
