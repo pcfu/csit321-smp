@@ -1,15 +1,14 @@
 namespace :db do
   desc "update stock price histories to most recent data"
   task :update_price_histories => :environment do
-    dates = Stock.all.map {|s| s.price_histories.order(date: :desc).first.date}
-    earliest = dates[0]
-    today = Date.current
-    return if earliest >= today
+    syms = Stock.pluck :symbol
+    Class.new.extend(BackendJobsEnqueuing).enqueue_price_retrieval_job syms
+  end
 
-    query = {
-      symbols: Stock.pluck(:symbol),
-      days: today.mjd - earliest.mjd
-    }
-    BackendClient.get('/prices', query)
+  desc "update stock technical indicators to most recent data"
+  task :update_technical_indicators => :environment do
+    Stock.pluck(:id).each do |id|
+      Class.new.extend(BackendJobsEnqueuing).enqueue_tis_retrieval_job id
+    end
   end
 end
