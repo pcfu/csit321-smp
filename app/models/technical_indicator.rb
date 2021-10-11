@@ -1,4 +1,6 @@
 class TechnicalIndicator < ApplicationRecord
+  extend LastDateForStockSearchable
+
   belongs_to :stock
 
   scope :start, ->(date) { where('date >= ?', date || '-infinity') }
