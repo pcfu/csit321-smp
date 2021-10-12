@@ -1,6 +1,6 @@
 class ThresholdController < ApplicationController
   #before_filter :redirect_cancel, :only=> [:create, :update]
-  before_action : logged_in_user
+  before_action :logged_in_user
 
   def new
     @threshold = Threshold.new

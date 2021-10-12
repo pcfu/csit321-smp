@@ -10,6 +10,7 @@
       <%= msg %>
     <% end -%>
   <% end %>
+  
 
   <div class="container">    
     <div class="row my-5">
@@ -43,12 +44,12 @@
           </thead>
           <tbody>
             <% @favorites.each do |fav| %>
-              <tr>
-                <td data-link ="<%= stock_path(fav.stock.id) %>"><%= fav.stock.symbol %></td>
+              <tr class="fav_row" data-link ="<%= stock_path(fav.stock.id) %>" >
+                <td><%= fav.stock.symbol %></td>
                 <td><%= fav.stock.name %></td>
                 <td><%= fav.stock.exchange %></td>
                 <% fav.stock.price_histories.order(date: :desc).limit(1).each do |pxhist| %>
-                    <td><%= pxhist.close%></td>
+                    <td class="fav_close"><%= pxhist.close%></td>
                     <td><%= pxhist.volume%></td>
                     <td><%= pxhist.change.round(3)%></td>
                     <td><%= pxhist.percent_change.round(4)*100%>%</td>
@@ -58,8 +59,8 @@
                   <td> - </td>
 
                 <% else %>
-                  <td><%= fav.threshold.buythreshold %></td>
-                  <td><%= fav.threshold.sellthreshold %></td>
+                  <td class="fav_buythreshold"><%= fav.threshold.buythreshold %></td>
+                  <td class="fav_sellthreshold"><%= fav.threshold.sellthreshold %></td>
                 
                 <% end %>
                 
