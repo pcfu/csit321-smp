@@ -24,6 +24,9 @@ Rails.application.routes.draw do
 
     member do
       resources :price_histories, only: [:index], defaults: { format: :json }
+      resources :technical_indicators do
+        post 'batch_create', on: :collection, defaults: { format: :json }
+      end
     end
   end
 
