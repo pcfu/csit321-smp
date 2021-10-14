@@ -11,4 +11,11 @@ class PriceHistory < ApplicationRecord
   validates_numericality_of :open, :high, :low, :close, :volume,
                             greater_than_or_equal_to: 0
   validates :date, uniqueness: { scope: :stock_id }
+
+
+  def to_ohlcv
+    data = slice(:date, :open, :high, :low, :close, :volume)
+    data.each {|k, v| data[k] = v.to_f if v.is_a? BigDecimal}
+    data
+  end
 end

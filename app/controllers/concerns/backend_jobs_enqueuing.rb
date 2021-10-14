@@ -33,7 +33,7 @@ module BackendJobsEnqueuing
     n_last_data = prices.start(from_date).count
     return NO_UPDATE_MSG if n_last_data == 0
 
-    data = { stock_id: stock_id, prices: prices, n_last_data: n_last_data }
+    data = { stock_id: stock_id, prices: prices.map(&:to_ohlcv), n_last_data: n_last_data }
     enqueue_job(TIS_ENDPOINT, data)
   end
 
