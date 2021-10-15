@@ -9,6 +9,7 @@ namespace :db do
   task :update_technical_indicators => :environment do
     Stock.pluck(:id).each do |id|
       Class.new.extend(BackendJobsEnqueuing).enqueue_tis_retrieval_job id
+      sleep 1  # sending jobs too quickly results in ids getting mixed
     end
   end
 end

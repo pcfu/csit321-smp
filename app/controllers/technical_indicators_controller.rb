@@ -3,11 +3,7 @@ class TechnicalIndicatorsController < ApplicationController
 
   def batch_create
     stock = Stock.find(params[:id])
-
-    data = batch_create_params
-    data.each do |tis|
-      #stock.technical_indicators.create tis
-    end
+    batch_create_params.each {|tis| stock.technical_indicators.create tis}
 
     respond_to do |format|
       format.json { head :ok }
