@@ -1,0 +1,91 @@
+
+  <% content_for :page_js do %>
+    favorites/index
+  <% end %>
+  
+
+
+  <% flash.each do |type, msg| %>
+    <%= content_tag :div, class: "alert alert-info" do -%>
+      <%= msg %>
+    <% end -%>
+  <% end %>
+  
+
+  <div class="container">    
+    <div class="row my-5">
+      <div class="col-12">
+        <h1>PORTFOLIO</h1>
+        <p> Add Stocks into Portfolio 
+        <%= form_for :favorite, :url => { :controller=> "favorites", :action => "create" }, :html => {:class => "favorite_form"} do |f| %>
+          <%= f.text_field :stocksymbol %>
+          <%= f.submit %>
+        <% end %>
+        <br><br>
+        
+        <% if flash[:error].present? %>
+          <div class="alert alert-danger"><%= flash[:error] %></div>
+        <% end %>
+
+        <table id="fav-list" class="table table-striped ">
+          <thead>
+            <tr>
+            <th scope="col">Symbol</th>
+            <th scope="col">Name</th>
+            <th scope="col">Exchange</th>
+            <th scope="col">Close</th>
+            <th scope="col">Volume</th>
+            <th scope="col">Change</th>
+            <th scope="col">% Change</th>
+            <th scope="col">Buy Threshold</th>
+            <th scope="col">Sell Threshold</th>
+            <th scope="col" >Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @favorites.each do |fav| %>
+              <tr class="fav_row" data-link ="<%= stock_path(fav.stock.id) %>" >
+                <td id="link_to_stock" ><%= fav.stock.symbol %></td>
+                <td><%= fav.stock.name %></td>
+                <td><%= fav.stock.exchange %></td>
+                <% fav.stock.price_histories.order(date: :desc).limit(1).each do |pxhist| %>
+                    <td class="fav_close"><%= pxhist.close%></td>
+                    <td><%= pxhist.volume%></td>
+                    <td><%= pxhist.change.round(3)%></td>
+                    <td><%= pxhist.percent_change.round(4)*100%>%</td>
+                <% end %>
+                <% if fav.threshold.nil? %>
+                  <td> - </td>
+                  <td> - </td>
+
+                <% else %>
+                  <td class="fav_buythreshold"><%= fav.threshold.buythreshold %></td>
+                  <td class="fav_sellthreshold"><%= fav.threshold.sellthreshold %></td>
+                
+                <% end %>
+                
+                <td class="unclickable">
+
+                  <!-- Button Link to Threshold Page -->
+                  <button> 
+                    <!--<a href="/portfolio/<%= fav.id %>">-->
+                    <%= link_to 'Threshold', fav %>
+                    </a> 
+                  </button>
+
+                  <!-- Button trigger modal -->
+                  <button>
+                    <%= link_to 'Un-Favorite', fav, method: :destroy, data: { confirm: 'Confirm to unfavorite the stock?', title: "Confirmation" } %>
+                    
+                  </button>
+ 
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+

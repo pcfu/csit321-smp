@@ -171,4 +171,9 @@ $(document).ready(function () {
     data: chartData,
     options: options
   });
+
+  //Set timeout
+  setTimeout(function(){
+    $('#flash').fadeOut();
+    }, 2000);
 });

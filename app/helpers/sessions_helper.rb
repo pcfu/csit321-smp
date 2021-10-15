@@ -12,6 +12,14 @@ module SessionsHelper
     current_user.present?
   end
 
+  #Adding a helper to check whether user is logged in
+  def logged_in_user
+    if !(logged_in?)
+       flash[:danger] = "Please log in."
+       redirect_to sessions_url
+    end
+ end
+
   def current_user
     if session[:user_id]
       @current_user ||= User.find_by(id: session[:user_id])

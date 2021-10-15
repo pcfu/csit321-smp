@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   root 'stocks#index'
@@ -30,6 +31,18 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :favorites, only: [:index, :show, :create], :path => 'portfolio'
+  resources :favorite
+  get 'favorites/update'
+  post 'portfolio/:id', to: 'favorites#destroy'
+
+  resources :threshold, only: [:create, :destroy]
+  post 'threshold/update'
+
+ 
+
+  
+  
   # System Administrator Endpoints
   ## Note: combine the two controllers
   get  'ml_models',      to: 'machine_learning_models#index'
@@ -50,4 +63,14 @@ Rails.application.routes.draw do
   end
 
   mount ActionCable.server => '/websocket/:id', constraints: { id: /[\w\-\.]+/ }
+
+   #Errors Custom Routes
+  match '/404', via: :all, to: 'errors#not_found'
+  match "/(*url)", via: :all, to: 'errors#not_found'
+  match '/422', via: :all, to: 'errors#unprocessable_entity'
+  match '/500', via: :all, to: 'errors#server_error'
+  #get   '*path', to: sessions_url
+  
 end
+
+

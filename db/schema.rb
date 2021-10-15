@@ -165,6 +165,15 @@ ActiveRecord::Schema.define(version: 2021_10_15_091054) do
     t.index ["stock_id", "date"], name: "index_technical_indicators_on_stock_id_and_date", unique: true
     t.index ["stock_id"], name: "index_technical_indicators_on_stock_id"
   end
+  
+  create_table "thresholds", force: :cascade do |t|
+    t.bigint "favorite_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.decimal "buythreshold"
+    t.decimal "sellthreshold"
+    t.index ["favorite_id"], name: "index_thresholds_on_favorite_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "first_name", null: false
@@ -184,4 +193,5 @@ ActiveRecord::Schema.define(version: 2021_10_15_091054) do
   add_foreign_key "price_histories", "stocks"
   add_foreign_key "price_predictions", "stocks"
   add_foreign_key "technical_indicators", "stocks"
+  add_foreign_key "thresholds", "favorites"
 end

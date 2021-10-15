@@ -1,0 +1,33 @@
+<% flash.each do |type, msg| %>
+  <%= content_tag :div, class: "alert alert-info" do -%>
+    <%= msg %>
+  <% end -%>
+<% end %>
+
+<div class="container">   
+  <% if @favorites.threshold.nil? %>
+
+    <div class="row my-5">
+      <div class="col-12">
+        <h1>CREATE THRESHOLD</h1>
+        <h4><%= @favorites.stock.name %></h4><br>
+        <%= form_for :threshold, :url => { :controller=> "threshold", :action => "create", :favoriteid =>@favorites.id }, :html => {:class => "threshold_form"} do |form| %>
+          Buy Threshold: <%= form.number_field :buythreshold, :required=>'required' %> <br><br>
+          Sell Threshold: <%= form.number_field :sellthreshold, :required=>'required' %> <br><br>
+          <%= submit_tag 'Submit' %>
+        <% end %>
+      </div>
+    </div>
+
+  <% else %>
+  <div class="row my-5">
+  <div class="col-12">
+    <h1>MODIFY THRESHOLD</h1>
+    <h4><%= @favorites.stock.name %></h4><br>
+    <%= form_for :threshold, :url => { :controller=> "threshold", :action => "update",  :thresholdid => @favorites.threshold.id  }, :html => {:class => "threshold_form"} do |form| %>
+      Buy Threshold: <%= form.number_field :buythreshold, :required=>'required' %> <br><br>
+      Sell Threshold: <%= form.number_field :sellthreshold, :required=>'required' %> <br><br>
+      <%= submit_tag 'Update' %>
+    <% end %>
+  <% end %>
+</div>

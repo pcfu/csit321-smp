@@ -20,5 +20,7 @@ window.$ = window.jQuery = jQuery;
 
 require('datatables.net');
 require('datatables.net-bs5');
-
 require('styles/application');
+
+//= require jquery_ujs
+//= reuire jquery3
