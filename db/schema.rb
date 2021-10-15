@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_07_131400) do
+ActiveRecord::Schema.define(version: 2021_10_15_091054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,9 +144,23 @@ ActiveRecord::Schema.define(version: 2021_10_07_131400) do
   create_table "technical_indicators", force: :cascade do |t|
     t.bigint "stock_id", null: false
     t.date "date", null: false
-    t.decimal "sma"
+    t.decimal "sma_5"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "sma_8"
+    t.decimal "sma_10"
+    t.decimal "wma_5"
+    t.decimal "wma_8"
+    t.decimal "wma_10"
+    t.decimal "macd"
+    t.decimal "cci"
+    t.decimal "stoch_k"
+    t.decimal "stoch_d"
+    t.decimal "williams"
+    t.decimal "rsi"
+    t.decimal "roc"
+    t.decimal "ad"
+    t.decimal "atr"
     t.index ["date"], name: "index_technical_indicators_on_date"
     t.index ["stock_id", "date"], name: "index_technical_indicators_on_stock_id_and_date", unique: true
     t.index ["stock_id"], name: "index_technical_indicators_on_stock_id"
