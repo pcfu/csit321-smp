@@ -19,7 +19,7 @@
     <div class="col-12">
       <h1 id="stockname"><%= @stock.symbol %></h1>   
       <% if logged_in? %>
-        <%= link_to favorite_text, favorites_update_path(stock:@stock), id:'favorite_link', remote: true %>   
+        <%= link_to favorite_text, favorites_update_path(stock:@stock), id:'favorite_link', remote: true, data: { confirm: 'Confirm to unfavorite the stock?', title: "Confirmation" } %>   
       <% else %>
         <%= link_to "Log in to add", sessions_path %>
       <% end %>

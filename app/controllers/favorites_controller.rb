@@ -16,7 +16,7 @@ class FavoritesController < ApplicationController
     respond_to do |format|
       format.html
     end
-  end
+  end  
 
   def update
     if logged_in?

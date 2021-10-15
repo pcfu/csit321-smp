@@ -68,16 +68,17 @@
 
                   <!-- Button Link to Threshold Page -->
                   <button> 
-                    <a href="/portfolio/<%= fav.id %>">
-                      Threshold
+                    <!--<a href="/portfolio/<%= fav.id %>">-->
+                    <%= link_to 'Threshold', fav %>
                     </a> 
                   </button>
 
                   <!-- Button trigger modal -->
                   <button>
-                    <%= link_to 'Un-Favorite', fav, method: :destroy, data: { confirm: 'Are you sure?', title: "Confirm Un-favorite" } %>
+                    <%= link_to 'Un-Favorite', fav, method: :destroy, data: { confirm: 'Confirm to unfavorite the stock?', title: "Confirmation" } %>
+                    
                   </button>
-
+ 
                 </td>
               </tr>
             <% end %>
@@ -85,6 +86,6 @@
         </table>
       </div>
     </div>
-    
+
   </div>
 

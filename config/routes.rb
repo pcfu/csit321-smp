@@ -23,7 +23,6 @@ Rails.application.routes.draw do
   resources :favorite
   get 'favorites/update'
   post 'portfolio/:id', to: 'favorites#destroy'
-  
 
   resources :threshold, only: [:create, :destroy]
   post 'threshold/update'

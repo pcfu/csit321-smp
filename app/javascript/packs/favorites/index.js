@@ -16,21 +16,7 @@ $(document).ready(function () {
         }
     });
     
-
-   
-      //  $('#fav-list tbody tr').setAttribute("class","table-danger");
-  //  $('.unclickable').on('click', function (e) {
-  //      e.stopPropagation(); 
-  //  })
-
-    // pop up alert button
-/*     $('#unfav_button').on('click', function (e) {
-        var r = confirm("Confirm unfavoriting?");
-        if (r!=true){
-            e.preventDefault();
-        };
-        $('.popup').show(); 
-    })   */
+  
 
 
     //link to stock show page
