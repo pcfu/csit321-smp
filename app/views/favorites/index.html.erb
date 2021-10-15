@@ -45,7 +45,7 @@
           <tbody>
             <% @favorites.each do |fav| %>
               <tr class="fav_row" data-link ="<%= stock_path(fav.stock.id) %>" >
-                <td><%= fav.stock.symbol %></td>
+                <td id="link_to_stock" ><%= fav.stock.symbol %></td>
                 <td><%= fav.stock.name %></td>
                 <td><%= fav.stock.exchange %></td>
                 <% fav.stock.price_histories.order(date: :desc).limit(1).each do |pxhist| %>
@@ -64,12 +64,20 @@
                 
                 <% end %>
                 
+                <td class="unclickable">
 
-                  <td>
-                  <button> <a href="/portfolio/<%= fav.id %>">
-                  Threshold
-                  </a> </button>
-                  <%= button_to "Unfavorite", fav,  :method => :destroy , data: { confirm: 'Confirm unfavoriting stock from portfolio?'}%>
+                  <!-- Button Link to Threshold Page -->
+                  <button> 
+                    <a href="/portfolio/<%= fav.id %>">
+                      Threshold
+                    </a> 
+                  </button>
+
+                  <!-- Button trigger modal -->
+                  <button>
+                    <%= link_to 'Un-Favorite', fav, method: :destroy, data: { confirm: 'Are you sure?', title: "Confirm Un-favorite" } %>
+                  </button>
+
                 </td>
               </tr>
             <% end %>
@@ -77,5 +85,6 @@
         </table>
       </div>
     </div>
+    
   </div>
 
