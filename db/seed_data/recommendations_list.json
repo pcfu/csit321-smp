@@ -1,0 +1,26 @@
+{
+    "AAPL": [
+        {
+            "entry_date": "2021-10-20",
+            "nd_verdict": "hold",
+            "st_verdict": "sell"
+        },
+        {
+            "entry_date": "2021-10-21",
+            "nd_verdict": "buy",
+            "st_verdict": "sell"
+        }
+    ],
+    "XOM": [
+        {
+            "entry_date": "2021-10-20",
+            "nd_verdict": "buy",
+            "st_verdict": "buy"
+        },
+        {
+            "entry_date": "2021-10-21",
+            "nd_verdict": "sell",
+            "st_verdict": "sell"
+        }
+    ]
+}

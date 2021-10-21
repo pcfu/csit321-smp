@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_15_091054) do
+ActiveRecord::Schema.define(version: 2021_10_21_171128) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,12 @@ ActiveRecord::Schema.define(version: 2021_10_15_091054) do
     "training",
     "done",
     "error",
+  ], force: :cascade
+
+  create_enum :recommendation_verdict, [
+    "buy",
+    "hold",
+    "sell",
   ], force: :cascade
 
   create_enum :user_role, [
@@ -129,6 +135,17 @@ ActiveRecord::Schema.define(version: 2021_10_15_091054) do
     t.index ["stock_id"], name: "index_price_predictions_on_stock_id"
   end
 
+  create_table "recommendations", force: :cascade do |t|
+    t.bigint "stock_id", null: false
+    t.date "entry_date", null: false
+    t.enum "nd_verdict", null: false, enum_name: "recommendation_verdict"
+    t.enum "st_verdict", null: false, enum_name: "recommendation_verdict"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stock_id", "entry_date"], name: "index_recommendations_on_stock_id_and_entry_date"
+    t.index ["stock_id"], name: "index_recommendations_on_stock_id"
+  end
+
   create_table "stocks", force: :cascade do |t|
     t.string "symbol", null: false
     t.string "name", null: false
@@ -165,7 +182,7 @@ ActiveRecord::Schema.define(version: 2021_10_15_091054) do
     t.index ["stock_id", "date"], name: "index_technical_indicators_on_stock_id_and_date", unique: true
     t.index ["stock_id"], name: "index_technical_indicators_on_stock_id"
   end
-  
+
   create_table "thresholds", force: :cascade do |t|
     t.bigint "favorite_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -192,6 +209,7 @@ ActiveRecord::Schema.define(version: 2021_10_15_091054) do
   add_foreign_key "model_trainings", "stocks"
   add_foreign_key "price_histories", "stocks"
   add_foreign_key "price_predictions", "stocks"
+  add_foreign_key "recommendations", "stocks"
   add_foreign_key "technical_indicators", "stocks"
   add_foreign_key "thresholds", "favorites"
 end

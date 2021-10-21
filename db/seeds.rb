@@ -43,6 +43,21 @@ predictions_data.each do |symbol, predictions|
 end
 
 
+puts "=== INSERTING RECOMMENDATIONS ==="
+
+filepath = "#{DATA_DIR}/recommendations_list.json"
+recommendations_data = JSON.parse(File.read(filepath))
+recommendations_data.each do |symbol, recommendations|
+  stock = Stock.find_by(:symbol => symbol)
+
+  recommendations.each_with_index do |recomm, idx|
+    print "\rInserting recommendations for #{symbol} (#{idx + 1} of #{recommendations.count})"
+    stock.recommendations.create recomm
+  end
+  puts
+end
+
+
 puts "=== INSERTING MODEL CONFIGS ==="
 
 params = {
