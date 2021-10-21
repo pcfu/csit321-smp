@@ -56,16 +56,12 @@
             <th>MT Max</th>
             <th>MT Exp</th>
             <th>MT Min</th>
-            <th>LT Date</th>
-            <th>LT Max</th>
-            <th>LT Exp</th>
-            <th>LT Min</th>
           </tr>
         </thead>
         <tbody>
           <% @recent_predictions.each do |pxPrehist| %>
             <tr>
-              <% pxPrehist.values[0...-4].each do |val| %>
+              <% pxPrehist.values[0..12].each do |val| %>
                 <td><%= val %></td>
               <% end %>
             </tr>
@@ -79,7 +75,6 @@
   <div class="row my-5">
     <div class="col-12">
       <h1>RECOMMENDATION</h1>
-      <p> COMING SOON - NOT FOR PROTOTYPE </p>
     </div>
   </div>
 

@@ -18,8 +18,7 @@ function maxPriceData(pd) {
     data: [
       { x: pd.nd_day, y: pd.nd_max_price },
       { x: pd.st_day, y: pd.st_max_price },
-      { x: pd.mt_day, y: pd.mt_max_price },
-      { x: pd.lt_day, y: pd.lt_max_price }
+      { x: pd.mt_day, y: pd.mt_max_price }
     ],
     label: "Maximum",
     pointStyle: DIAMOND,
@@ -38,7 +37,6 @@ function expPriceData(pd) {
       { x: pd.nd_day, y: pd.nd_exp_price },
       { x: pd.st_day, y: pd.st_exp_price },
       { x: pd.mt_day, y: pd.mt_exp_price },
-      { x: pd.lt_day, y: pd.lt_exp_price }
     ],
     label: "Expected",
     pointStyle: DIAMOND,
@@ -57,7 +55,6 @@ function minPriceData(pd) {
       { x: pd.nd_day, y: pd.nd_min_price },
       { x: pd.st_day, y: pd.st_min_price },
       { x: pd.mt_day, y: pd.mt_min_price },
-      { x: pd.lt_day, y: pd.lt_min_price }
     ],
     label: "Mininum",
     pointStyle: DIAMOND,
@@ -154,7 +151,7 @@ $(document).ready(function () {
   // Prediction Chart
   const pd = $('.price_prediction').data('pxpredict');
   const chartData = {
-    labels: [ pd.nd_date, pd.st_date, pd.mt_date, pd.lt_date ],
+    labels: [ pd.nd_date, pd.st_date, pd.mt_date ],
     datasets: [ maxPriceData(pd), expPriceData(pd), minPriceData(pd) ]
   };
 
