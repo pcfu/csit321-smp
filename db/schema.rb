@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_15_091054) do
+ActiveRecord::Schema.define(version: 2021_10_19_175753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 2021_10_15_091054) do
     t.integer "train_percent", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "model_type"
     t.index ["name"], name: "index_model_configs_on_name", unique: true
   end
 
@@ -165,7 +166,7 @@ ActiveRecord::Schema.define(version: 2021_10_15_091054) do
     t.index ["stock_id", "date"], name: "index_technical_indicators_on_stock_id_and_date", unique: true
     t.index ["stock_id"], name: "index_technical_indicators_on_stock_id"
   end
-  
+
   create_table "thresholds", force: :cascade do |t|
     t.bigint "favorite_id", null: false
     t.datetime "created_at", precision: 6, null: false

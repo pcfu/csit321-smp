@@ -53,6 +53,8 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :prototype, only: [:index]
     resources :model_configs, only: [:show], defaults: { format: 'json' }
+    resources :configurationexit
+    
     resources :model_trainings, only: [:update], defaults: { format: 'json' } do
       post 'batch_enqueue', on: :collection, defaults: { format: 'json' }
     end
