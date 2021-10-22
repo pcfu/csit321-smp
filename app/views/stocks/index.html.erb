@@ -18,23 +18,61 @@
 
 <!-- SECTION 2 -->
 <div class="container my-5">
-  <h1>SYNOPSIS PLACEHOLDER</h1>
+  <%# <h1>SYNOPSIS PLACEHOLDER</h1> %>
 </div>
 
 <!-- SECTION 3 -->
-<div class="container" style="margin-bottom: 20px">
-  <div class="row">
-    <div>
-      <div id="tradingview-chart"></div>
-    </div>
+<div class="container">
+  <div class="row my-5">
+    <% @ranked.each do |rank, data| %>
+      <div class="col-6">
+        <h1><%= "#{rank} performers".upcase %></h1>
+
+        <table id=<%= "#{rank.to_s.rpartition(' ').last}-stocks" %> class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Stock</th>
+              <th scope="col">Percent Change</th>
+              <th scope="col">Movement</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% data.each_with_index do |d, idx| %>
+            <tr>
+              <td><%= idx + 1 %></td>
+              <td><%= d[:symbol] %></td>
+              <td><%= d[:change] %></td>
+              <td>
+                <% if d[:change] > 0 %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                  </svg>
+                <% elsif d[:change] < 0 %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                  </svg>
+                <% else %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
+                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                  </svg>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
   </div>
 </div>
+
 
 <!-- SECTION 4 -->
 <div class="container">
   <div class="row my-5">
     <div class="col-12">
-      <h1>STOCKS LIST (PROTOTYPE)</h1>
+      <h1>STOCKS LIST</h1>
 
       <table id="stocks-list" class="table table-striped table-hover">
         <thead>
@@ -51,3 +89,13 @@
     </div>
   </div>
 </div>
+
+<style>
+  .bi-caret-up-fill {
+    color: limegreen;
+  }
+  .bi-caret-down-fill {
+    color: red;
+  }
+</style>
+
