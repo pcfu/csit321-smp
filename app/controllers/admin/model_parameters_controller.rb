@@ -1,12 +1,6 @@
 module Admin
   class ModelParametersController < ApplicationController
     def index
-      @headers = [
-        'SN', 'Name', 'Machine Model', 'Parameter 1', 'Parameter 2', 'Parameter 3',
-        'AUC', 'H-Measure', 'TPR', 'FPR', 'Status', 'Action'
-      ]
-
-      xxx = ['XXX'] * 7
       @models = ModelConfig.all
 
     end
@@ -27,16 +21,18 @@ module Admin
       #Extracting values from form
       @start_date = params[:model_config][:start_date]
       @train_test_param =  params[:model_config][:train_test_percent]
-      @c =  params[:model_config][:c]
-      @gamma =  params[:model_config][:gamma]
-      @kernel =  params[:model_config][:kernel]
-      @n_estimators =  params[:model_config][:n_estimators]
-      @max_depth =  params[:model_config][:max_depth]
-      @activation =  params[:model_config][:activation]
-      @units =  params[:model_config][:units]
-      @dropout =  params[:model_config][:dropout]
-      @epoch =  params[:model_config][:epoch]
-      @batch_size =  params[:model_config][:batch_size]
+      @c =  params[:model_config][:c].select!{|val| !val.empty?}
+      @gamma =  params[:model_config][:gamma].select!{|val| !val.empty?}
+      @kernel =  params[:model_config][:kernel].select!{|val| !val.empty?}
+      @n_estimators =  params[:model_config][:n_estimators].select!{|val| !val.empty?}
+      @max_depth =  params[:model_config][:max_depth].select!{|val| !val.empty?}
+      @max_features =  params[:model_config][:max_features].select!{|val| !val.empty?}
+      @criterion =  params[:model_config][:criterion].select!{|val| !val.empty?}
+      #@activation =  params[:model_config][:activation].select!{|val| !val.empty?}
+      #@units =  params[:model_config][:units].select!{|val| !val.empty?}
+      #@dropout =  params[:model_config][:dropout].select!{|val| !val.empty?}
+      #@epoch =  params[:model_config][:epoch].select!{|val| !val.empty?}
+      #@batch_size =  params[:model_config][:batch_size].select!{|val| !val.empty?}
       @name_param = params[:model_config][:name]
       @model_param = params[:model_config][:model_type]
 
@@ -54,17 +50,20 @@ module Admin
           @parameter = {
             :start_date =>@start_date, 
             :train_test_percent =>@train_test_param,
-            :build_args=>{:n_estimators=>@n_estimators, 
-                          :max_depth=>@max_depth}
+            :build_args=>{:c=>@c, 
+                          :gamma=>@gamma,
+                          :kernel=>@kernel}
                         }.to_json
       else      #RF
         @parameter = {
           :start_date =>@start_date, 
           :train_test_percent =>@train_test_param,
-          :build_args=>{:c=>@c, 
-                        :gamma=>@gamma,
-                        :kernel=>@kernel}
-                      }.to_json
+          :build_args=>{:n_estimators=>@n_estimators, 
+                        :max_depth=>@max_depth,
+                        :max_features=>@max_features,
+                        :criterion=>@criterion}
+                       }.to_json
+
       end
 
       #Creating new train model

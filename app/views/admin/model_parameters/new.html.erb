@@ -3,6 +3,8 @@ $(document).ready(function () {
 
     $('#n_estimators').hide();
     $('#max_depth').hide();
+    $('#max_features').hide();
+    $('#criterion').hide();
     $('#c').hide();
     $('#gamma').hide();
     $('#kernel').hide();
@@ -11,12 +13,16 @@ $(document).ready(function () {
       if (($('#model_type option:selected').val()) == "lstm"){
         $('#n_estimators').hide();
         $('#max_depth').hide();
+        $('#max_features').hide();
+        $('#criterion').hide();
         $('#c').hide();
         $('#gamma').hide();
         $('#kernel').hide();
-      } else if(($('#model_type option:selected').val()) == "svm"){
+      } else if(($('#model_type option:selected').val()) == "rf"){
         $('#n_estimators').show();
         $('#max_depth').show();
+        $('#max_features').show();
+        $('#criterion').show();
         $('#c').hide();
         $('#gamma').hide();
         $('#kernel').hide();
@@ -37,7 +43,7 @@ $(document).ready(function () {
 </script>
 
 <div class="container" style="margin-bottom: 20px">
-  <h1>Prediction/Recommendation</h1>
+  <h1>Model Training Parameters</h1>
   <h2>Add New Model</h2>
   <hr/>
 
@@ -67,18 +73,16 @@ $(document).ready(function () {
 
     <div class="mb-3" id="model_type">
       <%= f.label :model_type, class: "form-label" %><br>
-      <%=
-      f.select(:model_type,[['LSTM','lstm'],['SVM','svm'],['Random Forest','rf']],
-              { },
-              {class: "form-control"})
-      %>
+      <%= f.select :model_type, ModelConfig.model_types.keys, {}, {required: true, class: "form-control"}%>
+      
     </div>
 
     <div class="mb-3" id="n_estimators">
       <%= f.label :n_estimators, class: "form-label" %><br>
       <%=
       f.select(:n_estimators,
-              [['2',2],['3',3],['4',4],['5',5]],
+              [['20',20],['50',50],['70',70],['100',100],
+              ['150',150],['180',180],['200',200]],
               { },
               {:multiple => true,class: "form-control"})
       %>
@@ -88,17 +92,40 @@ $(document).ready(function () {
       <%= f.label :max_depth, class: "form-label" %><br>
       <%=
       f.select(:max_depth,
-              [['2',2],['3',3],['4',4],['5',5]],
+              [['3',3],['4',4],['5',5],['6',6],['7',7],
+              ['8',8],['9',9],['10',10],['11',11],['12',12],
+              ['13',13],['14',14]],
               { },
               { :multiple => true,class: "form-control"})
       %>
     </div>
 
+    <div class="mb-3" id="max_features">
+      <%= f.label :max_features, class: "form-label" %><br>
+      <%=
+      f.select(:max_features,
+              [['auto','auto'],['sqrt','sqrt'],['log2','log2']],
+              { },
+              { :multiple => true,class: "form-control"})
+      %>
+    </div>
+    
+    <div class="mb-3" id="criterion">
+    <%= f.label :criterion, class: "form-label" %><br>
+    <%=
+    f.select(:criterion,
+            [['gini','gini'],['entropy','entropy']],
+            { },
+            { :multiple => true,class: "form-control"})
+    %>
+  </div>   
+
     <div class="mb-3" id="c">
       <%= f.label :c, class: "form-label" %><br>
       <%=
       f.select(:c,
-              [['2',2],['3',3],['4',4],['5',5]],
+              [['1',1],['2',2],['3',3],['4',4],['5',5],
+              ['6',6],['7',7],['8',8],['9',9],['10',10]],
               { },
               { :multiple => true,class: "form-control"})
       %>
@@ -108,7 +135,9 @@ $(document).ready(function () {
     <%= f.label :gamma, class: "form-label" %><br>
     <%=
     f.select(:gamma,
-            [['2',2],['3',3],['4',4],['5',5]],
+            [['1',1],['2',2],['3',3],['4',4],['5',5],
+            ['6',6],['7',7],['8',8],['9',9],['10',10],
+            ['11',11],['12',12],['13',13],['14',14],['15',15]],
             { },
             {:multiple => true,class: "form-control"})
     %>
@@ -118,7 +147,8 @@ $(document).ready(function () {
     <%= f.label :kernel, class: "form-label" %><br>
     <%=
     f.select(:kernel,
-            [['Linear','linear'],['Poly','poly'],['RBF','rbf'],['Sigmoid','sigmoid'], ['Precomputed','precomputed']],
+            [['Linear','linear'],['Poly','poly'],['RBF','rbf'],
+            ['Sigmoid','sigmoid'], ['Precomputed','precomputed']],
             { },
             { :multiple => true,class: "form-control"})
     %>

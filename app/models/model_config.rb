@@ -54,5 +54,7 @@ class ModelConfig < ApplicationRecord
     end
 
     #Declare model_type enum
-    enum model_type: {lstm:1, svm:2, rf:3}
+    #enum model_type: {lstm:'lstm', svm:'svm', rf:'rf'}
+
+
 end
