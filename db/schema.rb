@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_19_175753) do
+ActiveRecord::Schema.define(version: 2021_10_21_171128) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,12 @@ ActiveRecord::Schema.define(version: 2021_10_19_175753) do
     "training",
     "done",
     "error",
+  ], force: :cascade
+
+  create_enum :recommendation_verdict, [
+    "buy",
+    "hold",
+    "sell",
   ], force: :cascade
 
   create_enum :user_role, [
@@ -55,7 +61,6 @@ ActiveRecord::Schema.define(version: 2021_10_19_175753) do
     t.integer "train_percent", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "model_type"
     t.index ["name"], name: "index_model_configs_on_name", unique: true
   end
 
@@ -130,6 +135,21 @@ ActiveRecord::Schema.define(version: 2021_10_19_175753) do
     t.index ["stock_id"], name: "index_price_predictions_on_stock_id"
   end
 
+  create_table "recommendations", force: :cascade do |t|
+    t.bigint "stock_id", null: false
+    t.date "entry_date", null: false
+    t.date "nd_date"
+    t.enum "nd_verdict", enum_name: "recommendation_verdict"
+    t.date "st_date"
+    t.enum "st_verdict", enum_name: "recommendation_verdict"
+    t.date "mt_date"
+    t.enum "mt_verdict", enum_name: "recommendation_verdict"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stock_id", "entry_date"], name: "index_recommendations_on_stock_id_and_entry_date"
+    t.index ["stock_id"], name: "index_recommendations_on_stock_id"
+  end
+
   create_table "stocks", force: :cascade do |t|
     t.string "symbol", null: false
     t.string "name", null: false
@@ -193,6 +213,7 @@ ActiveRecord::Schema.define(version: 2021_10_19_175753) do
   add_foreign_key "model_trainings", "stocks"
   add_foreign_key "price_histories", "stocks"
   add_foreign_key "price_predictions", "stocks"
+  add_foreign_key "recommendations", "stocks"
   add_foreign_key "technical_indicators", "stocks"
   add_foreign_key "thresholds", "favorites"
 end
