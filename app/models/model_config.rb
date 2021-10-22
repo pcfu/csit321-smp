@@ -52,4 +52,7 @@ class ModelConfig < ApplicationRecord
     def broadcast_training_progress
       AdminChannel.broadcast EventMessages.model_config_training_progress(self)
     end
+
+    #Declare model_type enum
+    enum model_type: {lstm:1, svm:2, rf:3}
 end
