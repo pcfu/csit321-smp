@@ -23,10 +23,15 @@ Rails.application.routes.draw do
       end
     end
 
-    member do
-      resources :price_histories, only: [:index], defaults: { format: :json }
-      resources :technical_indicators do
-        post 'batch_create', on: :collection, defaults: { format: :json }
+    defaults format: :json do
+      member do
+        resources :price_histories, only: [:index] do
+          get 'sister_prices', on: :collection
+        end
+
+        resources :technical_indicators do
+          post 'batch_create', on: :collection
+        end
       end
     end
   end
@@ -39,10 +44,7 @@ Rails.application.routes.draw do
   resources :threshold, only: [:create, :destroy]
   post 'threshold/update'
 
- 
 
-  
-  
   # System Administrator Endpoints
   ## Note: combine the two controllers
   get  'ml_models',      to: 'machine_learning_models#index'
@@ -75,7 +77,5 @@ Rails.application.routes.draw do
   match '/422', via: :all, to: 'errors#unprocessable_entity'
   match '/500', via: :all, to: 'errors#server_error'
   #get   '*path', to: sessions_url
-  
+
 end
-
-
