@@ -1,0 +1,40 @@
+<div class="container" style="margin-bottom: 20px">
+  <h1>Edit Schedule</h1>
+  <hr/>
+
+  <% if flash[:error].present? %>
+    <div class="alert alert-danger"><%= flash[:error] %></div>
+  <% end %>
+  <% if flash[:success].present? %>
+    <div class="alert alert-success"><%= flash[:success] %></div>
+  <% end %>
+
+  <%= form_with model: @ml_params, method: :post, url: admin_model_parameters_path, local: true do |f| %>
+
+
+    <div class = "mb-3">
+    <%= f.label :start_date, class: "form-label" %>
+    <%= f.date_field :start_date, required: true, class: "form-control" %>
+    </div>
+
+
+    <div class="mb-3" id="gamma">
+    <%= f.label :Frequency, class: "form-label" %><br>
+    <%=
+    f.select(:frequency,
+            [['7',7],['14',14],['21',21]],
+            { },
+            {class: "form-control"})
+    %>
+    </div>
+
+
+
+    <%= link_to "Back", "/admin/schedule", class: 'btn btn-danger col-1' %>
+    <%= f.submit :"Submit", class: "btn btn-primary col-1" %>
+
+    <% if local_assigns.has_key? :status_msg %>
+      <p><%= status_msg %></p>
+    <% end %>
+  <% end %>
+</div>
