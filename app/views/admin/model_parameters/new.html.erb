@@ -1,0 +1,134 @@
+<script>
+$(document).ready(function () {
+
+    $('#n_estimators').hide();
+    $('#max_depth').hide();
+    $('#c').hide();
+    $('#gamma').hide();
+    $('#kernel').hide();
+    $('#model_type').on("change",function(){
+
+      if (($('#model_type option:selected').val()) == "lstm"){
+        $('#n_estimators').hide();
+        $('#max_depth').hide();
+        $('#c').hide();
+        $('#gamma').hide();
+        $('#kernel').hide();
+      } else if(($('#model_type option:selected').val()) == "svm"){
+        $('#n_estimators').show();
+        $('#max_depth').show();
+        $('#c').hide();
+        $('#gamma').hide();
+        $('#kernel').hide();
+      }else{
+        $('#n_estimators').hide();
+        $('#max_depth').hide();
+        $('#c').show();
+        $('#gamma').show();
+        $('#kernel').show();
+      }
+    
+        
+     });
+})
+
+
+
+</script>
+
+<div class="container" style="margin-bottom: 20px">
+  <h1>Prediction/Recommendation</h1>
+  <h2>Add New Model</h2>
+  <hr/>
+
+  <% if flash[:error].present? %>
+    <div class="alert alert-danger"><%= flash[:error] %></div>
+  <% end %>
+  <% if flash[:success].present? %>
+    <div class="alert alert-success"><%= flash[:success] %></div>
+  <% end %>
+
+  <%= form_with model: @ml_params, method: :post, url: admin_model_parameters_path, local: true do |f| %>
+    <div class = "mb-3">
+      <%= f.label :name, class: "form-label" %>
+      <%= f.text_field :name, required: true, class: "form-control" %>
+    </div>
+
+    <div class = "mb-3">
+    <%= f.label :start_date, class: "form-label" %>
+    <%= f.date_field :start_date, required: true, class: "form-control" %>
+    </div>
+
+    <div class = "mb-3">
+    <%= f.label :train_test_percent, class: "form-label" %>
+    <%= f.number_field :train_test_percent, :step => 0.01, required: true, class: "form-control"%>
+    </div>
+
+
+    <div class="mb-3" id="model_type">
+      <%= f.label :model_type, class: "form-label" %><br>
+      <%=
+      f.select(:model_type,[['LSTM','lstm'],['SVM','svm'],['Random Forest','rf']],
+              { },
+              {class: "form-control"})
+      %>
+    </div>
+
+    <div class="mb-3" id="n_estimators">
+      <%= f.label :n_estimators, class: "form-label" %><br>
+      <%=
+      f.select(:n_estimators,
+              [['2',2],['3',3],['4',4],['5',5]],
+              { },
+              {:multiple => true,class: "form-control"})
+      %>
+    </div>
+
+    <div class="mb-3" id="max_depth">
+      <%= f.label :max_depth, class: "form-label" %><br>
+      <%=
+      f.select(:max_depth,
+              [['2',2],['3',3],['4',4],['5',5]],
+              { },
+              { :multiple => true,class: "form-control"})
+      %>
+    </div>
+
+    <div class="mb-3" id="c">
+      <%= f.label :c, class: "form-label" %><br>
+      <%=
+      f.select(:c,
+              [['2',2],['3',3],['4',4],['5',5]],
+              { },
+              { :multiple => true,class: "form-control"})
+      %>
+    </div>
+
+    <div class="mb-3" id="gamma">
+    <%= f.label :gamma, class: "form-label" %><br>
+    <%=
+    f.select(:gamma,
+            [['2',2],['3',3],['4',4],['5',5]],
+            { },
+            {:multiple => true,class: "form-control"})
+    %>
+  </div>
+
+  <div class="mb-3" id="kernel">
+    <%= f.label :kernel, class: "form-label" %><br>
+    <%=
+    f.select(:kernel,
+            [['Linear','linear'],['Poly','poly'],['RBF','rbf'],['Sigmoid','sigmoid'], ['Precomputed','precomputed']],
+            { },
+            { :multiple => true,class: "form-control"})
+    %>
+  </div>
+
+    <%= link_to "Back", admin_model_parameters_path, class: 'btn btn-danger col-1' %>
+    <%= f.submit :"Submit", class: "btn btn-primary col-1" %>
+
+    <% if local_assigns.has_key? :status_msg %>
+      <p><%= status_msg %></p>
+    <% end %>
+  <% end %>
+</div>

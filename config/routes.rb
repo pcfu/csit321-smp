@@ -47,12 +47,17 @@ Rails.application.routes.draw do
   ## Note: combine the two controllers
   get  'ml_models',      to: 'machine_learning_models#index'
   get  'ml_models/new',  to: 'machine_learning_models#new'
-  get  'model_parameters/new',    to: 'model_parameters#new'
-  post 'model_parameters/create', to: 'model_parameters#create'
+  #get  'model_parameters/new',    to: 'model_parameters#new'
+  #post 'model_parameters/create', to: 'model_parameters#create'
 
   namespace :admin do
     resources :prototype, only: [:index]
     resources :model_configs, only: [:show], defaults: { format: 'json' }
+    resources :model_parameters, only: [:index, :show, :new, :create]
+    post 'model_parameters/delete', to: 'model_parameters#destroy'
+    resources :schedule, only: [:index, :new]
+
+
     resources :model_trainings, only: [:update], defaults: { format: 'json' } do
       post 'batch_enqueue', on: :collection, defaults: { format: 'json' }
     end

@@ -56,16 +56,12 @@
             <th>MT Max</th>
             <th>MT Exp</th>
             <th>MT Min</th>
-            <th>LT Date</th>
-            <th>LT Max</th>
-            <th>LT Exp</th>
-            <th>LT Min</th>
           </tr>
         </thead>
         <tbody>
           <% @recent_predictions.each do |pxPrehist| %>
             <tr>
-              <% pxPrehist.values[0...-4].each do |val| %>
+              <% pxPrehist.values[0..12].each do |val| %>
                 <td><%= val %></td>
               <% end %>
             </tr>
@@ -79,7 +75,26 @@
   <div class="row my-5">
     <div class="col-12">
       <h1>RECOMMENDATION</h1>
-      <p> COMING SOON - NOT FOR PROTOTYPE </p>
+      <table id="pricehistory-list" class="table table-striped ">
+        <thead>
+          <tr>
+            <th>Entry Date</th>
+            <th>ND Date</th>
+            <th>ND Action</th>
+            <th>ST Date</th>
+            <th>ST Action</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>2021-08-16</td>
+              <td>2021-08-17</td>
+              <td>Sell</td>
+              <td>2021-08-30</td>
+              <td>Buy</td>
+            </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 

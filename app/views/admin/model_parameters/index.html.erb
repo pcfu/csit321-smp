@@ -1,0 +1,35 @@
+<div class="container mt-5">
+  <h1>Prediction/Recommendation</h1>
+  <h2>Machine Models</h2>
+  <hr/>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Model Type</th>
+        <th scope="col">Parameters</th>
+        <th scope="col">Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @models.each do |model| %>
+        <tr>
+          <td><%= model.name %></td>
+          <td><%= model.model_type %></td>
+          <td><%= model.params %></td>
+          <td>
+            <button>
+            <%= link_to "Details", admin_model_parameter_url(id:model), method: :get %>
+            </button>
+            <button>
+              <%= link_to 'Delete', admin_model_parameters_delete_path(id:model),  method: :destroy, data: { confirm: 'Confirm to delete the parameters', title: "Confirmation" } %>
+            </button>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to "New Parameters", "model_parameters/new", class: 'btn btn-primary' %>
+</div>
