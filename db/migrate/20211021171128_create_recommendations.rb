@@ -10,6 +10,8 @@ class CreateRecommendations < ActiveRecord::Migration[6.1]
       t.enum       :nd_verdict, enum_name: :recommendation_verdict
       t.date       :st_date
       t.enum       :st_verdict, enum_name: :recommendation_verdict
+      t.date       :mt_date
+      t.enum       :mt_verdict, enum_name: :recommendation_verdict
 
       t.timestamps
     end

@@ -75,6 +75,29 @@
   <div class="row my-5">
     <div class="col-12">
       <h1>RECOMMENDATION</h1>
+      <table id="pricehistory-list" class="table table-striped ">
+        <thead>
+          <tr>
+            <th>Entry Date</th>
+            <th>ND Date</th>
+            <th>ND Action</th>
+            <th>ST Date</th>
+            <th>ST Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @stock.recommendations.order(entry_date: :desc).limit(5).each do |pxhist| %>
+            <tr>
+              <td><%= pxhist.entry_date%></td>
+              <td><%= pxhist.nd_date%></td>
+              <td><%= pxhist.nd_verdict%></td>
+              <td><%= pxhist.st_date%></td>
+              <td><%= pxhist.st_verdict%></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
     </div>
   </div>
 

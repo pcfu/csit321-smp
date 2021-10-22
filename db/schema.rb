@@ -138,8 +138,12 @@ ActiveRecord::Schema.define(version: 2021_10_21_171128) do
   create_table "recommendations", force: :cascade do |t|
     t.bigint "stock_id", null: false
     t.date "entry_date", null: false
-    t.enum "nd_verdict", null: false, enum_name: "recommendation_verdict"
-    t.enum "st_verdict", null: false, enum_name: "recommendation_verdict"
+    t.date "nd_date"
+    t.enum "nd_verdict", enum_name: "recommendation_verdict"
+    t.date "st_date"
+    t.enum "st_verdict", enum_name: "recommendation_verdict"
+    t.date "mt_date"
+    t.enum "mt_verdict", enum_name: "recommendation_verdict"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["stock_id", "entry_date"], name: "index_recommendations_on_stock_id_and_entry_date"

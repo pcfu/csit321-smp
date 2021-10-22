@@ -1,6 +1,11 @@
 {
     "AAPL": [
         {
+            "entry_date": "2021-10-19",
+            "nd_verdict": "hold",
+            "st_verdict": "hold"
+        },
+        {
             "entry_date": "2021-10-20",
             "nd_verdict": "hold",
             "st_verdict": "sell"
