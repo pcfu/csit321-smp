@@ -37,11 +37,11 @@ module BackendJobsEnqueuing
     enqueue_job(TIS_ENDPOINT, data)
   end
 
-  def enqueue_training_jobs(training_list, model_params, data_range)
+  def enqueue_training_jobs(training_list, model_class, model_params)
     data = {
       training_list: training_list,
+      model_class: model_class,
       model_params: model_params,
-      data_range: data_range
     }
     res = BackendClient.post(TRAINING_ENDPOINT, data)
     JSON.parse(res.body, symbolize_names: true)
