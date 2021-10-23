@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     resources :model_configs, only: [:show], defaults: { format: 'json' }
     resources :model_parameters, only: [:index, :show, :new, :create]
     post 'model_parameters/delete', to: 'model_parameters#destroy'
+    post 'model_parameters/setActive', to: 'model_parameters#setActive'
     resources :schedule, only: [:index, :new]
 
 

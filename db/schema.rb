@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_21_171128) do
+ActiveRecord::Schema.define(version: 2021_10_23_064021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_enum :ml_name, [
+    "lstm",
+    "svm",
+    "rf",
+  ], force: :cascade
 
   create_enum :model_training_stage, [
     "requested",
@@ -61,6 +67,8 @@ ActiveRecord::Schema.define(version: 2021_10_21_171128) do
     t.integer "train_percent", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "active"
+    t.enum "model_type", enum_name: "ml_name"
     t.index ["name"], name: "index_model_configs_on_name", unique: true
   end
 

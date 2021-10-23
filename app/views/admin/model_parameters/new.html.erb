@@ -1,41 +1,23 @@
 <script>
 $(document).ready(function () {
-
-    $('#n_estimators').hide();
-    $('#max_depth').hide();
-    $('#max_features').hide();
-    $('#criterion').hide();
-    $('#c').hide();
-    $('#gamma').hide();
-    $('#kernel').hide();
+    $('.rf_div').hide();
+    $('.svm_div').hide();
+    $('.lstm_div').hide();
     $('#model_type').on("change",function(){
-
       if (($('#model_type option:selected').val()) == "lstm"){
-        $('#n_estimators').hide();
-        $('#max_depth').hide();
-        $('#max_features').hide();
-        $('#criterion').hide();
-        $('#c').hide();
-        $('#gamma').hide();
-        $('#kernel').hide();
+        $('.rf_div').hide();
+        $('.svm_div').hide();
+        $('.lstm_div').show();
       } else if(($('#model_type option:selected').val()) == "rf"){
-        $('#n_estimators').show();
-        $('#max_depth').show();
-        $('#max_features').show();
-        $('#criterion').show();
-        $('#c').hide();
-        $('#gamma').hide();
-        $('#kernel').hide();
+        $('.rf_div').show();
+        $('.svm_div').hide();
+        $('.lstm_div').hide();
       }else{
-        $('#n_estimators').hide();
-        $('#max_depth').hide();
-        $('#c').show();
-        $('#gamma').show();
-        $('#kernel').show();
+        $('.rf_div').hide();
+        $('.svm_div').show();
+        $('.lstm_div').hide();
       }
-    
-        
-     });
+    });
 })
 
 
@@ -77,82 +59,136 @@ $(document).ready(function () {
       
     </div>
 
-    <div class="mb-3" id="n_estimators">
-      <%= f.label :n_estimators, class: "form-label" %><br>
-      <%=
-      f.select(:n_estimators,
-              [['20',20],['50',50],['70',70],['100',100],
-              ['150',150],['180',180],['200',200]],
-              { },
-              {:multiple => true,class: "form-control"})
-      %>
+    <!-- Div where the LSTM are -->
+    <div class="lstm_div">
+
+      <div class="mb-3" id="activation">
+        <%= f.label :activation, class: "form-label" %><br>
+        <%=
+        f.select(:activation,
+                [['Relu','relu'],['Linear','linear']],
+                { },
+                {class: "form-control"})
+        %>
+      </div>  
+
+      <div class="mb-3" id="units">
+        <%= f.label :units, class: "form-label" %><br>
+        <%=
+        f.select(:units,
+                [['64',64],['32',32]],
+                { },
+                {class: "form-control"})
+        %>
+      </div>
+
+      <div class="mb-3" id="dropout">
+        <%= f.label :dropout, class: "form-label" %><br>
+        <%= f.number_field :dropout, step:0.1 , min:0.1, max:0.9, class: "form-control"%>
+      </div>
+
+      <div class="mb-3" id="epoch">
+        <%= f.label :epoch, class: "form-label" %><br>
+        <%= f.number_field :epoch,  min:1, max:100, class: "form-control"%>
+      </div>
+
+      <div class="mb-3" id="batch_size">
+        <%= f.label :batch_size, class: "form-label" %><br>
+        <%=
+        f.select(:batch_size,
+                [['8',8],['32',32],['64',64],['128',128]],
+                { },
+                {class: "form-control"})
+        %>
+      </div>
+      
+
     </div>
 
-    <div class="mb-3" id="max_depth">
-      <%= f.label :max_depth, class: "form-label" %><br>
-      <%=
-      f.select(:max_depth,
-              [['3',3],['4',4],['5',5],['6',6],['7',7],
-              ['8',8],['9',9],['10',10],['11',11],['12',12],
-              ['13',13],['14',14]],
-              { },
-              { :multiple => true,class: "form-control"})
-      %>
+    <!-- Div where the RF are -->
+    <div class="rf_div">
+
+      <div class="mb-3" id="n_estimators">
+        <%= f.label :n_estimators, class: "form-label" %><br>
+        <%=
+        f.select(:n_estimators,
+                [['20',20],['50',50],['70',70],['100',100],
+                ['150',150],['180',180],['200',200]],
+                { },
+                {:multiple => true,class: "form-control"})
+        %>
+      </div>
+
+      <div class="mb-3" id="max_depth">
+        <%= f.label :max_depth, class: "form-label" %><br>
+        <%=
+        f.select(:max_depth,
+                [['3',3],['4',4],['5',5],['6',6],['7',7],
+                ['8',8],['9',9],['10',10],['11',11],['12',12],
+                ['13',13],['14',14]],
+                { },
+                { :multiple => true,class: "form-control"})
+        %>
+      </div>
+
+      <div class="mb-3" id="max_features">
+        <%= f.label :max_features, class: "form-label" %><br>
+        <%=
+        f.select(:max_features,
+                [['Auto','auto'],['Sqrt','sqrt'],['Log2','log2']],
+                { },
+                { :multiple => true,class: "form-control"})
+        %>
+      </div>
+      
+      <div class="mb-3" id="criterion">
+        <%= f.label :criterion, class: "form-label" %><br>
+        <%=
+        f.select(:criterion,
+                [['Gini','gini'],['Entropy','entropy']],
+                { },
+                { :multiple => true,class: "form-control"})
+        %>
+      </div>  
     </div>
 
-    <div class="mb-3" id="max_features">
-      <%= f.label :max_features, class: "form-label" %><br>
-      <%=
-      f.select(:max_features,
-              [['auto','auto'],['sqrt','sqrt'],['log2','log2']],
-              { },
-              { :multiple => true,class: "form-control"})
-      %>
+    <!-- Div where the SVM are -->
+    <div class="svm_div">
+
+      <div class="mb-3" id="c">
+        <%= f.label :c, class: "form-label" %><br>
+        <%=
+        f.select(:c,
+                [['1',1],['2',2],['3',3],['4',4],['5',5],
+                ['6',6],['7',7],['8',8],['9',9],['10',10]],
+                { },
+                { :multiple => true,class: "form-control"})
+        %>
+      </div>
+
+      <div class="mb-3" id="gamma">
+        <%= f.label :gamma, class: "form-label" %><br>
+        <%=
+        f.select(:gamma,
+                [['1',1],['2',2],['3',3],['4',4],['5',5],
+                ['6',6],['7',7],['8',8],['9',9],['10',10],
+                ['11',11],['12',12],['13',13],['14',14],['15',15]],
+                { },
+                {:multiple => true,class: "form-control"})
+        %>
+      </div>
+
+      <div class="mb-3" id="kernel">
+        <%= f.label :kernel, class: "form-label" %><br>
+        <%=
+        f.select(:kernel,
+                [['Linear','linear'],['Poly','poly'],['RBF','rbf'],
+                ['Sigmoid','sigmoid'], ['Precomputed','precomputed']],
+                { },
+                { :multiple => true,class: "form-control"})
+        %>
+      </div>
     </div>
-    
-    <div class="mb-3" id="criterion">
-    <%= f.label :criterion, class: "form-label" %><br>
-    <%=
-    f.select(:criterion,
-            [['gini','gini'],['entropy','entropy']],
-            { },
-            { :multiple => true,class: "form-control"})
-    %>
-  </div>   
-
-    <div class="mb-3" id="c">
-      <%= f.label :c, class: "form-label" %><br>
-      <%=
-      f.select(:c,
-              [['1',1],['2',2],['3',3],['4',4],['5',5],
-              ['6',6],['7',7],['8',8],['9',9],['10',10]],
-              { },
-              { :multiple => true,class: "form-control"})
-      %>
-    </div>
-
-    <div class="mb-3" id="gamma">
-    <%= f.label :gamma, class: "form-label" %><br>
-    <%=
-    f.select(:gamma,
-            [['1',1],['2',2],['3',3],['4',4],['5',5],
-            ['6',6],['7',7],['8',8],['9',9],['10',10],
-            ['11',11],['12',12],['13',13],['14',14],['15',15]],
-            { },
-            {:multiple => true,class: "form-control"})
-    %>
-  </div>
-
-  <div class="mb-3" id="kernel">
-    <%= f.label :kernel, class: "form-label" %><br>
-    <%=
-    f.select(:kernel,
-            [['Linear','linear'],['Poly','poly'],['RBF','rbf'],
-            ['Sigmoid','sigmoid'], ['Precomputed','precomputed']],
-            { },
-            { :multiple => true,class: "form-control"})
-    %>
-  </div>
 
     <%= link_to "Back", admin_model_parameters_path, class: 'btn btn-danger col-1' %>
     <%= f.submit :"Submit", class: "btn btn-primary col-1" %>

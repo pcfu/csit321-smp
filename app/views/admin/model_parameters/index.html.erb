@@ -1,7 +1,16 @@
+
+<% if flash[:error].present? %>
+<div class="alert alert-danger"><%= flash[:error] %></div>
+<% end %>
+<% if flash[:success].present? %>
+<div class="alert alert-success"><%= flash[:success] %></div>
+<% end %>
+
 <div class="container mt-5">
   <h1>Model Training Parameters </h1>
   <h2>Price Prediction & Recommendation</h2>
   <hr/>
+
 
   <table class="table">
     <thead>
@@ -9,6 +18,7 @@
         <th scope="col">Name</th>
         <th scope="col">Model Type</th>
         <th scope="col">Parameters</th>
+        <th scope="col">Active</th>
         <th scope="col">Details</th>
       </tr>
     </thead>
@@ -18,6 +28,7 @@
           <td><%= model.name %></td>
           <td><%= model.model_type %></td>
           <td><%= model.params %></td>
+          <td><%= model.active %></td>
           <td>
             <button>
             <%= link_to "Details", admin_model_parameter_url(id:model), method: :get %>
@@ -25,6 +36,9 @@
             <button>
               <%= link_to 'Delete', admin_model_parameters_delete_path(id:model),  method: :destroy, data: { confirm: 'Confirm to delete the parameters', title: "Confirmation" } %>
             </button>
+            <button>
+            <%= link_to 'Set Active', admin_model_parameters_setActive_path(id:model),  method: :post, data: { confirm: 'Confirm to set this set of parameters active?', title: "Confirmation" } %>
+          </button>
           </td>
         </tr>
       <% end %>

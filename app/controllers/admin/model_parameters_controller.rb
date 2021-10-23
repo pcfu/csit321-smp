@@ -1,5 +1,8 @@
 module Admin
   class ModelParametersController < ApplicationController
+    before_action :logged_in_user
+    skip_before_action :verify_authenticity_token, if: -> { request.format.json? }
+
     def index
       @models = ModelConfig.all
 
@@ -19,22 +22,26 @@ module Admin
 
     def create
       #Extracting values from form
+      @name_param = params[:model_config][:name]
+      @model_param = params[:model_config][:model_type]
       @start_date = params[:model_config][:start_date]
       @train_test_param =  params[:model_config][:train_test_percent]
+      #svm
       @c =  params[:model_config][:c].select!{|val| !val.empty?}
       @gamma =  params[:model_config][:gamma].select!{|val| !val.empty?}
       @kernel =  params[:model_config][:kernel].select!{|val| !val.empty?}
+      #rf
       @n_estimators =  params[:model_config][:n_estimators].select!{|val| !val.empty?}
       @max_depth =  params[:model_config][:max_depth].select!{|val| !val.empty?}
       @max_features =  params[:model_config][:max_features].select!{|val| !val.empty?}
       @criterion =  params[:model_config][:criterion].select!{|val| !val.empty?}
-      #@activation =  params[:model_config][:activation].select!{|val| !val.empty?}
-      #@units =  params[:model_config][:units].select!{|val| !val.empty?}
-      #@dropout =  params[:model_config][:dropout].select!{|val| !val.empty?}
-      #@epoch =  params[:model_config][:epoch].select!{|val| !val.empty?}
-      #@batch_size =  params[:model_config][:batch_size].select!{|val| !val.empty?}
-      @name_param = params[:model_config][:name]
-      @model_param = params[:model_config][:model_type]
+      #lstm
+      @activation =  params[:model_config][:activation]
+      @units =  params[:model_config][:units]
+      @dropout =  params[:model_config][:dropout]
+      @epoch =  params[:model_config][:epoch]
+      @batch_size =  params[:model_config][:batch_size]
+
 
       #Defining the json string
       if @model_param == "lstm"   #LSTM
@@ -66,11 +73,16 @@ module Admin
 
       end
 
+      
+
       #Creating new train model
       @ml_params = ModelConfig.create(name: @name_param,model_type:@model_param, train_percent:0, params:@parameter)
       
       #Saving model
       if @ml_params.save
+        #Set all active state as false
+        setInactive(@model_param)
+        @ml_params.update(:active =>true)
         flash[:success] = "ML parameters saved successfully"
         redirect_to admin_model_parameters_path  # change this redirect to index later
       else
@@ -80,16 +92,50 @@ module Admin
     end
 
     def destroy
-      @model = ModelConfig.find(params[:id])
-      @model.destroy
-      redirect_to admin_model_parameters_path, :alert=>"Model Parameters has been deleted"
+      @active_status = ModelConfig.find(params[:id])[:active]
+      if @active_status == false
+        @model = ModelConfig.find(params[:id])
+        @model.destroy
+        flash[:success] = "Parameters deleted"
+        redirect_to admin_model_parameters_path
+      else
+        flash[:error] = "Error: You cannot delete active parameters."
+        redirect_to admin_model_parameters_path
+      end
+
+    end
+
+
+    def setActive
+      #Set all the other historical parameters inactive
+     # @model_type_toactive = ModelConfig.select(:model_type).find(params[:id])
+      @model_type_toactive = ModelConfig.find(params[:id])[:model_type]
+      setInactive(@model_type_toactive)
+
+      #Set selected parameter active
+      @model_toactive = ModelConfig.find(params[:id])
+      @model_toactive.update(:active =>true)
+      flash[:success] = "Active Model Parameters Updated"
+      redirect_to admin_model_parameters_path
       respond_to do |format|
         format.html{}
         format.js{}
       end
+
     end
 
     private
+
+    def setInactive(modeltype)
+      if modeltype == "svm"
+        ModelConfig.where(model_type:"rf", active:true).update_all(active:false)
+      elsif modeltype == "rf"
+        ModelConfig.where(model_type:"svm", active:true).update_all(active:false)
+      end
+      ModelConfig.where(model_type:modeltype, active:true).update_all(active:false)
+    end
+
+
   end
 
 
