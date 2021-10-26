@@ -14,7 +14,8 @@
         <%= form_for :threshold, :url => { :controller=> "threshold", :action => "create", :favoriteid =>@favorites.id }, :html => {:class => "threshold_form"} do |form| %>
           Buy Threshold: <%= form.number_field :buythreshold, :required=>'required' %> <br><br>
           Sell Threshold: <%= form.number_field :sellthreshold, :required=>'required' %> <br><br>
-          <%= submit_tag 'Submit' %>
+          <%= link_to "Back", favorites_path, class: 'btn btn-danger col-1' %>
+          <%= form.submit :"Submit", class: "btn btn-primary col-1" %>  
         <% end %>
       </div>
     </div>
@@ -27,7 +28,8 @@
     <%= form_for :threshold, :url => { :controller=> "threshold", :action => "update",  :thresholdid => @favorites.threshold.id  }, :html => {:class => "threshold_form"} do |form| %>
       Buy Threshold: <%= form.number_field :buythreshold, :required=>'required' %> <br><br>
       Sell Threshold: <%= form.number_field :sellthreshold, :required=>'required' %> <br><br>
-      <%= submit_tag 'Update' %>
+      <%= link_to "Back", favorites_path, class: 'btn btn-danger col-1' %>
+      <%= form.submit :"Update", class: "btn btn-primary col-1" %>  
     <% end %>
   <% end %>
 </div>

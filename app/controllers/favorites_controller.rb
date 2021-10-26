@@ -24,7 +24,7 @@ class FavoritesController < ApplicationController
       if favorite == []
         #Create the favorite
         Favorite.create(stock: Stock.find(params[:stock]),user:current_user)
-        #flash[:notice] ="Stock added to favorites"
+        #flash[:success] ="Stock added to favorites"
         @favorite_exists = true
       else
         favorite.destroy_all
@@ -48,7 +48,7 @@ class FavoritesController < ApplicationController
       if @favorite == [] 
       #Create favorite
         Favorite.create(stock:Stock.find_by(symbol:@stocksymbol), user: current_user)
-        redirect_to favorites_path, flash: {notice: "Stock added to favorites"}
+        redirect_to favorites_path, flash: {success: "Stock added to favorites"}
 
         @favorite_exists = true
       else
@@ -58,7 +58,7 @@ class FavoritesController < ApplicationController
       end
     else
       #No such stock symbol
-      redirect_to favorites_path, flash: {notice: "Stock does not exist"}
+      redirect_to favorites_path, flash: {error: "Stock does not exist"}
 
     end
   end
@@ -69,7 +69,7 @@ class FavoritesController < ApplicationController
     @fav.destroy
     @favorite_exists = false
       
-    redirect_to favorites_path, :alert=>"Favorite has been deleted"
+    redirect_to favorites_path, flash: {success: "Stock has been removed"}
     respond_to do |format|
       format.html{}
       format.js{}

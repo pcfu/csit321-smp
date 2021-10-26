@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_23_064021) do
+ActiveRecord::Schema.define(version: 2021_10_26_182725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -204,6 +204,15 @@ ActiveRecord::Schema.define(version: 2021_10_23_064021) do
     t.index ["favorite_id"], name: "index_thresholds_on_favorite_id"
   end
 
+  create_table "training_schedules", force: :cascade do |t|
+    t.bigint "model_config_id", null: false
+    t.date "start_date"
+    t.integer "frequency"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["model_config_id"], name: "index_training_schedules_on_model_config_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name", null: false
     t.string "last_name", null: false
@@ -224,4 +233,5 @@ ActiveRecord::Schema.define(version: 2021_10_23_064021) do
   add_foreign_key "recommendations", "stocks"
   add_foreign_key "technical_indicators", "stocks"
   add_foreign_key "thresholds", "favorites"
+  add_foreign_key "training_schedules", "model_configs"
 end

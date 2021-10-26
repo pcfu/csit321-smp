@@ -21,4 +21,9 @@ class ApplicationController < ActionController::Base
       return @favorite_exists ? "UnFavorite" : "Favorite"
   end
   helper_method:favorite_text
+
+  def check_boolean(boolean)
+    boolean ? 'Yes' : 'No'
+  end
+  helper_method:check_boolean
 end

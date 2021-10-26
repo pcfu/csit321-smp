@@ -1,0 +1,20 @@
+$(document).ready(function () {
+    $('.rf_div').hide();
+    $('.svm_div').hide();
+    $('.lstm_div').hide();
+    $('#model_type').on("change",function(){
+      if (($('#model_type option:selected').val()) == "lstm"){
+        $('.rf_div').prop('disabled', true);
+        $('.svm_div').prop('disabled', true);
+        $('.lstm_div').show();
+      } else if(($('#model_type option:selected').val()) == "rf"){
+        $('.rf_div').show();
+        $('.svm_div').prop('disabled', true);
+        $('.lstm_div').prop('disabled', true);
+      }else{
+        $('.rf_div').prop('disabled', true);
+        $('.svm_div').show();
+        $('.lstm_div').prop('disabled', true);
+      }
+    });
+})

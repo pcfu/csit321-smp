@@ -16,10 +16,7 @@ $(document).ready(function () {
         }
     });
     
-  
-
-
-    //link to stock show page
+      //link to stock show page
     $('#fav-list tbody tr').css('cursor', 'pointer');
     $('#fav-list tbody tr').on('click', 'td:not(.unclickable)', function () {
         var the_link = $(this).parent().attr("data-link");
