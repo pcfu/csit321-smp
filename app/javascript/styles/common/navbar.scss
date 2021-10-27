@@ -1,3 +1,15 @@
+.navbar-custom {
+  background-color: #295174;
+}
+
+.navbar-custom a{
+  color: white!important;
+  &:hover {
+    cursor: pointer;
+    color:rgb(184, 220, 252)!important;
+  }
+}
+
 .account-control {
   position: relative;
   margin-left: 20px;
