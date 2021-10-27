@@ -9,7 +9,7 @@
     <div class="alert alert-success"><%= flash[:success] %></div>
   <% end %>
 
-  <%= form_with model: @ml_params, method: :post, url: admin_model_parameters_path, local: true do |f| %>
+  <%= form_with model: @schedule, method: :post, url: admin_schedule_index_path, local: true do |f| %>
 
 
     <div class = "mb-3">
@@ -24,13 +24,13 @@
     f.select(:frequency,
             [['7',7],['14',14],['21',21]],
             { },
-            {class: "form-control"})
+            { required: true, class: "form-control"})
     %>
     </div>
 
 
 
-    <%= link_to "Back", "/admin/schedule", class: 'btn btn-danger col-1' %>
+    <%= link_to "Back", admin_schedule_index_path, class: 'btn btn-danger col-1' %>
     <%= f.submit :"Submit", class: "btn btn-primary col-1" %>
 
     <% if local_assigns.has_key? :status_msg %>

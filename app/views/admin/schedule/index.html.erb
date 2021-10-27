@@ -8,19 +8,25 @@
         <th scope="col">Model Parameters Config Name</th>
         <th scope="col">Schedule Date</th>
         <th scope="col">Frequency (Days)</th>
+        <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody>
       <% @schedule.each do |schedule| %>
         <tr>
           <td><%= schedule.model_config.name %></td>
-          <td><%=schedule.start_date %></td>
+          <td><%= schedule.start_date %></td>
           <td><%= schedule.frequency %></td>
+          <td>
+            <button class: 'btn btn-primary'>
+            <%= link_to "Edit", edit_admin_schedule_path(id:schedule), method: :get %>
+            </button>
+          </td>
         </tr>
       <% end %>
 
     </tbody>
   </table>
 
-  <%= link_to "Add/Edit", "schedule/new", method: :get, class: 'btn btn-primary' %>
+ 
 </div>

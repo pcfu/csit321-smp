@@ -8,6 +8,7 @@ module Admin
 
 
         def edit
+            @schedule = TrainingSchedule.find(params[:id])
         end
     end 
 end
