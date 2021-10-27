@@ -76,13 +76,10 @@ module Admin
       
 
       #Creating new train model
-      @ml_params = ModelConfig.create(name: @name_param,model_type:@model_param, train_percent:0, params:@parameter)
+      @ml_params = ModelConfig.create(name: @name_param,model_type:@model_param, train_percent:0, params:@parameter, active:false)
       
       #Saving model
       if @ml_params.save
-        #Set all active state as false
-        setInactive(@model_param)
-        @ml_params.update(:active =>true)
         flash[:success] = "ML parameters saved successfully"
         redirect_to admin_model_parameters_path  # change this redirect to index later
       else
@@ -105,21 +102,34 @@ module Admin
 
     end
 
+    def train
+      @model_totrain = ModelConfig.find(params[:id])
+      @model_totrain.update(:train_percent=>100)
+      flash[:success] = "Parameters trained 100%"
+      redirect_to admin_model_parameters_path
+    end
+
 
     def setActive
-      #Set all the other historical parameters inactive
-     # @model_type_toactive = ModelConfig.select(:model_type).find(params[:id])
-      @model_type_toactive = ModelConfig.find(params[:id])[:model_type]
-      setInactive(@model_type_toactive)
-
-      #Set selected parameter active
       @model_toactive = ModelConfig.find(params[:id])
-      @model_toactive.update(:active =>true)
-      flash[:success] = "Active Model Parameters Updated"
-      redirect_to admin_model_parameters_path
-      respond_to do |format|
-        format.html{}
-        format.js{}
+      if @model_toactive.train_percent == 0
+        flash[:error] = "You cannot set untrained parameters as active parameters"
+        redirect_to admin_model_parameters_path
+      else
+        #Set all the other historical parameters inactive
+        @model_type_toactive = ModelConfig.find(params[:id])[:model_type]
+        setInactive(@model_type_toactive)
+        #Set selected parameter active
+        @model_toactive.update(:active =>true)
+         #Creating default schedule
+        TrainingSchedule.create(model_config:@model_toactive,start_date:Date.current,frequency:7)
+        flash[:success] = "Active Model Parameters Updated"
+        redirect_to admin_model_parameters_path
+        respond_to do |format|
+          format.html{}
+          format.js{}
+        end
+      
       end
 
     end
@@ -129,10 +139,21 @@ module Admin
     def setInactive(modeltype)
       if modeltype == "svm"
         ModelConfig.where(model_type:"rf", active:true).update_all(active:false)
+        destroySchedule("rf")
       elsif modeltype == "rf"
         ModelConfig.where(model_type:"svm", active:true).update_all(active:false)
+        destroySchedule("svm")
       end
+      currentModelId=ModelConfig.where(model_type:modeltype, active:true)
       ModelConfig.where(model_type:modeltype, active:true).update_all(active:false)
+      destroySchedule(modeltype)
+    end
+
+    def destroySchedule(modeltype)
+      current_schedule = TrainingSchedule.where(model_config:ModelConfig.where(model_type:modeltype))
+      if current_schedule != []
+        current_schedule.destroy_all
+      end
     end
 
 

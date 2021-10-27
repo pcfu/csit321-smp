@@ -15,6 +15,7 @@
         <th scope="col">Model Type</th>
         <th scope="col">Parameters</th>
         <th scope="col">Active</th>
+        <th scope="col">Trained Percent </th>
         <th scope="col" colspan="2">Action</th>
       </tr>
     </thead>
@@ -25,14 +26,23 @@
           <td><%= model.model_type %></td>
           <td><%= model.params %></td>
           <td><%= check_boolean(model.active) %></td>
+          <td><%= model.train_percent %>%</td>
           <td class="unclickable" >
             <% if model.active == false %>
               <button>
                 <%= link_to 'Delete', admin_model_parameters_delete_path(id:model),  method: :destroy, data: { confirm: 'Confirm to delete the parameters', title: "Confirmation" } %>
               </button> 
-              <button>
-                <%= link_to 'Set Active', admin_model_parameters_setActive_path(id:model),  method: :post, data: { confirm: 'Confirm to set this set of parameters active?', title: "Confirmation" } %>
-              </button>
+              <% if model.train_percent == 100 %>
+                <button>
+                  <%= link_to 'Set Active', admin_model_parameters_setActive_path(id:model),  method: :post, data: { confirm: 'Confirm to set this set of parameters active?', title: "Confirmation" } %>
+                </button>
+              <% else %>
+                <button>
+                  <%= link_to 'Train', admin_model_parameters_train_path(id:model),  method: :post, data: { confirm: 'Confirm to train this set of parameters?', title: "Confirmation" } %>
+                </button>            
+              <% end %>
+              
+
             <% else %>
               -
             <% end %>
