@@ -10,6 +10,7 @@ module Admin
     
     def show
       @model = ModelConfig.find(params[:id])
+      @model_trained = ModelTraining.where(model_config:@model)
       
       respond_to do |format|
         format.html
@@ -57,7 +58,7 @@ module Admin
           @parameter = {
             :start_date =>@start_date, 
             :train_test_percent =>@train_test_param,
-            :build_args=>{:c=>@c, 
+            :build_args=>{:C=>@c, 
                           :gamma=>@gamma,
                           :kernel=>@kernel}
                         }.to_json

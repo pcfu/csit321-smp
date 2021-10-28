@@ -6,17 +6,22 @@
     <thead>
       <tr>
         <th scope="col">Stock Name</th>
+        <th scope="col">Stage</th>
         <th scope="col">Parameters</th>
         <th scope="col">Accuracy</th>
+        <th scope="col">RMSE</th>
       </tr>
     </thead>
     <tbody>
-
+      <% @model_trained.each do |m| %>
         <tr>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><%=m.stock.symbol %></td>
+          <td><%=m.stage %></td>
+          <td><%=m.parameters %></td>
+          <td><%=m.accuracy %></td>
+          <td><%=m.rmse %></td>
         </tr>
+      <% end %>
 
     </tbody>
   </table>

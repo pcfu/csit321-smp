@@ -12,7 +12,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @schedule.each do |schedule| %>
+      <% @schedule.order({ created_at: :desc }).each do |schedule| %>
         <tr>
           <td><%= schedule.model_config.name %></td>
           <td><%= schedule.start_date %></td>
