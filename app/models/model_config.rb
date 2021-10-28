@@ -2,6 +2,8 @@ class ModelConfig < ApplicationRecord
   has_many :model_trainings,  dependent: :destroy
   has_many :stocks,           through: :model_trainings
 
+  enum model_type: {lstm:'lstm', svm:'svm', rf:'rf'}
+
   auto_strip_attributes :name, :params
   after_update :broadcast_training_progress,
                if: -> { train_percent_before_last_save < train_percent }
@@ -52,9 +54,4 @@ class ModelConfig < ApplicationRecord
     def broadcast_training_progress
       AdminChannel.broadcast EventMessages.model_config_training_progress(self)
     end
-
-    #Declare model_type enum
-    enum model_type: {lstm:'lstm', svm:'svm', rf:'rf'}
-
-
 end
