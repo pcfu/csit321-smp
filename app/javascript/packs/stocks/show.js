@@ -133,7 +133,7 @@ $(document).ready(function () {
   var exchange = ex_dict[ex_symbol]
   new TradingView.widget(
     {
-      "width": 980,
+      "width": 1300,
       "height": 610,
       "symbol": exchange.concat(":",document.getElementById('stockname').innerHTML),
       "interval": "D",

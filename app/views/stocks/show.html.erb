@@ -11,97 +11,45 @@
   <!-- PRICE CHART -->
   <div class="row my-5">
     <div class="col-12">
-      <h1 id="stockname"><%= @stock.symbol %></h1>   
+      <br/>
+      <h1 id="stockname" style="display: inline">
+        <%= @stock.symbol %> 
+
+        <span class="fs-3 text-secondary"><%= @recommendation_action.first.nd_date %></span>
+
+        <% if @recommendation_action.first.nd_verdict.upcase == "SELL" %>
+          <span class="badge bg-danger text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
+        <% elsif @recommendation_action.first.nd_verdict.upcase == "BUY" %>
+          <span class="badge bg-success text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
+        <% else %>
+          <span class="badge bg-warning text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
+        <% end %>
+      </h1>
+
       <% if logged_in? %>
-        <%= link_to favorite_text, favorites_update_path(stock:@stock), id:'favorite_link', remote: true %>   
+        <%= link_to favorite_text, favorites_update_path(stock:@stock), class:'btn btn-primary', style:'margin-top:30px; float:right;', id:'favorite_link', remote: true %>   
       <% else %>
         <%= link_to "Log in to add", sessions_path %>
       <% end %>
+
+      <h3 id="stockfullname"><%= @stock.name %></h3> 
+
+    </div>
+
+    <div class="col-12">
       <span id="stockexchange" style="visibility: hidden"><%=@stock.exchange%></span>
       <div id="tradingview_Chart"></div>
     </div>
   </div>
 
-  <!-- PREDICTION FROM ML -->
-  <div class="row my-5">
-    <div class="col-12">
-      <h1>PREDICTION</h1>
-      <%= content_tag :div,
-        class: "price_prediction",
-        data: { pxpredict: @recent_predictions.first } do
-      %>
-        <canvas id="line-chart" width="400" height="200"></canvas>
-      <% end %>
 
-      <p class="mt-5"> * Below is dummy data from model for testing purpose </p>
-      <table id="pricepredict-list" class="table table-striped">
-        <thead>
-          <tr>
-            <th>Entry Date</th>
-            <th>ND Date</th>
-            <th>ND Max</th>
-            <th>ND Exp</th>
-            <th>ND Min</th>
-            <th>ST Date</th>
-            <th>ST Max</th>
-            <th>ST Exp</th>
-            <th>ST Min</th>
-            <th>MT Date</th>
-            <th>MT Max</th>
-            <th>MT Exp</th>
-            <th>MT Min</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @recent_predictions.each do |pxPrehist| %>
-            <tr>
-              <% pxPrehist.values[0..12].each do |val| %>
-                <td><%= val %></td>
-              <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- RECOMMENDATION FROM ML -->
-  <div class="row my-5">
-    <div class="col-12">
-      <h1>RECOMMENDATION</h1>
-      <table id="pricehistory-list" class="table table-striped ">
-        <thead>
-          <tr>
-            <th>Entry Date</th>
-            <th>ND Date</th>
-            <th>ND Action</th>
-            <th>ST Date</th>
-            <th>ST Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @stock.recommendations.order(entry_date: :desc).limit(5).each do |pxhist| %>
-            <tr>
-              <td><%= pxhist.entry_date%></td>
-              <td><%= pxhist.nd_date%></td>
-              <td><%= pxhist.nd_verdict%></td>
-              <td><%= pxhist.st_date%></td>
-              <td><%= pxhist.st_verdict%></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-
-    </div>
-  </div>
-
-  <!-- PRICE RELATED DATA -->
+   <!-- PRICE RELATED DATA -->
   <div class="row my-5">
     <div class="col-12">
       <h1>LAST 5 PRICE DATA</h1>
 
       <table id="pricehistory-list" class="table table-striped ">
-        <thead>
+        <thead class="table-dark">
           <tr>
             <th>Date</th>
             <th>Open</th>
@@ -130,4 +78,93 @@
       </table>
     </div>
   </div>
+
+
+  <!-- PREDICTION FROM ML -->
+  <h1>PREDICTION</h1>
+  <div class="row my-5">
+    <div class="col-6">
+      <%= content_tag :div,
+        class: "price_prediction",
+        data: { pxpredict: @recent_predictions.first } do
+      %>
+        <canvas id="line-chart" width="400" height="200"></canvas>
+      <% end %>
+
+    </div>
+
+    <div class="col-6">
+      <table id="pricepredict-list" class="table table-sm">
+        <thead class="table-active">
+          <tr>
+            <th>Entry Date</th>
+            <th>ND Date</th>
+            <th>ND Max</th>
+            <th>ND Exp</th>
+            <th>ND Min</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recent_predictions.each do |prices| %>
+              <tr>
+                <td><%= prices[:entry_date] %></td>
+                <td><%= prices[:nd_date] %></td>
+                <td><%= prices[:nd_max_price] %></td>
+                <td><%= prices[:nd_exp_price] %></td>
+                <td><%= prices[:nd_min_price] %></td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <table id="pricepredict-list" class="table table-sm">
+        <thead class="table-active">
+          <tr>
+            <th>Entry Date</th>
+            <th>ST Date</th>
+            <th>ST Max</th>
+            <th>ST Exp</th>
+            <th>ST Min</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recent_predictions.each do |prices| %>
+              <tr>
+                <td><%= prices[:entry_date] %></td>
+                <td><%= prices[:st_date] %></td>
+                <td><%= prices[:st_max_price] %></td>
+                <td><%= prices[:st_exp_price] %></td>
+                <td><%= prices[:st_min_price] %></td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <table id="pricepredict-list" class="table table-sm">
+        <thead class="table-active">
+          <tr>
+            <th>Entry Date</th>
+            <th>MT Date</th>
+            <th>MT Max</th>
+            <th>MT Exp</th>
+            <th>MT Min</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recent_predictions.each do |prices| %>
+              <tr>
+                <td><%= prices[:entry_date] %></td>
+                <td><%= prices[:mt_date] %></td>
+                <td><%= prices[:mt_max_price] %></td>
+                <td><%= prices[:mt_exp_price] %></td>
+                <td><%= prices[:mt_min_price] %></td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+
 </div>
