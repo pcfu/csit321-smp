@@ -22,7 +22,6 @@ class ModelTraining < ApplicationRecord
   validates :date_end,      presence: true
   validate  :date_start_before_date_end
   validates :stage,         presence: true
-  validates :rmse,          presence: true, if: -> { done? }
   validates :rmse,          numericality: { allow_nil: true,
                                             greater_than_or_equal_to: 0 }
   validates :error_message, presence: true, if: -> { error? }
