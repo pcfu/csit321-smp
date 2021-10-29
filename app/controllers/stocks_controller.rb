@@ -21,8 +21,8 @@ class StocksController < ApplicationController
     count_worst = worst_changes.length() >= max_performer ? max_performer : worst_changes.length()
 
     @ranked = {
-      "#{count_best} Best": best_changes[0..count_best-1],
-      "#{count_worst} Worst": worst_changes[-count_worst..-1].reverse
+      "Best": best_changes[0..count_best-1],
+      "Worst": worst_changes[-count_worst..-1].reverse
     }
 
     respond_to do |format|
@@ -34,7 +34,7 @@ class StocksController < ApplicationController
   def show
     @stock = Stock.find(params[:id])
 
-    @recent_predictions = @stock.price_predictions.order(entry_date: :desc).limit(2)
+    @recent_predictions = @stock.price_predictions.order(entry_date: :desc).limit(5)
                                 .map {|s| s.to_chart_json }
 
     @recommendation_action = @stock.recommendations.order(entry_date: :desc).limit(1)

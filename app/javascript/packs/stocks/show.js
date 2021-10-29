@@ -152,7 +152,7 @@ $(document).ready(function () {
   const pd = $('.price_prediction').data('pxpredict');
   const chartData = {
     labels: [ pd.nd_date, pd.st_date, pd.mt_date ],
-    datasets: [ maxPriceData(pd), expPriceData(pd), minPriceData(pd) ]
+    datasets: [ expPriceData(pd) ]
   };
 
   const options = {

@@ -12,19 +12,17 @@
   <div class="row my-5">
     <div class="col-12">
       <br/>
-      <h1 id="stockname" style="display: inline">
-        <%= @stock.symbol %> 
+      <h1 id="stockname" style="display: inline"><%= @stock.symbol %> </h1>
 
-        <span class="fs-3 text-secondary"><%= @recommendation_action.first.nd_date %></span>
+      <% if @recommendation_action.first.nd_verdict.upcase == "SELL" %>
+        <span class="badge bg-danger text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
+      <% elsif @recommendation_action.first.nd_verdict.upcase == "BUY" %>
+        <span class="badge bg-success text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
+      <% else %>
+        <span class="badge bg-warning text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
+      <% end %>
 
-        <% if @recommendation_action.first.nd_verdict.upcase == "SELL" %>
-          <span class="badge bg-danger text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
-        <% elsif @recommendation_action.first.nd_verdict.upcase == "BUY" %>
-          <span class="badge bg-success text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
-        <% else %>
-          <span class="badge bg-warning text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
-        <% end %>
-      </h1>
+      <span class="fs-3 text-secondary">On <%= @recommendation_action.first.nd_date %></span>
 
       <% if logged_in? %>
         <%= link_to favorite_text, favorites_update_path(stock:@stock), class:'btn btn-primary', style:'margin-top:30px; float:right;', id:'favorite_link', remote: true %>   
@@ -83,81 +81,40 @@
   <!-- PREDICTION FROM ML -->
   <h1>PREDICTION</h1>
   <div class="row my-5">
-    <div class="col-6">
+    <div class="col-5">
       <%= content_tag :div,
         class: "price_prediction",
         data: { pxpredict: @recent_predictions.first } do
       %>
-        <canvas id="line-chart" width="400" height="200"></canvas>
+        <canvas id="line-chart" width="350" height="200"></canvas>
       <% end %>
 
     </div>
 
-    <div class="col-6">
-      <table id="pricepredict-list" class="table table-sm">
-        <thead class="table-active">
+    <div class="col-7">
+      <table id="pricepredict-list" class="table table-striped">
+ 
+        <thead>
           <tr>
-            <th>Entry Date</th>
-            <th>ND Date</th>
-            <th>ND Max</th>
-            <th>ND Exp</th>
-            <th>ND Min</th>
+            <th class="bg-secondary">Entry Date</th>
+            <th class="bg-primary">ND Date</th>
+            <th class="bg-primary">ND Exp</th>
+            <th class="bg-warning">ST Date</th>
+            <th class="bg-warning">ST Exp</th>
+            <th class="bg-success">MT Date</th>
+            <th class="bg-success">MT Exp</th>
           </tr>
         </thead>
         <tbody>
           <% @recent_predictions.each do |prices| %>
               <tr>
-                <td><%= prices[:entry_date] %></td>
-                <td><%= prices[:nd_date] %></td>
-                <td><%= prices[:nd_max_price] %></td>
-                <td><%= prices[:nd_exp_price] %></td>
-                <td><%= prices[:nd_min_price] %></td>
-              </tr>
-          <% end %>
-        </tbody>
-      </table>
-
-      <table id="pricepredict-list" class="table table-sm">
-        <thead class="table-active">
-          <tr>
-            <th>Entry Date</th>
-            <th>ST Date</th>
-            <th>ST Max</th>
-            <th>ST Exp</th>
-            <th>ST Min</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @recent_predictions.each do |prices| %>
-              <tr>
-                <td><%= prices[:entry_date] %></td>
-                <td><%= prices[:st_date] %></td>
-                <td><%= prices[:st_max_price] %></td>
-                <td><%= prices[:st_exp_price] %></td>
-                <td><%= prices[:st_min_price] %></td>
-              </tr>
-          <% end %>
-        </tbody>
-      </table>
-
-      <table id="pricepredict-list" class="table table-sm">
-        <thead class="table-active">
-          <tr>
-            <th>Entry Date</th>
-            <th>MT Date</th>
-            <th>MT Max</th>
-            <th>MT Exp</th>
-            <th>MT Min</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @recent_predictions.each do |prices| %>
-              <tr>
-                <td><%= prices[:entry_date] %></td>
-                <td><%= prices[:mt_date] %></td>
-                <td><%= prices[:mt_max_price] %></td>
-                <td><%= prices[:mt_exp_price] %></td>
-                <td><%= prices[:mt_min_price] %></td>
+                <td class="table-secondary"><%= prices[:entry_date] %></td>
+                <td class="table-primary"><%= prices[:nd_date] %></td>
+                <td class="table-primary"><%= prices[:nd_exp_price] %></td>
+                <td class="table-warning"><%= prices[:st_date] %></td>
+                <td class="table-warning"><%= prices[:st_exp_price] %></td>
+                <td class="table-success"><%= prices[:mt_date] %></td>
+                <td class="table-success"><%= prices[:mt_exp_price] %></td>
               </tr>
           <% end %>
         </tbody>
@@ -165,6 +122,5 @@
 
     </div>
   </div>
-
 
 </div>
