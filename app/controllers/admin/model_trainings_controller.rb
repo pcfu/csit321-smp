@@ -16,9 +16,8 @@ module Admin
 
     def update
       with_error_handling do |flagger|
-        new_data = update_params
         @model_training = ModelTraining.find(params[:id])
-        @model_training.update!(new_data)
+        @model_training.update!(update_params)
       end
     end
 
@@ -30,10 +29,8 @@ module Admin
       end
 
       def update_params
-        stage = params.require(:stage)
-        rmse ||= params.require(:rmse) if stage == 'done'
-        error_message ||= params.require(:error_message) if stage == 'error'
-        { stage: stage, rmse: rmse, error_message: error_message }
+        params.require(:model_training)
+              .permit(:stage, :rmse, :accuracy, :parameters, :error_message)
       end
 
       def reset_trainings(model_config)
