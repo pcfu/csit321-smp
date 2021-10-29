@@ -12,7 +12,7 @@ class ModelTraining < ApplicationRecord
 
   auto_strip_attributes :error_message
   after_initialize      :set_defaults
-  before_update         :set_rmse_and_error_message_to_nil,
+  before_update         :reset,
                         if: -> { requested? or enqueued? or training? }
   after_update          :update_model_config_train_percent,
                         if: -> { stage_changed_to_or_from_done? }
@@ -22,14 +22,13 @@ class ModelTraining < ApplicationRecord
   validates :date_end,      presence: true
   validate  :date_start_before_date_end
   validates :stage,         presence: true
-  validates :rmse,          presence: true, if: -> { done? }
   validates :rmse,          numericality: { allow_nil: true,
                                             greater_than_or_equal_to: 0 }
   validates :error_message, presence: true, if: -> { error? }
 
 
   def reset
-    assign_attributes(stage: :requested, rmse: nil, error_message: nil)
+    assign_attributes(rmse: nil, accuracy: nil, parameters: nil, error_message: nil)
     self
   end
 
@@ -43,11 +42,6 @@ class ModelTraining < ApplicationRecord
 
     def set_defaults
       self.stage ||= :requested
-    end
-
-    def set_rmse_and_error_message_to_nil
-      self.rmse = nil
-      self.error_message = nil
     end
 
     def date_start_before_date_end

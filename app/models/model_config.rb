@@ -34,9 +34,12 @@ class ModelConfig < ApplicationRecord
     self
   end
 
-  def reset_trainings(date_start, date_end, stock_ids = nil)
+  def reset_trainings(stock_ids = nil)
+    date_s = parse_params[:start_date]
+    date_e = Date.current.strftime('%Y-%m-%d')
     stock_ids ||= Stock.pluck(:id)
-    stock_ids.each {|sid| reset_training(date_start, date_end, sid)}
+
+    stock_ids.each {|sid| reset_training(sid, date_s, date_e)}
     update(train_percent: 0)
     broadcast_training_progress
   end
@@ -44,10 +47,10 @@ class ModelConfig < ApplicationRecord
 
   private
 
-    def reset_training(date_start, date_end, stock_id)
+    def reset_training(stock_id, date_start, date_end)
       ref = { model_config_id: id, stock_id: stock_id }
       trng = ModelTraining.find_or_initialize_by(ref)
-      trng.reset.assign_attributes(date_start: date_start, date_end: date_end)
+      trng.reset.assign_attributes(stage: :requested, date_start: date_start, date_end: date_end)
       trng.save
     end
 
