@@ -22,7 +22,7 @@
         <span class="badge bg-warning text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
       <% end %>
 
-      <span class="fs-3 text-secondary">On <%= @recommendation_action.first.nd_date %></span>
+      <span class="fs-3 text-secondary">on <%= @recommendation_action.first.nd_date %></span>
 
       <% if logged_in? %>
         <%= link_to favorite_text, favorites_update_path(stock:@stock), class:'btn btn-primary', style:'margin-top:30px; float:right;', id:'favorite_link', remote: true %>   
@@ -79,7 +79,7 @@
 
 
   <!-- PREDICTION FROM ML -->
-  <h1>PREDICTION</h1>
+  <h1>STOCKS PREDICTION</h1>
   <div class="row my-5">
     <div class="col-5">
       <%= content_tag :div,
