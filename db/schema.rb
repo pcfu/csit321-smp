@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_26_182725) do
+ActiveRecord::Schema.define(version: 2021_10_29_143737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,8 @@ ActiveRecord::Schema.define(version: 2021_10_26_182725) do
     t.text "error_message"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "accuracy"
+    t.text "parameters"
     t.index ["model_config_id", "stock_id"], name: "index_model_trainings_on_model_config_id_and_stock_id", unique: true
     t.index ["model_config_id"], name: "index_model_trainings_on_model_config_id"
     t.index ["stage"], name: "index_model_trainings_on_stage"
