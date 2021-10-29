@@ -21,7 +21,7 @@ module BackendJobsEnqueuing
     return NO_UPDATE_MSG if earliest >= today
 
     data = { symbols: symbols, days: today.mjd - earliest.mjd }
-    enqueue_job(PRICES_ENDPOINT, data)
+    enqueue_job(:get, PRICES_ENDPOINT, data)
   end
 
   def enqueue_tis_retrieval_job(stock_id)
@@ -34,33 +34,24 @@ module BackendJobsEnqueuing
     return NO_UPDATE_MSG if n_last_data == 0
 
     data = { stock_id: stock_id, prices: prices.map(&:to_ohlcv), n_last_data: n_last_data }
-    enqueue_job(TIS_ENDPOINT, data)
+    enqueue_job(:get, TIS_ENDPOINT, data)
   end
 
-  def enqueue_training_jobs(training_list, model_class, model_params)
-    data = {
-      training_list: training_list,
-      model_class: model_class,
-      model_params: model_params,
-    }
-    res = BackendClient.post(TRAINING_ENDPOINT, data)
-    JSON.parse(res.body, symbolize_names: true)
+  def enqueue_training_jobs(training_list, model)
+    data = { training_list: training_list, model: model }
+    enqueue_job(:post, TRAINING_ENDPOINT, data)
   end
 
   def enqueue_prediction_job(training_id, stock_id)
-    data = {
-      training_id: training_id,
-      stock_id: stock_id,
-    }
-    res = BackendClient.get(PREDICTION_ENDPOINT, data)
-    JSON.parse(res.body, symbolize_names: true)
+    data = { training_id: training_id, stock_id: stock_id }
+    enqueue_job(:get, PREDICTION_ENDPOINT, data)
   end
 
 
   private
 
-    def enqueue_job(endpoint, data)
-      res = BackendClient.get(endpoint, data)
+    def enqueue_job(method, endpoint, data)
+      res = BackendClient.send(method, endpoint, data)
       JSON.parse(res.body, symbolize_names: true)
     end
 end

@@ -6,11 +6,44 @@
   <h1>Model Training Parameters </h1>
   <h2>Price Prediction & Recommendation</h2>
   <hr/>
+  <br>
 
-
+  <!-- Show the current active records -->
+  <h3>Active Records</h3>
   <table class="table" id="model-list" class="table table-striped ">
     <thead>
       <tr>
+        <th scope="col">Date Created</th>
+        <th scope="col">Name</th>
+        <th scope="col">Model Type</th>
+        <th scope="col">Parameters</th>
+        <th scope="col">Active</th>
+        <th scope="col">Trained Percent </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @models.order({ created_at: :desc }).each do |model| %>
+        <% if model.active == true %>
+          <tr data-link ="<%= admin_model_parameter_url(id:model) %>">
+            <td><%= model.created_at.in_time_zone("Singapore") %></td>
+            <td><%= model.name %></td>
+            <td><%= model.model_type %></td>
+            <td><%= model.params %></td>
+            <td><%= check_boolean(model.active) %></td>
+            <td><%= model.train_percent %>%</td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  <br><br>
+
+  <!-- Show all inactive and new records -->
+  <h3>Inactive/New Records</h3>
+  <table class="table" id="model-list" class="table table-striped ">
+    <thead>
+      <tr>
+        <th scope="col">Date Created</th>
         <th scope="col">Name</th>
         <th scope="col">Model Type</th>
         <th scope="col">Parameters</th>
@@ -20,34 +53,33 @@
       </tr>
     </thead>
     <tbody>
-      <% @models.each do |model| %>
-        <tr data-link ="<%= admin_model_parameter_url(id:model) %>">
-          <td><%= model.name %></td>
-          <td><%= model.model_type %></td>
-          <td><%= model.params %></td>
-          <td><%= check_boolean(model.active) %></td>
-          <td><%= model.train_percent %>%</td>
-          <td class="unclickable" >
-            <% if model.active == false %>
+      <% @models.order({ created_at: :desc }).each do |model| %>
+        <% if model.active == false %>
+          <tr data-link ="<%= admin_model_parameter_url(id:model) %>">
+            <td><%= model.created_at.in_time_zone("Singapore") %></td>
+            <td><%= model.name %></td>
+            <td><%= model.model_type %></td>
+            <td><%= model.params %></td>
+            <td><%= check_boolean(model.active) %></td>
+            <td><%= model.train_percent %>%</td>
+            <td class="unclickable" >
+              <div class="btn-group btn-group-justified" >
               <button>
                 <%= link_to 'Delete', admin_model_parameters_delete_path(id:model),  method: :destroy, data: { confirm: 'Confirm to delete the parameters', title: "Confirmation" } %>
               </button> 
               <% if model.train_percent == 100 %>
-                <button>
-                  <%= link_to 'Set Active', admin_model_parameters_setActive_path(id:model),  method: :post, data: { confirm: 'Confirm to set this set of parameters active?', title: "Confirmation" } %>
+                <button style="white-space: nowrap">
+                  <%= link_to 'Set Active', admin_model_parameters_setActive_path(id:model),  method: :post, data: { confirm: "Confirm to set this set of parameters active? \nNote that the schedule will reset.", title: "Confirmation" } %>
                 </button>
               <% else %>
                 <button>
                   <%= link_to 'Train', admin_model_parameters_train_path(id:model),  method: :post, data: { confirm: 'Confirm to train this set of parameters?', title: "Confirmation" } %>
                 </button>            
               <% end %>
-              
-
-            <% else %>
-              -
-            <% end %>
-          </td>
-        </tr>
+              </div>
+            </td>
+          </tr>
+        <% end %>
       <% end %>
     </tbody>
   </table>

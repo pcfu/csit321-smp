@@ -4,12 +4,12 @@
 
     <ul class="navbar-nav ms-auto">
       <li class="nav-item">
-        <%= link_to "Stocks", "/stocks", class: 'nav-link' %>
+        <%= link_to "Stocks", stocks_path, class: 'nav-link' %>
       </li>
 
       <% if logged_in? %>
       <li class="nav-item">
-        <%= link_to "Portfolio", "/portfolio", class: 'nav-link' %>
+        <%= link_to "Portfolio", favorites_path, class: 'nav-link' %>
       </li>
       <% end %>
 
@@ -21,7 +21,7 @@
 
       <% if logged_in? && current_user.admin? %>
         <li class="nav-item">
-          <%= link_to "Schedule", "schedule", class: 'nav-link' %>
+          <%= link_to "Schedule", admin_schedule_index_path, class: 'nav-link' %>
         </li>
       <% end %>
 
