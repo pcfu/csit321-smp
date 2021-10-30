@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_30_121813) do
+ActiveRecord::Schema.define(version: 2021_10_30_182502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,12 @@ ActiveRecord::Schema.define(version: 2021_10_30_121813) do
     "buy",
     "hold",
     "sell",
+  ], force: :cascade
+
+  create_enum :stock_industry, [
+    "technology",
+    "energy",
+    "healthcare",
   ], force: :cascade
 
   create_enum :user_role, [
@@ -159,10 +165,9 @@ ActiveRecord::Schema.define(version: 2021_10_30_121813) do
     t.string "symbol", null: false
     t.string "name", null: false
     t.string "exchange", null: false
-    t.string "stock_type", null: false
-    t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.enum "industry", enum_name: "stock_industry"
     t.index ["name"], name: "index_stocks_on_name"
     t.index ["symbol"], name: "index_stocks_on_symbol", unique: true
   end
