@@ -1,17 +1,17 @@
 module BackendJobsEnqueuing
   extend ActiveSupport::Concern
 
-  TRAINING_ENDPOINT   = "ml/model_training"
-  PREDICTION_ENDPOINT = "ml/prediction"
-  PRICES_ENDPOINT     = "prices"
-  TIS_ENDPOINT        = "tis"
+  TRAINING_ENDPOINT       = "ml/model_training"
+  PREDICTION_ENDPOINT     = "ml/prediction"
+  RECOMMENDATION_ENDPOINT = "ml/recommendation"
+  PRICES_ENDPOINT         = "prices"
+  TIS_ENDPOINT            = "tis"
 
   NO_STOCK_MSG        = { status: 'error', message: 'stock does not exist' }
   NO_UPDATE_MSG       = { status: 'ok', message: 'no update required' }
 
-  private_constant :TRAINING_ENDPOINT, :PREDICTION_ENDPOINT,
-                   :PRICES_ENDPOINT, :TIS_ENDPOINT,
-                   :NO_STOCK_MSG, :NO_UPDATE_MSG
+  private_constant :TRAINING_ENDPOINT, :PREDICTION_ENDPOINT, :RECOMMENDATION_ENDPOINT,
+                   :PRICES_ENDPOINT, :TIS_ENDPOINT, :NO_STOCK_MSG, :NO_UPDATE_MSG
 
 
   def enqueue_price_retrieval_job(symbols)
@@ -45,6 +45,11 @@ module BackendJobsEnqueuing
   def enqueue_prediction_job(training_id, stock_id)
     data = { training_id: training_id, stock_id: stock_id }
     enqueue_job(:get, PREDICTION_ENDPOINT, data)
+  end
+
+  def enqueue_recommendation_jobs(stocks)
+    data = { stocks: stocks }
+    enqueue_job(:get, RECOMMENDATION_ENDPOINT, data)
   end
 
 
