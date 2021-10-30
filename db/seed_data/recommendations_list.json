@@ -1,31 +1,46 @@
 {
     "AAPL": [
         {
-            "entry_date": "2021-10-19",
-            "nd_verdict": "hold",
-            "st_verdict": "hold"
+            "prediction_date": "2021-10-19",
+            "verdict": "hold"
         },
         {
-            "entry_date": "2021-10-20",
-            "nd_verdict": "hold",
-            "st_verdict": "sell"
+            "prediction_date": "2021-10-20",
+            "verdict": "hold"
         },
         {
-            "entry_date": "2021-10-21",
-            "nd_verdict": "buy",
-            "st_verdict": "sell"
+            "prediction_date": "2021-10-21",
+            "verdict": "buy"
         }
     ],
     "XOM": [
         {
-            "entry_date": "2021-10-20",
-            "nd_verdict": "buy",
-            "st_verdict": "buy"
+            "prediction_date": "2021-10-20",
+            "verdict": "buy"
         },
         {
-            "entry_date": "2021-10-21",
-            "nd_verdict": "sell",
-            "st_verdict": "sell"
+            "prediction_date": "2021-10-21",
+            "verdict": "sell"
+        }
+    ],
+    "GSK": [
+        {
+            "prediction_date": "2021-10-20",
+            "verdict": "buy"
+        },
+        {
+            "prediction_date": "2021-10-21",
+            "verdict": "sell"
+        }
+    ],
+    "WPM": [
+        {
+            "prediction_date": "2021-10-20",
+            "verdict": "buy"
+        },
+        {
+            "prediction_date": "2021-10-21",
+            "verdict": "hold"
         }
     ]
 }
