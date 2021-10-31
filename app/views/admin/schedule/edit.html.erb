@@ -1,4 +1,5 @@
 <div class="container" style="margin-bottom: 20px">
+  <br/><br/><br/><br/>
   <h1>Edit Schedule</h1>
   <hr/>
 
@@ -11,30 +12,31 @@
 
   <%= form_with model: @schedule, action: :update, url: admin_schedule_path(@schedule), local: true do |f| %>
 
-
-    <div class = "mb-3">
-    <%= f.label :start_date, class: "form-label" %>
-    <%= f.date_field :start_date, required: true, class: "form-control" %>
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label"><%= f.label :start_date, class: "form-label" %></label>
+      <div class="col-sm-10">
+        <%= f.date_field :start_date, required: true, class: "form-control" %>
+      </div>
     </div>
 
-
-    <div class="mb-3" id="gamma">
-    <%= f.label :Frequency, class: "form-label" %><br>
-    <%=
-    f.select(:frequency,
-            [['7',7],['14',14],['21',21]],
-            { },
-            { required: true, class: "form-control"})
-    %>
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label"><%= f.label :Frequency, class: "form-label" %></label>
+      <div class="col-sm-10">
+        <%=
+        f.select(:frequency,
+                [['7',7],['14',14],['21',21]],
+                { },
+                { required: true, class: "form-control"})
+        %>
+      </div>
     </div>
-
-
 
     <%= link_to "Back", admin_schedule_index_path, class: 'btn btn-danger col-1' %>
-    <%= f.submit :"Submit", class: "btn btn-primary col-1" %>
+    <%= f.submit :"Save", class: "btn btn-primary col-1" %>
 
     <% if local_assigns.has_key? :status_msg %>
       <p><%= status_msg %></p>
     <% end %>
   <% end %>
+
 </div>
