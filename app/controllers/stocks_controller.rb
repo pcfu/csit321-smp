@@ -1,7 +1,6 @@
 class StocksController < ApplicationController
-
-
   def index
+    @stocks = Stock.all
 
     max_performer = 10
     
@@ -27,7 +26,7 @@ class StocksController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: Stock.all }
+      format.json
     end
   end
 
