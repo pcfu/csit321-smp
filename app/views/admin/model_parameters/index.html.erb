@@ -3,6 +3,7 @@
 <% end %>
 
 <div class="container mt-5">
+  <br/><br/>
   <h1>Model Training Parameters </h1>
   <h2>Price Prediction & Recommendation</h2>
   <hr/>
@@ -11,24 +12,28 @@
   <!-- Show the current active records -->
   <h3>Active Records</h3>
   <table class="table" id="model-list" class="table table-striped ">
-    <thead>
+    <thead class="table-dark">
       <tr>
         <th scope="col">Date Created</th>
-        <th scope="col">Name</th>
+        <th scope="col">Model Name</th>
         <th scope="col">Model Type</th>
         <th scope="col">Parameters</th>
         <th scope="col">Active</th>
-        <th scope="col">Trained Percent </th>
+        <th scope="col">Trained % </th>
       </tr>
     </thead>
     <tbody>
       <% @models.order({ created_at: :desc }).each do |model| %>
         <% if model.active == true %>
           <tr data-link ="<%= admin_model_parameter_url(id:model) %>">
-            <td><%= model.created_at.in_time_zone("Singapore") %></td>
+            <td><%= model.created_at.in_time_zone("Singapore").strftime("%Y-%d-%m %H:%M:%S") %></td>
             <td><%= model.name %></td>
             <td><%= model.model_type %></td>
-            <td><%= model.params %></td>
+            <td>
+              <% JSON.parse(model.params).each do |attr_name, attr_value| %>
+                <%= attr_name.to_s + ": " + attr_value.to_s%> <br/>
+              <% end %>
+            </td>
             <td><%= check_boolean(model.active) %></td>
             <td><%= model.train_percent %>%</td>
           </tr>
@@ -41,41 +46,37 @@
   <!-- Show all inactive and new records -->
   <h3>Inactive/New Records</h3>
   <table class="table" id="model-list" class="table table-striped ">
-    <thead>
+    <thead class="table-secondary">
       <tr>
-        <th scope="col">Date Created</th>
-        <th scope="col">Name</th>
-        <th scope="col">Model Type</th>
-        <th scope="col">Parameters</th>
-        <th scope="col">Active</th>
-        <th scope="col">Trained Percent </th>
-        <th scope="col" colspan="2">Action</th>
+        <th scope="col" style="width: 10%">Date Created</th>
+        <th scope="col" style="width: 10%">Model Name</th>
+        <th scope="col" style="width: 10%">Model Type</th>
+        <th scope="col" style="width: 40%">Parameters</th>
+        <th scope="col" style="width: 10%">Trained % </th>
+        <th scope="col" style="width: 20%">Action</th>
       </tr>
     </thead>
     <tbody>
       <% @models.order({ created_at: :desc }).each do |model| %>
         <% if model.active == false %>
           <tr data-link ="<%= admin_model_parameter_url(id:model) %>">
-            <td><%= model.created_at.in_time_zone("Singapore") %></td>
+            <td><%= model.created_at.in_time_zone("Singapore").strftime("%Y-%d-%m %H:%M:%S") %></td>
             <td><%= model.name %></td>
             <td><%= model.model_type %></td>
-            <td><%= model.params %></td>
-            <td><%= check_boolean(model.active) %></td>
+            <td>
+              <% JSON.parse(model.params).each do |attr_name, attr_value| %>
+                <%= attr_name.to_s + ": " + attr_value.to_s%> <br/>
+              <% end %>
+            </td>
             <td><%= model.train_percent %>%</td>
             <td class="unclickable" >
-              <div class="btn-group btn-group-justified" >
-              <button>
-                <%= link_to 'Delete', admin_model_parameters_delete_path(id:model),  method: :destroy, data: { confirm: 'Confirm to delete the parameters', title: "Confirmation" } %>
-              </button> 
+              <div>
               <% if model.train_percent == 100 %>
-                <button style="white-space: nowrap">
-                  <%= link_to 'Set Active', admin_model_parameters_setActive_path(id:model),  method: :post, data: { confirm: "Confirm to set this set of parameters active? \nNote that the schedule will reset.", title: "Confirmation" } %>
-                </button>
+                <%= link_to 'Set Active', admin_model_parameters_setActive_path(id:model), class:'btn btn-success',  method: :post, data: { confirm: "Confirm to set this set of parameters active? \nNote that the schedule will reset.", title: "Confirmation" } %>
               <% else %>
-                <button>
-                  <%= link_to 'Train', admin_model_parameters_train_path(id:model),  method: :post, data: { confirm: 'Confirm to train this set of parameters?', title: "Confirmation" } %>
-                </button>            
+                <%= link_to 'Train', admin_model_parameters_train_path(id:model), class:'btn btn-warning', method: :post, data: { confirm: 'Confirm to train this set of parameters?', title: "Confirmation" } %>
               <% end %>
+              <%= link_to 'Delete', admin_model_parameters_delete_path(id:model), class:'btn btn-danger', method: :destroy, data: { confirm: 'Confirm to delete the parameters', title: "Confirmation" } %>
               </div>
             </td>
           </tr>

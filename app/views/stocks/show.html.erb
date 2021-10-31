@@ -14,23 +14,33 @@
       <br/>
       <h1 id="stockname" style="display: inline"><%= @stock.symbol %> </h1>
 
-      <% if @recommendation_action.first.nd_verdict.upcase == "SELL" %>
-        <span class="badge bg-danger text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
-      <% elsif @recommendation_action.first.nd_verdict.upcase == "BUY" %>
-        <span class="badge bg-success text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
-      <% else %>
-        <span class="badge bg-warning text-wrap" style="font-size: 20px;"><%= @recommendation_action.first.nd_verdict.upcase %></span> 
-      <% end %>
+      <% if @recommendation_action.count > 0 %>
+        <% if @recommendation_action.first.verdict.upcase == "SELL" %>
+          <span class="badge bg-danger text-wrap" style="font-size: 20px;">
+            <%= @recommendation_action.first.verdict.upcase %>
+          </span>
+        <% elsif @recommendation_action.first.verdict.upcase == "BUY" %>
+          <span class="badge bg-success text-wrap" style="font-size: 20px;">
+            <%= @recommendation_action.first.verdict.upcase %>
+          </span>
+        <% else %>
+          <span class="badge bg-warning text-wrap" style="font-size: 20px;">
+            <%= @recommendation_action.first.verdict.upcase %>
+          </span>
+        <% end %>
 
-      <span class="fs-3 text-secondary">on <%= @recommendation_action.first.nd_date %></span>
+        <span class="fs-3 text-secondary">
+          on <%= @recommendation_action.first.prediction_date %>
+        </span>
+      <% end %>
 
       <% if logged_in? %>
-        <%= link_to favorite_text, favorites_update_path(stock:@stock), class:'btn btn-primary', style:'margin-top:30px; float:right;', id:'favorite_link', remote: true %>   
+        <%= link_to favorite_text, favorites_update_path(stock:@stock), class:'btn btn-primary', style:'margin-top:30px; float:right;', id:'favorite_link', remote: true %>
       <% else %>
-        <%= link_to "Log in to add", sessions_path %>
+        <%= link_to "Log in to add", sessions_path, class:'btn btn-primary', style:'margin-top:30px; float:right;' %>
       <% end %>
 
-      <h3 id="stockfullname"><%= @stock.name %></h3> 
+      <h3 id="stockfullname"><%= @stock.name %></h3>
 
     </div>
 
@@ -93,7 +103,7 @@
 
     <div class="col-7">
       <table id="pricepredict-list" class="table table-striped">
- 
+
         <thead>
           <tr>
             <th class="bg-secondary">Entry Date</th>
