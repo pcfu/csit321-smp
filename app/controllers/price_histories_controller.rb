@@ -25,13 +25,12 @@ class PriceHistoriesController < ApplicationController
 
   def batch_create
     data = batch_create_params
-    data.each do |d|
-      stock = Stock.find_by(symbol: d[:symbol])
-      d[:prices].each {|p| stock.price_histories.create p}
-    end
+    stock = Stock.find_by(symbol: data[:symbol])
+    data[:prices].sort {|a, b| a[:date] <=> b[:date]}
+                 .each {|p| stock.price_histories.create p}
 
     respond_to do |format|
-      format.json { head :ok }
+      format.json { render json: Hash[status: 'ok'] }
       format.any { render_404 }
     end
   end
@@ -41,10 +40,10 @@ class PriceHistoriesController < ApplicationController
 
     def stock_prices(id_or_symbol, date_s, date_e)
       Stock.where(id: id_or_symbol).or(Stock.where(symbol: id_or_symbol))
-           .first.price_histories.start(date_s).end(date_e)
+           .first.price_histories.start(date_s).end(date_e).order(date: :asc)
     end
 
     def batch_create_params
-      params.require(:price_histories).map &:permit!
+      params.require(:price_histories).permit!
     end
 end

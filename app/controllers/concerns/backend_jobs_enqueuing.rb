@@ -14,14 +14,16 @@ module BackendJobsEnqueuing
                    :PRICES_ENDPOINT, :TIS_ENDPOINT, :NO_STOCK_MSG, :NO_UPDATE_MSG
 
 
-  def enqueue_price_retrieval_job(symbols)
-    dates = symbols.map {|sym| PriceHistory.last_date_for_stock(symbol: sym)}
-    earliest =  dates.sort.first
-    today = Date.current
-    return NO_UPDATE_MSG if earliest >= today
+  def enqueue_price_retrieval_job(symbol)
+    return NO_STOCK_MSG unless Stock.where(symbol: symbol).exists?
 
-    data = { symbols: symbols, days: today.mjd - earliest.mjd }
-    enqueue_job(:get, PRICES_ENDPOINT, data)
+    today = Date.current
+    last_date = PriceHistory.last_date_for_stock(symbol: symbol)
+    n_last_data = last_date ? today.mjd - last_date.mjd : today.mjd - Date.new.mjd
+    return NO_UPDATE_MSG if n_last_data <= 0
+
+    data = { symbol: symbol, days: n_last_data }
+    enqueue_job(:get, PRICES_ENDPOINT, data )
   end
 
   def enqueue_tis_retrieval_job(stock_id)
