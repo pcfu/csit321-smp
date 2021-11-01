@@ -1,9 +1,10 @@
 <div class="container mt-5">
+  <br/><br/>
   <h1>Schedule</h1>
   <hr/>
 
   <table class="table">
-    <thead>
+    <thead class="table-dark">
       <tr>
         <th scope="col">Model Parameters Config Name</th>
         <th scope="col">Schedule Date</th>
@@ -18,15 +19,12 @@
           <td><%= schedule.start_date %></td>
           <td><%= schedule.frequency %></td>
           <td>
-            <button class: 'btn btn-primary'>
-            <%= link_to "Edit", edit_admin_schedule_path(id:schedule), method: :get %>
-            </button>
+            <%= link_to "Edit", edit_admin_schedule_path(id:schedule), method: :get, class: 'btn btn-primary' %>
           </td>
         </tr>
       <% end %>
 
     </tbody>
   </table>
-
  
 </div>

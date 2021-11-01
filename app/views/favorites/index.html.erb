@@ -1,4 +1,3 @@
-
 <% content_for :page_js do %>
   favorites/index
 <% end %>
@@ -6,20 +5,22 @@
   <div class="container">    
     <div class="row my-5">
       <div class="col-12">
-        <h1>PORTFOLIO</h1>
-        <p> Add Stocks into Portfolio 
-        <%= form_for :favorite, :url => { :controller=> "favorites", :action => "create" }, :html => {:class => "favorite_form"} do |f| %>
-          <%= f.text_field :stocksymbol %>
-          <%= f.submit %>
+        <br/><br/>
+        <h1>Portfolio</h1>
+        <hr/>
+        <br/>
+
+        <%= form_for :favorite, :url => { :controller=> "favorites", :action => "create" } do |f| %>
+          <%= f.text_field :stocksymbol, :placeholder => "Stock Symbol", :class=>"form-control", :style=>"width:250px; display:inline;" %>
+          <%= f.submit "Add to Favorite", class: "btn btn-primary" %>
         <% end %>
-        <br><br>
+        <br/>
 
-
-        <table id="fav-list" class="table table-striped ">
-          <thead>
+        <table id="fav-list" class="table table-striped">
+          <thead class="table-dark">
             <tr>
             <th scope="col">Symbol</th>
-            <th scope="col">Name</th>
+            <th scope="col">Stock Name</th>
             <th scope="col">Exchange</th>
             <th scope="col">Close</th>
             <th scope="col">Volume</th>
@@ -27,7 +28,7 @@
             <th scope="col">% Change</th>
             <th scope="col">Buy Threshold</th>
             <th scope="col">Sell Threshold</th>
-            <th scope="col" >Action</th>
+            <th scope="col" style="width:20%">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -55,14 +56,10 @@
                 <td class="unclickable">
 
                   <!-- Button Link to Threshold Page -->
-                  <button> 
-                    <%= link_to 'Threshold', fav %>
-                  </button>
+                  <%= link_to 'Threshold', fav, class: 'btn btn-success' %>
 
                   <!-- Button trigger modal -->
-                  <button>
-                    <%= link_to 'Un-Favorite', fav, method: :destroy, data: { confirm: 'Confirm to unfavorite the stock?', title: "Confirmation" } %>
-                  </button>
+                  <%= link_to 'Un-Favorite', fav, method: :destroy, data: { confirm: 'Confirm to unfavorite the stock?', title: "Confirmation" }, class: 'btn btn-danger' %>
  
                 </td>
               </tr>
