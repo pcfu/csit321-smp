@@ -31,7 +31,7 @@ module BackendJobsEnqueuing
 
     last_date = TechnicalIndicator.last_date_for_stock(stock_id: stock_id)
     from_date = last_date ? last_date.advance(days: 1) : Date.new
-    prices = PriceHistory.where(stock_id: stock_id)
+    prices = PriceHistory.where(stock_id: stock_id).order(date: :asc)
     n_last_data = prices.start(from_date).count
     return NO_UPDATE_MSG if n_last_data == 0
 

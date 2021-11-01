@@ -3,7 +3,7 @@ class TechnicalIndicatorsController < ApplicationController
 
   def index
     @tis = Stock.find(params[:id]).technical_indicators
-                .start(params[:date_start]).end(params[:date_end])
+                .start(params[:date_start]).end(params[:date_end]).order(date: :asc)
 
     respond_to do |format|
       format.json
@@ -16,7 +16,7 @@ class TechnicalIndicatorsController < ApplicationController
     batch_create_params.each {|tis| stock.technical_indicators.create tis}
 
     respond_to do |format|
-      format.json { head :ok }
+      format.json { render json: Hash[status: 'ok'] }
       format.any { render_404 }
     end
   end
