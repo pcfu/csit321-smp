@@ -6,7 +6,9 @@ module Admin
     rescue_from StandardError, with: :handle_error
 
     def batch_enqueue
-      config = ModelConfig.find enqueue_params[:config_id]
+      config = ModelConfig.find params.require(:config_id)
+      raise StandardError.new("Invalid model for recommendation") if config.lstm?
+
       @response = enqueue_recommendation_jobs enqueue_data(config)
       raise StandardError.new(@response[:message]) if @response[:status] == 'error'
       render json: @response
@@ -19,10 +21,6 @@ module Admin
 
 
     private
-
-      def enqueue_params
-        { config_id: params.require(:config_id) }
-      end
 
       def create_params
         params.require(:recommendation).permit(:stock_id, :prediction_date, :verdict)

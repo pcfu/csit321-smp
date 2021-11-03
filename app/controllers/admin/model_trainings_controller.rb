@@ -7,7 +7,7 @@ module Admin
 
     def batch_enqueue
       with_error_handling do |flagger|
-        config = ModelConfig.find(batch_enqueue_params[:config_id])
+        config = ModelConfig.find params.require(:config_id)
         config.reset_trainings
         @response = enqueue_training_jobs(training_data(config), model_data(config))
         flagger.flag(@response) if @response[:status] == 'error'
@@ -23,10 +23,6 @@ module Admin
 
 
     private
-
-      def batch_enqueue_params
-        { config_id: params.require(:config_id) }
-      end
 
       def update_params
         params.require(:model_training)
