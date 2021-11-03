@@ -4,206 +4,211 @@
 
 
 <div class="container mt-5">
-  <br/><br/><br/>
-  <h1>Model Training Parameters</h1>
-  <h2>Add New Model</h2>
-  <hr/>
+  <div class="row my-5">
+    <div class="col-12">
+      <br/><br/>
+      <h1>Model Training Parameters</h1>
+      <h2>Add New Model</h2>
+      <hr/>
+      <br/>
 
 
-  <%= form_with model: @ml_params, method: :post, url: admin_model_parameters_path, local: true do |f| %>
+      <%= form_with model: @ml_params, method: :post, url: admin_model_parameters_path, local: true do |f| %>
 
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label"><%= f.label :name, class: "form-label" %></label>
-      <div class="col-sm-10">
-        <%= f.text_field :name, required: true, class: "form-control" %>
-      </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label"><%= f.label :name, class: "form-label" %></label>
+          <div class="col-sm-10">
+            <%= f.text_field :name, required: true, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label"><%= f.label :start_date, class: "form-label" %></label>
+          <div class="col-sm-10">
+            <%= f.date_field :start_date, value: Date.new(2010,01,01), min: Date.new(2010, 01, 01), max: Date.today-365, required: true, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label"><%= f.label :train_test_percent, class: "form-label" %></label>
+          <div class="col-sm-10">
+            <%= f.number_field :train_test_percent, :step => 0.01, :min => 0.10, :max => 0.99, required: true, class: "form-control"%>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label"><%= f.label :model_type, class: "form-label" %></label>
+          <div class="col-sm-10">
+            <%= f.select :model_type, ModelConfig.model_types.keys, {}, {required: true, class: "form-control", id: "model_type"}%>
+          </div>
+        </div>
+
+
+        <!-- Div where the LSTM are -->
+        <div class="lstm_div">
+
+          <div class="form-group row" id="activation">
+            <label class="col-sm-2 col-form-label"><%= f.label :activation, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%=
+              f.select(:activation,
+                      [['Relu','relu'],['Linear','linear']],
+                      { },
+                      {required: true, class: ["form-control","lstm_div"]})
+              %>
+            </div>
+          </div>
+
+          <div class="form-group row" id="units">
+            <label class="col-sm-2 col-form-label"><%= f.label :units, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%=
+              f.select(:units,
+                      [['64',64],['32',32]],
+                      { },
+                      {required: true, class: ["form-control","lstm_div"]})
+              %>
+            </div>
+          </div>
+
+          <div class="form-group row" id="dropout">
+            <label class="col-sm-2 col-form-label"><%= f.label :dropout, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%= f.number_field :dropout, step:0.1 , min:0.1, max:0.9, required: true, class: ["form-control","lstm_div"]%>
+            </div>
+          </div>
+
+          <div class="form-group row" id="epoch">
+            <label class="col-sm-2 col-form-label"><%= f.label :epoch, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%= f.number_field :epoch,  min:1, max:100, required: true, class: ["form-control","lstm_div"]%>
+            </div>
+          </div>
+
+          <div class="form-group row" id="batch_size">
+            <label class="col-sm-2 col-form-label"><%= f.label :batch_size, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%=
+              f.select(:batch_size,
+                      [['8',8],['32',32],['64',64],['128',128]],
+                      { },
+                      {required: true, class: ["form-control","lstm_div"]})
+              %>
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- Div where the RF are -->
+        <div class="rf_div">
+
+          <div class="form-group row" id="n_estimators">
+            <label class="col-sm-2 col-form-label"><%= f.label :n_estimators, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%=
+              f.select(:n_estimators,
+                      [['20',20],['50',50],['70',70],['100',100],
+                      ['150',150],['180',180],['200',200]],
+                      { },
+                      {:multiple => true,required: true,class: ["form-control","rf_div"]})
+              %>
+            </div>
+          </div>
+
+          <div class="form-group row" id="max_depth">
+            <label class="col-sm-2 col-form-label"><%= f.label :max_depth, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%=
+              f.select(:max_depth,
+                      [['3',3],['4',4],['5',5],['6',6],['7',7],
+                      ['8',8],['9',9],['10',10],['11',11],['12',12],
+                      ['13',13],['14',14]],
+                      { },
+                      { :multiple => true,required: true,class: ["form-control","rf_div"]})
+              %>
+            </div>
+          </div>
+
+          <div class="form-group row" id="max_features">
+            <label class="col-sm-2 col-form-label"><%= f.label :max_features, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%=
+              f.select(:max_features,
+                      [['Auto','auto'],['Sqrt','sqrt'],['Log2','log2']],
+                      { },
+                      { :multiple => true,required: true,class: ["form-control","rf_div"]})
+              %>
+            </div>
+          </div>
+
+          <div class="form-group row" id="criterion">
+            <label class="col-sm-2 col-form-label"><%= f.label :criterion, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%=
+              f.select(:criterion,
+                      [['Gini','gini'],['Entropy','entropy']],
+                      { },
+                      { :multiple => true,required: true,class: ["form-control","rf_div"]})
+              %>
+            </div>
+          </div>
+
+        </div>
+      
+
+        <!-- Div where the SVM are -->
+        <div class="svm_div">
+
+          <div class="form-group row" id="c">
+            <label class="col-sm-2 col-form-label"><%= f.label :c, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%=
+              f.select(:c,
+                      [['1',1],['2',2],['3',3],['4',4],['5',5],
+                      ['6',6],['7',7],['8',8],['9',9],['10',10]],
+                      { },
+                      { :multiple => true,required: true,class: ["form-control","svm_div"]})
+              %>
+            </div>
+          </div>
+
+          <div class="form-group row" id="gamma">
+            <label class="col-sm-2 col-form-label"><%= f.label :gamma, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%=
+              f.select(:gamma,
+                      [['1',1],['2',2],['3',3],['4',4],['5',5],
+                      ['6',6],['7',7],['8',8],['9',9],['10',10],
+                      ['11',11],['12',12],['13',13],['14',14],['15',15]],
+                      { },
+                      {:multiple => true,required: true,class: ["form-control","svm_div"]})
+              %>
+            </div>
+          </div>
+
+          <div class="form-group row" id="kernel">
+            <label class="col-sm-2 col-form-label"><%= f.label :kernel, class: "form-label" %></label>
+            <div class="col-sm-10">
+              <%=
+              f.select(:kernel,
+                      [['Linear','linear'],['Poly','poly'],['RBF','rbf'],
+                      ['Sigmoid','sigmoid']],
+                      { },
+                      { :multiple => true,required: true,class: ["form-control","svm_div"]})
+              %>
+            </div>
+          </div>
+
+        </div>
+
+        <%= link_to "Back", admin_model_parameters_path, class: 'btn btn-danger col-1' %>
+        <%= f.submit :"Save", class: "btn btn-primary col-1" %>  
+
+        <% if local_assigns.has_key? :status_msg %>
+          <p><%= status_msg %></p>
+        <% end %>
+      <% end %>
     </div>
-
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label"><%= f.label :start_date, class: "form-label" %></label>
-      <div class="col-sm-10">
-        <%= f.date_field :start_date, required: true, class: "form-control" %>
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label"><%= f.label :train_test_percent, class: "form-label" %></label>
-      <div class="col-sm-10">
-        <%= f.number_field :train_test_percent, :step => 0.01, :min => 0.10, :max => 0.99, required: true, class: "form-control"%>
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label"><%= f.label :model_type, class: "form-label" %></label>
-      <div class="col-sm-10">
-        <%= f.select :model_type, ModelConfig.model_types.keys, {}, {required: true, class: "form-control", id: "model_type"}%>
-      </div>
-    </div>
-
-
-    <!-- Div where the LSTM are -->
-    <div class="lstm_div">
-
-      <div class="form-group row" id="activation">
-        <label class="col-sm-2 col-form-label"><%= f.label :activation, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%=
-          f.select(:activation,
-                  [['Relu','relu'],['Linear','linear']],
-                  { },
-                  {required: true, class: ["form-control","lstm_div"]})
-          %>
-        </div>
-      </div>
-
-      <div class="form-group row" id="units">
-        <label class="col-sm-2 col-form-label"><%= f.label :units, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%=
-          f.select(:units,
-                  [['64',64],['32',32]],
-                  { },
-                  {required: true, class: ["form-control","lstm_div"]})
-          %>
-        </div>
-      </div>
-
-      <div class="form-group row" id="dropout">
-        <label class="col-sm-2 col-form-label"><%= f.label :dropout, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%= f.number_field :dropout, step:0.1 , min:0.1, max:0.9, required: true, class: ["form-control","lstm_div"]%>
-        </div>
-      </div>
-
-      <div class="form-group row" id="epoch">
-        <label class="col-sm-2 col-form-label"><%= f.label :epoch, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%= f.number_field :epoch,  min:1, max:100, required: true, class: ["form-control","lstm_div"]%>
-        </div>
-      </div>
-
-      <div class="form-group row" id="batch_size">
-        <label class="col-sm-2 col-form-label"><%= f.label :batch_size, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%=
-          f.select(:batch_size,
-                  [['8',8],['32',32],['64',64],['128',128]],
-                  { },
-                  {required: true, class: ["form-control","lstm_div"]})
-          %>
-        </div>
-      </div>
-
-    </div>
-
-
-    <!-- Div where the RF are -->
-    <div class="rf_div">
-
-      <div class="form-group row" id="n_estimators">
-        <label class="col-sm-2 col-form-label"><%= f.label :n_estimators, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%=
-          f.select(:n_estimators,
-                  [['20',20],['50',50],['70',70],['100',100],
-                  ['150',150],['180',180],['200',200]],
-                  { },
-                  {:multiple => true,required: true,class: ["form-control","rf_div"]})
-          %>
-        </div>
-      </div>
-
-      <div class="form-group row" id="max_depth">
-        <label class="col-sm-2 col-form-label"><%= f.label :max_depth, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%=
-          f.select(:max_depth,
-                  [['3',3],['4',4],['5',5],['6',6],['7',7],
-                  ['8',8],['9',9],['10',10],['11',11],['12',12],
-                  ['13',13],['14',14]],
-                  { },
-                  { :multiple => true,required: true,class: ["form-control","rf_div"]})
-          %>
-        </div>
-      </div>
-
-      <div class="form-group row" id="max_features">
-        <label class="col-sm-2 col-form-label"><%= f.label :max_features, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%=
-          f.select(:max_features,
-                  [['Auto','auto'],['Sqrt','sqrt'],['Log2','log2']],
-                  { },
-                  { :multiple => true,required: true,class: ["form-control","rf_div"]})
-          %>
-        </div>
-      </div>
-
-      <div class="form-group row" id="criterion">
-        <label class="col-sm-2 col-form-label"><%= f.label :criterion, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%=
-          f.select(:criterion,
-                  [['Gini','gini'],['Entropy','entropy']],
-                  { },
-                  { :multiple => true,required: true,class: ["form-control","rf_div"]})
-          %>
-        </div>
-      </div>
-
-    </div>
-  
-
-    <!-- Div where the SVM are -->
-    <div class="svm_div">
-
-      <div class="form-group row" id="c">
-        <label class="col-sm-2 col-form-label"><%= f.label :c, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%=
-          f.select(:c,
-                  [['1',1],['2',2],['3',3],['4',4],['5',5],
-                  ['6',6],['7',7],['8',8],['9',9],['10',10]],
-                  { },
-                  { :multiple => true,required: true,class: ["form-control","svm_div"]})
-          %>
-        </div>
-      </div>
-
-      <div class="form-group row" id="gamma">
-        <label class="col-sm-2 col-form-label"><%= f.label :gamma, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%=
-          f.select(:gamma,
-                  [['1',1],['2',2],['3',3],['4',4],['5',5],
-                  ['6',6],['7',7],['8',8],['9',9],['10',10],
-                  ['11',11],['12',12],['13',13],['14',14],['15',15]],
-                  { },
-                  {:multiple => true,required: true,class: ["form-control","svm_div"]})
-          %>
-        </div>
-      </div>
-
-      <div class="form-group row" id="kernel">
-        <label class="col-sm-2 col-form-label"><%= f.label :kernel, class: "form-label" %></label>
-        <div class="col-sm-10">
-          <%=
-          f.select(:kernel,
-                  [['Linear','linear'],['Poly','poly'],['RBF','rbf'],
-                  ['Sigmoid','sigmoid']],
-                  { },
-                  { :multiple => true,required: true,class: ["form-control","svm_div"]})
-          %>
-        </div>
-      </div>
-
-    </div>
-
-    <%= link_to "Back", admin_model_parameters_path, class: 'btn btn-danger col-1' %>
-    <%= f.submit :"Save", class: "btn btn-primary col-1" %>  
-
-    <% if local_assigns.has_key? :status_msg %>
-      <p><%= status_msg %></p>
-    <% end %>
-  <% end %>
+  </div>
 </div>

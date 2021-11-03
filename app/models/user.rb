@@ -26,7 +26,7 @@ class User < ApplicationRecord
                           uniqueness: true
   validates :password,    presence: true,
                           length: { in: PW_MIN_LEN..PW_MAX_LEN },
-                          format: { with: PW_REGEX },
+                          format: { with: PW_REGEX},
                           if: :validate_password?
   validates :role,        presence: true
 
