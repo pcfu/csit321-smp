@@ -5,7 +5,9 @@ $(document).ready(function () {
     table = window.$('#stocks-list').DataTable({
       aaData: data,
       columns: [
-        { data: 'id' },
+        { data: 'id' ,
+          render: function (data, type, row, meta) {
+            return meta.row + meta.settings._iDisplayStart + 1;}},
         { data: 'symbol' },
         { data: 'name' },
         { data: 'exchange' },
