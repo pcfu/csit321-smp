@@ -4,21 +4,20 @@ module Admin
     include DateFormatChecking
 
     skip_before_action :verify_authenticity_token, if: -> { request.format.json? }
+    rescue_from StandardError, with: :handle_error
 
     def batch_enqueue
-      with_error_handling do |flagger|
-        config = ModelConfig.find params.require(:config_id)
-        config.reset_trainings
-        @response = enqueue_training_jobs(training_data(config), model_data(config))
-        flagger.flag(@response) if @response[:status] == 'error'
-      end
+      config = ModelConfig.find params.require(:config_id)
+      config.reset_trainings
+
+      @response = enqueue_training_jobs(training_data(config), model_data(config))
+      raise StandardError.new(@response[:message]) if @response[:status] == 'error'
+      render json: @response
     end
 
     def update
-      with_error_handling do |flagger|
-        @model_training = ModelTraining.find(params[:id])
-        @model_training.update!(update_params)
-      end
+      @model_training = ModelTraining.find(params[:id])
+      @model_training.update!(update_params)
     end
 
 
