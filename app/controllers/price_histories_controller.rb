@@ -26,7 +26,7 @@ class PriceHistoriesController < ApplicationController
   def batch_create
     data = batch_create_params
     prices = data[:prices].sort {|a, b| a[:date] <=> b[:date]}
-    prices.pop while prices.last[:percent_change].zero?
+    prices.pop while prices.count > 0 and prices.last[:percent_change].zero?
 
     stock = Stock.find_by(symbol: data[:symbol])
     prices.each {|p| stock.price_histories.create p}
