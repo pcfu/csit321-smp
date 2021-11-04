@@ -21,21 +21,21 @@
   <div class="form-group">
     <%= form_label_with_error(f, :password, model) %>
     <%= f.password_field :password, class: "form-control" %>
-    <small class="form-text">
-      Password needs to have
-      <ul> 
-        <li> Minimum 8 characters </li>
-        <li> A mix of uppercase and lowercase characters </li>
-        <li> At least 1 number </li>
-        <li> At least 1 special character </li>
-      </ul>  
-    </div>
-  </small>
+  </div>
 
   <% if form_type == 'register' %>
     <div class="form-group">
       <%= form_label_with_error(f, :password_confirmation, model) %>
       <%= f.password_field :password_confirmation, class: "form-control" %>
+      <small class="form-text">
+        Password needs to have
+        <ul> 
+          <li> Minimum 8 characters </li>
+          <li> A mix of uppercase and lowercase characters </li>
+          <li> At least 1 number </li>
+          <li> At least 1 special character </li>
+        </ul>  
+      </small>
     </div>
   <% end %>
 
