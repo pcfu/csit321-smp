@@ -1,4 +1,6 @@
 export default class Alerts {
+  static #MAX_DISPLAY = 2;
+
   static #buildAlert(context, message) {
     const alert = $('<div>', {
       class: `alert alert-${context} alert-dismissible fade show mt-3`,
@@ -24,22 +26,22 @@ export default class Alerts {
     container.append(alert);
   }
 
-  static success(container, message, maxDisplay = 3) {
+  static success(container, message, maxDisplay = Alerts.#MAX_DISPLAY) {
     const alert = Alerts.#buildAlert('success', message);
     Alerts.#addAlert(alert, container, maxDisplay);
   }
 
-  static warning(container, message, maxDisplay = 3) {
+  static warning(container, message, maxDisplay = Alerts.#MAX_DISPLAY) {
     const alert = Alerts.#buildAlert('warning', message);
     Alerts.#addAlert(alert, container, maxDisplay);
   }
 
-  static danger(container, message, maxDisplay = 3) {
+  static danger(container, message, maxDisplay = Alerts.#MAX_DISPLAY) {
     const alert = Alerts.#buildAlert('danger', message);
     Alerts.#addAlert(alert, container, maxDisplay);
   }
 
-  static primary(container, message, maxDisplay = 3) {
+  static primary(container, message, maxDisplay = Alerts.#MAX_DISPLAY) {
     const alert = Alerts.#buildAlert('primary', message);
     Alerts.#addAlert(alert, container, maxDisplay);
   }
