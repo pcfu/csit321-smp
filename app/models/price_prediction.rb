@@ -1,8 +1,4 @@
 class PricePrediction < ApplicationRecord
-  ST_DAYS = 14
-  MT_DAYS = 90
-  LT_DAYS = 365
-
   PREFIX = %i(st mt lt)
   SUFFIX = %i(date exp_price)
   ATTRS = [:reference_date] + PREFIX.product(SUFFIX).map {|p, s| "#{p}_#{s}".to_sym}
@@ -20,7 +16,9 @@ class PricePrediction < ApplicationRecord
   def to_chart_json
     attrs = attributes.symbolize_keys.slice(*ATTRS)
     json = attrs.each {|k, v| attrs[k] = v.to_f.round(3) if v.is_a? BigDecimal }
-    json.merge({ nd_day: 1, st_day: ST_DAYS, mt_day: MT_DAYS, lt_day: LT_DAYS })
+
+    ref_price = stock.price_histories.find_by(date: reference_date).close.to_f.round(3)
+    json.merge({ reference_price: ref_price })
   end
 
 

@@ -8,37 +8,18 @@ const DIAMOND = 'rectRot';
 const PT_SIZE = 2;
 const X_AXIS  = {
   MIN: 1,
-  MAX: 365,
-  MILESTONES: [1, 14, 90, 365]
+  MAX: 10,
+  MILESTONES: [1, 3, 10]
 };
-
-
-function maxPriceData(pd) {
-  return {
-    data: [
-      { x: pd.nd_day, y: pd.nd_max_price },
-      { x: pd.st_day, y: pd.st_max_price },
-      { x: pd.mt_day, y: pd.mt_max_price }
-    ],
-    label: "Maximum",
-    pointStyle: DIAMOND,
-    pointBorderWidth: PT_SIZE,
-    fill: '+1',
-    borderColor: GREEN,
-    backgroundColor: GREEN + ALPHA,
-    pointBackgroundColor: GREEN,
-    order: 3
-  };
-}
 
 function expPriceData(pd) {
   return {
     data: [
-      { x: pd.nd_day, y: pd.nd_exp_price },
-      { x: pd.st_day, y: pd.st_exp_price },
-      { x: pd.mt_day, y: pd.mt_exp_price },
+      { x: X_AXIS.MILESTONES[0], y: pd.st_exp_price },
+      { x: X_AXIS.MILESTONES[1], y: pd.mt_exp_price },
+      { x: X_AXIS.MILESTONES[2], y: pd.lt_exp_price },
     ],
-    label: "Expected",
+    label: "Close",
     pointStyle: DIAMOND,
     pointBorderWidth: PT_SIZE,
     fill: '+1',
@@ -46,22 +27,6 @@ function expPriceData(pd) {
     backgroundColor: RED + ALPHA,
     pointBackgroundColor: PURPLE,
     order: 2
-  };
-}
-
-function minPriceData(pd) {
-  return {
-    data: [
-      { x: pd.nd_day, y: pd.nd_min_price },
-      { x: pd.st_day, y: pd.st_min_price },
-      { x: pd.mt_day, y: pd.mt_min_price },
-    ],
-    label: "Mininum",
-    pointStyle: DIAMOND,
-    pointBorderWidth: PT_SIZE,
-    borderColor: RED,
-    pointBackgroundColor: RED,
-    order: 1
   };
 }
 
@@ -85,21 +50,6 @@ function scaleOptions() {
   };
 }
 
-function legendOptions() {
-  return {
-    reverse: true,
-    labels: {
-      font: { size: 20 },
-      padding: 10,
-      generateLabels: function(chart) {
-        const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
-        labels.forEach(l => l.fillStyle = l.strokeStyle);
-        return labels;
-      }
-    }
-  };
-}
-
 function tooltipOptions() {
   return {
     titleAlign: 'center',
@@ -108,7 +58,7 @@ function tooltipOptions() {
     callbacks: {
       title: function(context) {
         const dates = context[0].chart.data.labels;
-        const terms = ['next day', 'short term', 'medium term', 'long term'];
+        const terms = ['short term', 'medium term', 'long term'];
         const idx = context[0].dataIndex;
         return `${dates[idx]} (${terms[idx]})`;
       },
@@ -151,14 +101,16 @@ $(document).ready(function () {
   // Prediction Chart
   const pd = $('.price_prediction').data('pxpredict');
   const chartData = {
-    labels: [ pd.nd_date, pd.st_date, pd.mt_date ],
+    labels: [ pd.st_date, pd.mt_date, pd.lt_date ],
     datasets: [ expPriceData(pd) ]
   };
 
   const options = {
     scales: scaleOptions(),
     plugins: {
-      legend: legendOptions(),
+      legend: {
+        display: false,
+      },
       tooltip: tooltipOptions()
     }
   };

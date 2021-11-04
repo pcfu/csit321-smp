@@ -27,7 +27,7 @@ class StocksController < ApplicationController
   def show
     @stock = Stock.find(params[:id])
 
-    @recent_predictions = @stock.price_predictions.order(entry_date: :desc).limit(5)
+    @recent_predictions = @stock.price_predictions.order(reference_date: :desc).limit(5)
                                 .map {|s| s.to_chart_json }
 
     @recommendation_action = @stock.recommendations.order(prediction_date: :desc).limit(1)

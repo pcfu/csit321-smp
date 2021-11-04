@@ -106,25 +106,25 @@
 
         <thead>
           <tr>
-            <th class="bg-secondary">Entry Date</th>
-            <th class="bg-primary">ND Date</th>
-            <th class="bg-primary">ND Exp</th>
-            <th class="bg-warning">ST Date</th>
-            <th class="bg-warning">ST Exp</th>
-            <th class="bg-success">MT Date</th>
-            <th class="bg-success">MT Exp</th>
+            <th class="bg-secondary">Ref Date</th>
+            <th class="bg-primary">ST Date</th>
+            <th class="bg-primary">ST Prc</th>
+            <th class="bg-warning">MT Date</th>
+            <th class="bg-warning">MT Prc</th>
+            <th class="bg-success">LT Date</th>
+            <th class="bg-success">LT Prc</th>
           </tr>
         </thead>
         <tbody>
           <% @recent_predictions.each do |prices| %>
               <tr>
-                <td class="table-secondary"><%= prices[:entry_date] %></td>
-                <td class="table-primary"><%= prices[:nd_date] %></td>
-                <td class="table-primary"><%= prices[:nd_exp_price] %></td>
-                <td class="table-warning"><%= prices[:st_date] %></td>
-                <td class="table-warning"><%= prices[:st_exp_price] %></td>
-                <td class="table-success"><%= prices[:mt_date] %></td>
-                <td class="table-success"><%= prices[:mt_exp_price] %></td>
+                <td class="table-secondary"><%= prices[:reference_date] %></td>
+                <td class="table-primary"><%= prices[:st_date] %></td>
+                <td class="table-primary"><%= prices[:st_exp_price] %></td>
+                <td class="table-warning"><%= prices[:mt_date] %></td>
+                <td class="table-warning"><%= prices[:mt_exp_price] %></td>
+                <td class="table-success"><%= prices[:lt_date] %></td>
+                <td class="table-success"><%= prices[:lt_exp_price] %></td>
               </tr>
           <% end %>
         </tbody>
