@@ -1,50 +1,47 @@
-<% flash.each do |type, msg| %>
-  <%= content_tag :div, class: "alert alert-info" do -%>
-    <%= msg %>
-  <% end -%>
-<% end %>
-
-<div class="container">   
-  <% if @favorites.threshold.nil? %>
-
-    <div class="row my-5">
-      <div class="col-12">
-        <br/><br/>
+<div class="container">    
+  <div class="row my-5">
+    <div class="col-12">
+      <br/><br/>
+      <% if @favorites.threshold.nil? %>
         <h1>Create Threshold</h1>
         <hr/>
+
         <h4>Add Threshold for <span class="text-primary"><%= @favorites.stock.name %></span></h4><br>
         <%= form_for :threshold, :url => { :controller=> "threshold", :action => "create", :favoriteid =>@favorites.id }, :html => {:class => "threshold_form"} do |form| %>
 
           <div class="form-group row">
             <label class="col-sm-2 col-form-label">Buy Threshold</label>
             <div class="col-sm-10">
-              <%= form.number_field :buythreshold, :required=>'required', :class=>'form-control', :style=>"width:250px" %>
+              <%= form.number_field :buythreshold, :step => 0.01, :min => 0.10, value:@favorites.threshold.buythreshold, :required=>'required', :class=>'form-control', :style=>"width:250px" %>
             </div>
           </div>
 
           <div class="form-group row">
             <label class="col-sm-2 col-form-label">Sell Threshold</label>
             <div class="col-sm-10">
-              <%= form.number_field :sellthreshold, :required=>'required', :class=>'form-control', :style=>"width:250px" %>
+              <%= form.number_field :sellthreshold, :step => 0.01, :min => 0.10, value:@favorites.threshold.sellthreshold, :required=>'required', :class=>'form-control', :style=>"width:250px" %>
             </div>
           </div>
 
           <%= link_to "Back", favorites_path, class: 'btn btn-danger col-1' %>
           <%= form.submit :"Save", class: "btn btn-primary col-1" %>  
         <% end %>
-      </div>
+      <% else %>
+
+
+
+
+        <h1>Modify Threshold</h1>
+        <hr/>
+        <h4><%= @favorites.stock.name %></h4><br>
+        <%= form_for :threshold, :url => { :controller=> "threshold", :action => "update",  :thresholdid => @favorites.threshold.id  }, :html => {:class => "threshold_form"} do |form| %>
+          Buy Threshold: <%= form.number_field :buythreshold, :step => 0.01, :min => 0.10, value:@favorites.threshold.buythreshold, :required=>'required' %> <br><br>
+          Sell Threshold: <%= form.number_field :sellthreshold, :step => 0.01, :min => 0.10, value:@favorites.threshold.sellthreshold, :required=>'required' %> <br><br>
+          <%= link_to "Back", favorites_path, class: 'btn btn-danger col-1' %>
+          <%= form.submit :"Update", class: "btn btn-primary col-1" %>  
+        <% end %>
+      <% end %>
     </div>
 
-  <% else %>
-  <div class="row my-5">
-  <div class="col-12">
-    <h1>MODIFY THRESHOLD</h1>
-    <h4><%= @favorites.stock.name %></h4><br>
-    <%= form_for :threshold, :url => { :controller=> "threshold", :action => "update",  :thresholdid => @favorites.threshold.id  }, :html => {:class => "threshold_form"} do |form| %>
-      Buy Threshold: <%= form.number_field :buythreshold, :required=>'required' %> <br><br>
-      Sell Threshold: <%= form.number_field :sellthreshold, :required=>'required' %> <br><br>
-      <%= link_to "Back", favorites_path, class: 'btn btn-danger col-1' %>
-      <%= form.submit :"Update", class: "btn btn-primary col-1" %>  
-    <% end %>
-  <% end %>
+  
 </div>
