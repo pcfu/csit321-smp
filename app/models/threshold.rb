@@ -1,4 +1,11 @@
 class Threshold < ApplicationRecord
- # include ActiveModel::Model
+
   belongs_to :favorite
+
+
+  validates :sellthreshold, 
+            :numericality => {:allow_nil => true, :greater_than => :buythreshold}, 
+            :on => :update 
+
+  
 end

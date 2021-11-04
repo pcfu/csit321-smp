@@ -7,19 +7,36 @@ class ThresholdController < ApplicationController
   end
   
   def create
-    @threshold = Threshold.create(favorite:Favorite.find(params[:favoriteid]), buythreshold:params[:threshold][:buythreshold], sellthreshold:params[:threshold][:sellthreshold])
-    @threshold.save
-    if @threshold.save
-      redirect_to favorites_path, :alert=>"Threshold has been created"   
+    buy = params[:threshold][:buythreshold]
+    sell = params[:threshold][:sellthreshold]
+    if (buy>sell)
+      redirect_to favorites_path, flash: {error: "Threshold not created. Buy Threshold value is higher than Sell Threshold"}
     else
-      redirect_to '/', :alert=>"Something went wrong"   
+      @threshold = Threshold.create(favorite:Favorite.find(params[:favoriteid]), buythreshold:buy, sellthreshold:sell)
+      if @threshold.save
+        redirect_to favorites_path,  flash: {notice: "Threshold has been created"}   
+      else
+        redirect_to favorites_path, flash: {error: "Unexpected Error"}
+      end
     end  
   end
 
   def update
     @updatethreshold = Threshold.find(params[:thresholdid])
-    @updatethreshold.update(buythreshold:params[:threshold][:buythreshold], sellthreshold:params[:threshold][:sellthreshold])
-    redirect_to favorites_path, :alert=>"Threshold has been updated"   
+    buy = params[:threshold][:buythreshold]
+    sell = params[:threshold][:sellthreshold]
+    if (buy>sell)
+      redirect_to favorites_path, flash: {error: "Threshold not updated. Buy Threshold value is higher than Sell Threshold"}
+    else
+      @updatethreshold.update(buythreshold:buy, sellthreshold:sell)
+      if @updatethreshold.save
+        redirect_to favorites_path,  flash: {notice: "Threshold has been updated"}  
+      else
+        redirect_to favorites_path, flash: {error: "Unexpected Error"}
+      end 
+
+    end  
+    
   end
 
   private
