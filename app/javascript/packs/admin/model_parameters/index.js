@@ -16,21 +16,31 @@ function setupWebSocket() {
 function handleModelConfigMessage(data) {
   if (data.subject === "model training progress") {
     const model_name = data.model_name;
-
-    if (data.percent > 0) {
-      const elem = $(`#${model_name}-train-percent`);
-      elem.text(`${data.percent}%`);
-      blink(elem.parent());
-    }
+    const elem = $(`#${model_name}-train-percent`);
+    elem.text(`${data.percent}%`);
+    blink(elem.parent());
 
     if (data.percent === 100) {
-      $(`#${model_name}-active-btn`).removeClass('d-none');
-      $(`#${model_name}-delete-btn`).removeClass('d-none');
-      $(`#${model_name}-train-btn`).addClass('d-none');
-      $(`#${model_name}-training-indicator`).addClass('d-none');
+      showModelTrained(model_name);
       Alerts.success(alertsContainer, `${model_name}: training complete`);
+    } else {
+      showModelTraining(model_name);
     }
   }
+}
+
+function showModelTrained(model_name) {
+  $(`#${model_name}-active-btn`).removeClass('d-none');
+  $(`#${model_name}-delete-btn`).removeClass('d-none');
+  $(`#${model_name}-train-btn`).addClass('d-none');
+  $(`#${model_name}-training-indicator`).addClass('d-none');
+}
+
+function showModelTraining(model_name) {
+  $(`#${model_name}-active-btn`).addClass('d-none');
+  $(`#${model_name}-delete-btn`).addClass('d-none');
+  $(`#${model_name}-train-btn`).addClass('d-none');
+  $(`#${model_name}-training-indicator`).removeClass('d-none');
 }
 
 function initButtons() {

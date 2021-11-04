@@ -73,7 +73,8 @@
                     <%= attr_name.to_s + ": " + attr_value.to_s%> <br/>
                   <% end %>
                 </td>
-                <td><%= model.train_percent %>%</td>
+                <td id=<%= "#{model.name}-train-percent" %>><%= model.train_percent %>%</td>
+
                 <td class="unclickable" >
                   <div>
                     <%=
