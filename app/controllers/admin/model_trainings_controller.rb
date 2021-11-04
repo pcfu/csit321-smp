@@ -7,6 +7,7 @@ module Admin
     rescue_from StandardError, with: :handle_error
 
     def batch_enqueue
+      BackendClient.ping rescue raise StandardError.new "No connection to backend"
       config = ModelConfig.find params.require(:config_id)
       config.reset_trainings
 
