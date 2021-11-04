@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_30_182502) do
+ActiveRecord::Schema.define(version: 2021_11_04_083414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,26 +128,16 @@ ActiveRecord::Schema.define(version: 2021_10_30_182502) do
 
   create_table "price_predictions", force: :cascade do |t|
     t.bigint "stock_id", null: false
-    t.date "entry_date", null: false
-    t.date "nd_date", null: false
-    t.decimal "nd_max_price", null: false
-    t.decimal "nd_exp_price", null: false
-    t.decimal "nd_min_price", null: false
+    t.date "reference_date", null: false
     t.date "st_date", null: false
-    t.decimal "st_max_price", null: false
     t.decimal "st_exp_price", null: false
-    t.decimal "st_min_price", null: false
     t.date "mt_date", null: false
-    t.decimal "mt_max_price", null: false
     t.decimal "mt_exp_price", null: false
-    t.decimal "mt_min_price", null: false
     t.date "lt_date", null: false
-    t.decimal "lt_max_price", null: false
     t.decimal "lt_exp_price", null: false
-    t.decimal "lt_min_price", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["stock_id", "entry_date"], name: "index_price_predictions_on_stock_id_and_entry_date"
+    t.index ["stock_id", "reference_date"], name: "index_price_predictions_on_stock_id_and_reference_date"
     t.index ["stock_id"], name: "index_price_predictions_on_stock_id"
   end
 
