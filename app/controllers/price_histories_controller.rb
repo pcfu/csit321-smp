@@ -25,9 +25,11 @@ class PriceHistoriesController < ApplicationController
 
   def batch_create
     data = batch_create_params
+    prices = data[:prices].sort {|a, b| a[:date] <=> b[:date]}
+    prices.pop while prices.last[:percent_change].zero?
+
     stock = Stock.find_by(symbol: data[:symbol])
-    data[:prices].sort {|a, b| a[:date] <=> b[:date]}
-                 .each {|p| stock.price_histories.create p}
+    prices.each {|p| stock.price_histories.create p}
 
     respond_to do |format|
       format.json { render json: Hash[status: 'ok'] }
