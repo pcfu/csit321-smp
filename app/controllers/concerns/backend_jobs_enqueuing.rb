@@ -44,8 +44,8 @@ module BackendJobsEnqueuing
     enqueue_job(:post, TRAINING_ENDPOINT, data)
   end
 
-  def enqueue_prediction_job(training_id, stock_id)
-    data = { training_id: training_id, stock_id: stock_id }
+  def enqueue_prediction_job(stocks)
+    data = { stocks: stocks }
     enqueue_job(:get, PREDICTION_ENDPOINT, data)
   end
 

@@ -3,16 +3,15 @@ class PricePrediction < ApplicationRecord
   MT_DAYS = 90
   LT_DAYS = 365
 
-  PREFIX = %i(nd st mt lt)
-  SUFFIX = %i(date max_price exp_price min_price)
-  ATTRS = [:entry_date] + PREFIX.product(SUFFIX).map {|p, s| "#{p}_#{s}".to_sym}
+  PREFIX = %i(st mt lt)
+  SUFFIX = %i(date exp_price)
+  ATTRS = [:reference_date] + PREFIX.product(SUFFIX).map {|p, s| "#{p}_#{s}".to_sym}
   PRICES = ATTRS.select {|attr| attr.to_s.include? 'price'}
   private_constant :PREFIX, :SUFFIX, :PRICES
 
   belongs_to :stock
 
-  before_validation :impute_dates
-  after_create      :broadcast_new_prediction
+  after_create :broadcast_new_prediction
 
   validates_presence_of *ATTRS
   validates_numericality_of *PRICES, greater_than_or_equal_to: 0
@@ -26,15 +25,6 @@ class PricePrediction < ApplicationRecord
 
 
   private
-
-    def impute_dates
-      if entry_date.present?
-        self.nd_date = entry_date.advance(days: 1) if nd_date.nil?
-        self.st_date = entry_date.advance(days: ST_DAYS) if st_date.nil?
-        self.mt_date = entry_date.advance(days: MT_DAYS) if mt_date.nil?
-        self.lt_date = entry_date.advance(days: LT_DAYS) if lt_date.nil?
-      end
-    end
 
     def broadcast_new_prediction
       AdminChannel.broadcast EventMessages.price_prediction_creation(self)

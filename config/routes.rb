@@ -67,7 +67,7 @@ Rails.application.routes.draw do
       end
 
       resources :price_predictions, only: [:create] do
-        post 'enqueue', on: :collection
+        post 'batch_enqueue', on: :collection
       end
 
       resources :recommendations, only: [:create] do
