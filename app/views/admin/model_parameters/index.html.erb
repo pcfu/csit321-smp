@@ -3,7 +3,12 @@
 <% end %>
 
 <div class="container mt-5">
-  <br/><br/>
+  <div class="row pt-5">
+    <div class="col-12">
+      <div id="alerts-container"></div>
+    </div>
+  </div>
+
   <h1>Model Training Parameters </h1>
   <h2>Price Prediction & Recommendation</h2>
   <hr/>
@@ -68,15 +73,49 @@
                 <%= attr_name.to_s + ": " + attr_value.to_s%> <br/>
               <% end %>
             </td>
-            <td><%= model.train_percent %>%</td>
+            <td id=<%= "#{model.name}-train-percent" %>><%= model.train_percent %>%</td>
             <td class="unclickable" >
               <div>
-              <% if model.train_percent == 100 %>
-                <%= link_to 'Set Active', admin_model_parameters_setActive_path(id:model), class:'btn btn-success',  method: :post, data: { confirm: "Confirm to set this set of parameters active? \nNote that the schedule will reset.", title: "Confirmation" } %>
-              <% else %>
-                <%= link_to 'Train', admin_model_parameters_train_path(id:model), class:'btn btn-warning', method: :post, data: { confirm: 'Confirm to train this set of parameters?', title: "Confirmation" } %>
-              <% end %>
-              <%= link_to 'Delete', admin_model_parameters_delete_path(id:model), class:'btn btn-danger', method: :destroy, data: { confirm: 'Confirm to delete the parameters', title: "Confirmation" } %>
+                <%=
+                  link_to 'Set Active',
+                  admin_model_parameters_setActive_path(id:model),
+                  id: "#{model.name}-active-btn",
+                  class: "btn btn-success #{model.train_percent == 100 ? '' : 'd-none'}",
+                  method: :post,
+                  data: {
+                    confirm: "Confirm to set this set of parameters active? \nNote that the schedule will reset.",
+                    title: "Confirmation"
+                  }
+                %>
+
+                <% btn_class = model.train_percent == 100 || model.training? ? 'd-none' : '' %>
+                <%= tag.button Hash[
+                  id: "#{model.name}-train-btn",
+                  class: "btn btn-warning btn-train #{btn_class}",
+                  data: { config_id: model.id }
+                ] do %>
+                  Train
+                <% end %>
+
+                <%= tag.button Hash[
+                  id: "#{model.name}-training-indicator",
+                  class: "btn btn-info btn-training #{model.training? ? '' : 'd-none'}",
+                  disabled: true
+                ] do %>
+                  Training
+                <% end %>
+
+                <%=
+                  link_to 'Delete',
+                  admin_model_parameters_delete_path(id:model),
+                  id: "#{model.name}-delete-btn",
+                  class: "btn btn-danger #{model.training? ? 'd-none' : ''}" ,
+                  method: :destroy,
+                  data: {
+                    confirm: 'Confirm to delete the parameters',
+                    title: "Confirmation"
+                  }
+                %>
               </div>
             </td>
           </tr>
