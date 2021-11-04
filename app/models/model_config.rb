@@ -19,6 +19,10 @@ class ModelConfig < ApplicationRecord
                                             less_than_or_equal_to: 100 }
 
 
+  def training?
+    model_trainings.any? {|t| t.requested? or t.enqueued? or t.training?}
+  end
+
   def parse_params
     JSON.parse(params, symbolize_names: true)
   end
