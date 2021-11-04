@@ -10,8 +10,13 @@ class BackendClient
       build_and_send_request('post', endpoint, data.to_json)
     end
 
+    def ping
+      get
+    end
+
 
     private
+
       def build_and_send_request(method, endpoint, json)
         uri = build_uri(endpoint)
         http = Net::HTTP.new(uri.host, uri.port)

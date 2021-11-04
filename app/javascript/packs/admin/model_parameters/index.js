@@ -51,7 +51,8 @@ function initButtons() {
       $.post("/admin/model_trainings/batch_enqueue", data, function () {
         location.reload();
       }).fail(function (xhr) {
-        Alerts.danger(alertsContainer, xhr.statusText);
+        const msg = JSON.parse(xhr.responseText).message;
+        Alerts.danger(alertsContainer, msg);
       });
     }
   });
