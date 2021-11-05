@@ -25,8 +25,8 @@ class ThresholdController < ApplicationController
     @updatethreshold = Threshold.find(params[:thresholdid])
     buy = params[:threshold][:buythreshold]
     sell = params[:threshold][:sellthreshold]
-    if (buy>sell)
-      redirect_to favorites_path, flash: {error: "Threshold not updated. Buy Threshold value is higher than Sell Threshold"}
+    if (buy>=sell)
+      redirect_to favorites_path, flash: {error: "Threshold not updated. Buy Threshold value should be lower than Sell Threshold"}
     else
       @updatethreshold.update(buythreshold:buy, sellthreshold:sell)
       if @updatethreshold.save

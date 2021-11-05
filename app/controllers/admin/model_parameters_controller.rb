@@ -28,20 +28,20 @@ module Admin
       @start_date = params[:model_config][:start_date]
       @train_test_param =  params[:model_config][:train_test_percent]
       #svm
-      @c =  params[:model_config][:c].select!{|val| !val.empty?}
-      @gamma =  params[:model_config][:gamma].select!{|val| !val.empty?}
+      @c =  params[:model_config][:c].select!{|val| !val.empty?}.map(&:to_i)
+      @gamma =  params[:model_config][:gamma].select!{|val| !val.empty?}.map(&:to_i)
       @kernel =  params[:model_config][:kernel].select!{|val| !val.empty?}
       #rf
-      @n_estimators =  params[:model_config][:n_estimators].select!{|val| !val.empty?}
-      @max_depth =  params[:model_config][:max_depth].select!{|val| !val.empty?}
+      @n_estimators =  params[:model_config][:n_estimators].select!{|val| !val.empty?}.map(&:to_i)
+      @max_depth =  params[:model_config][:max_depth].select!{|val| !val.empty?}.map(&:to_i)
       @max_features =  params[:model_config][:max_features].select!{|val| !val.empty?}
       @criterion =  params[:model_config][:criterion].select!{|val| !val.empty?}
       #lstm
       @activation =  params[:model_config][:activation]
-      @units =  params[:model_config][:units]
-      @dropout =  params[:model_config][:dropout]
-      @epoch =  params[:model_config][:epoch]
-      @batch_size =  params[:model_config][:batch_size]
+      @units =  params[:model_config][:units].to_i
+      @dropout =  params[:model_config][:dropout].to_f
+      @epoch =  params[:model_config][:epoch].to_f
+      @batch_size =  params[:model_config][:batch_size].to_i
 
 
       #Defining the json string
@@ -52,7 +52,8 @@ module Admin
           :build_args=>{:activation=>@activation, 
                         :units=>@units,
                         :dropout=>@dropout,
-                        :epoch=>@epoch}
+                        :epoch=>@epoch,
+                        :batch_size=>@batch_size}
                       }.to_json
       elsif @model_param == "svm"    #SVM
           @parameter = {
