@@ -7,5 +7,5 @@ class Threshold < ApplicationRecord
             :numericality => {:allow_nil => true, :greater_than => :buythreshold}, 
             :on => :update 
 
-  
+
 end

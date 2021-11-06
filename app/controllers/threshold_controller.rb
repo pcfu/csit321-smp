@@ -7,10 +7,10 @@ class ThresholdController < ApplicationController
   end
   
   def create
-    buy = params[:threshold][:buythreshold]
-    sell = params[:threshold][:sellthreshold]
-    if (buy>sell)
-      redirect_to favorites_path, flash: {error: "Threshold not created. Buy Threshold value is higher than Sell Threshold"}
+    buy = params[:threshold][:buythreshold].to_f
+    sell = params[:threshold][:sellthreshold].to_f
+    if (buy>=sell)
+      redirect_to favorites_path, flash: {error: "Threshold not updated. Buy Threshold value should be lower than Sell Threshold"}
     else
       @threshold = Threshold.create(favorite:Favorite.find(params[:favoriteid]), buythreshold:buy, sellthreshold:sell)
       if @threshold.save
@@ -23,8 +23,8 @@ class ThresholdController < ApplicationController
 
   def update
     @updatethreshold = Threshold.find(params[:thresholdid])
-    buy = params[:threshold][:buythreshold]
-    sell = params[:threshold][:sellthreshold]
+    buy = params[:threshold][:buythreshold].to_f
+    sell = params[:threshold][:sellthreshold].to_f
     if (buy>=sell)
       redirect_to favorites_path, flash: {error: "Threshold not updated. Buy Threshold value should be lower than Sell Threshold"}
     else
