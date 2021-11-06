@@ -26,7 +26,7 @@ module Admin
       @name_param = params[:model_config][:name]
       @model_param = params[:model_config][:model_type]
       @start_date = params[:model_config][:start_date]
-      @train_test_param =  params[:model_config][:train_test_percent]
+      @train_test_param =  params[:model_config][:train_test_percent].to_f
       #svm
       @c =  params[:model_config][:c].select!{|val| !val.empty?}.map(&:to_i)
       @gamma =  params[:model_config][:gamma].select!{|val| !val.empty?}.map(&:to_i)
