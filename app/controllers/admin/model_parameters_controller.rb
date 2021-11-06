@@ -7,11 +7,11 @@ module Admin
       @models = ModelConfig.all
 
     end
-    
+
     def show
       @model = ModelConfig.find(params[:id])
       @model_trained = ModelTraining.where(model_config:@model)
-      
+
       respond_to do |format|
         format.html
       end
@@ -40,16 +40,16 @@ module Admin
       @activation =  params[:model_config][:activation]
       @units =  params[:model_config][:units].to_i
       @dropout =  params[:model_config][:dropout].to_f
-      @epoch =  params[:model_config][:epoch].to_f
+      @epoch =  params[:model_config][:epoch].to_i
       @batch_size =  params[:model_config][:batch_size].to_i
 
 
       #Defining the json string
       if @model_param == "lstm"   #LSTM
         @parameter = {
-          :start_date =>@start_date, 
+          :start_date =>@start_date,
           :train_test_percent =>@train_test_param,
-          :build_args=>{:activation=>@activation, 
+          :build_args=>{:activation=>@activation,
                         :units=>@units,
                         :dropout=>@dropout,
                         :epoch=>@epoch,
@@ -57,17 +57,17 @@ module Admin
                       }.to_json
       elsif @model_param == "svm"    #SVM
           @parameter = {
-            :start_date =>@start_date, 
+            :start_date =>@start_date,
             :train_test_percent =>@train_test_param,
-            :build_args=>{:C=>@c, 
+            :build_args=>{:C=>@c,
                           :gamma=>@gamma,
                           :kernel=>@kernel}
                         }.to_json
       else      #RF
         @parameter = {
-          :start_date =>@start_date, 
+          :start_date =>@start_date,
           :train_test_percent =>@train_test_param,
-          :build_args=>{:n_estimators=>@n_estimators, 
+          :build_args=>{:n_estimators=>@n_estimators,
                         :max_depth=>@max_depth,
                         :max_features=>@max_features,
                         :criterion=>@criterion}
@@ -75,11 +75,11 @@ module Admin
 
       end
 
-      
+
 
       #Creating new train model
       @ml_params = ModelConfig.create(name: @name_param,model_type:@model_param, train_percent:0, params:@parameter, active:false)
-      
+
       #Saving model
       if @ml_params.save
         flash[:success] = "ML parameters saved successfully"
@@ -131,7 +131,7 @@ module Admin
           format.html{}
           format.js{}
         end
-      
+
       end
 
     end
