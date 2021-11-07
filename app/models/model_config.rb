@@ -1,6 +1,7 @@
 class ModelConfig < ApplicationRecord
   has_many :model_trainings,  dependent: :destroy
   has_many :stocks,           through: :model_trainings
+  has_one  :training_schedule
 
   enum model_type: {lstm:'lstm', svm:'svm', rf:'rf'}
 
