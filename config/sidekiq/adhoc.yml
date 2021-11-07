@@ -1,0 +1,20 @@
+:queues:
+  - [adhoc, 1]
+
+:schedule:
+  retrieve_stock_prices:
+    in: 3s
+    class: PriceRetrievalWorker
+    queue: adhoc
+  # retrieve_technical_indicators:
+  #   in: 3s
+  #   class: TiRetrievalWorker
+  #   queue: adhoc
+  # train_models:
+  #   in: 3s
+  #   class: TrainingWorker
+  #   queue: adhoc
+  # make_predictions:
+  #   in: 3s
+  #   class: PredictionWorker
+  #   queue: adhoc

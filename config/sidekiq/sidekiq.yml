@@ -1,0 +1,20 @@
+:queues:
+  - [daily, 1]
+
+:schedule:
+  retrieve_stock_prices:
+    cron: '0 0 0 * * *'
+    class: PriceRetrievalWorker
+    queue: daily
+  retrieve_technical_indicators:
+    cron: '0 30 0 * * *'
+    class: TiRetrievalWorker
+    queue: daily
+  train_models:
+    cron: '0 0 1 * * *'
+    class: TrainingWorker
+    queue: daily
+  make_predictions:
+    cron: '0 0 3 * * *'
+    class: PredictionWorker
+    queue: daily
