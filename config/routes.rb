@@ -1,3 +1,7 @@
+require 'sidekiq/web'
+require 'sidekiq-scheduler/web'
+
+
 Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
@@ -46,12 +50,6 @@ Rails.application.routes.draw do
 
 
   # System Administrator Endpoints
-  ## Note: combine the two controllers
-  get  'ml_models',      to: 'machine_learning_models#index'
-  get  'ml_models/new',  to: 'machine_learning_models#new'
-  #get  'model_parameters/new',    to: 'model_parameters#new'
-  #post 'model_parameters/create', to: 'model_parameters#create'
-
   namespace :admin do
     resources :prototype, only: [:index]
     resources :model_configs, only: [:show], defaults: { format: 'json' }
@@ -77,8 +75,9 @@ Rails.application.routes.draw do
   end
 
   mount ActionCable.server => '/websocket/:id', constraints: { id: /[\w\-\.]+/ }
+  mount Sidekiq::Web => "/sidekiq"
 
-   #Errors Custom Routes
+  #Errors Custom Routes
   match '/404', via: :all, to: 'errors#not_found'
   match "/(*url)", via: :all, to: 'errors#not_found'
   match '/422', via: :all, to: 'errors#unprocessable_entity'
