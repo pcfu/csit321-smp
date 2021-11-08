@@ -3,6 +3,8 @@
     <div class="col-12">
       <h1>Edit Schedule</h1>
       <hr/>
+
+      <h4>Edit Schedule for <span class="text-primary"><%= @schedule.model_config.name %></span></h4><br>
       <br/>
 
       <%= form_with model: @schedule, action: :update, url: admin_schedule_path(@schedule), local: true do |f| %>
