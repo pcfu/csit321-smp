@@ -1,4 +1,4 @@
-attrs = @price_histories.first.attribute_names - %w[created_at updated_at]
+attrs = PriceHistory.attribute_names - %w[created_at updated_at]
 
 json.status 'ok'
 json.price_histories do
