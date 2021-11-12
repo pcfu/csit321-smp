@@ -3,7 +3,6 @@ class Stock < ApplicationRecord
   has_many :technical_indicators, dependent: :destroy
   has_many :price_predictions,    dependent: :destroy
   has_many :recommendations,      dependent: :destroy
-  has_many :headlines,            dependent: :destroy
   has_many :model_trainings,      dependent: :destroy
   has_many :model_configs,        through: :model_trainings
 
