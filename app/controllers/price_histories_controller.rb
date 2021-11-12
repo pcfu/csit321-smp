@@ -16,6 +16,7 @@ class PriceHistoriesController < ApplicationController
     @sister_prices = sisters.map do |sis|
       { sis => stock_prices(sis, params[:date_start], params[:date_end]) }
     end
+    fallback_if_blanks(@sister_prices, params[:id], params[:date_start], params[:date_end])
 
     respond_to do |format|
       format.json
@@ -47,5 +48,23 @@ class PriceHistoriesController < ApplicationController
 
     def batch_create_params
       params.require(:price_histories).permit!
+    end
+
+    def fallback_if_blanks(sisters, stock_id, date_s, date_e)
+      stock = Stock.find(stock_id)
+      others = Stock.send(stock.industry).pluck(:symbol).map(&:to_sym) -
+               [stock.symbol.to_sym, *sisters.map(&:keys).flatten]
+
+      sisters.each do |sis|
+        if not sis[sis.keys.first].exists?
+          sis.delete(sis.keys.first)
+
+          while others.present? and sis.blank?
+            sym = others.shuffle!.pop
+            prices = stock_prices(sym, date_s, date_e)
+            sis[sym] = prices if prices.exists?
+          end
+        end
+      end
     end
 end
