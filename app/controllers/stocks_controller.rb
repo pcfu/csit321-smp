@@ -27,10 +27,11 @@ class StocksController < ApplicationController
   def show
     @stock = Stock.find(params[:id])
 
-    @recent_predictions = @stock.price_predictions.order(reference_date: :desc).limit(5)
-                                .map {|s| s.to_chart_json }
+    @recent_predictions = @stock.price_predictions.order(reference_date: :desc, created_at: :desc)
+                                .limit(5).map {|s| s.to_chart_json }
 
-    @recommendation_action = @stock.recommendations.order(prediction_date: :desc).limit(1)
+    @recommendation_action = @stock.recommendations.order(prediction_date: :desc, created_at: :desc)
+                                   .limit(1)
 
     @favorite_exists = Favorite.where(stock: @stock, user:current_user) == [] ? false : true
     respond_to do |format|
