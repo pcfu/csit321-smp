@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_04_083414) do
+ActiveRecord::Schema.define(version: 2021_11_12_134025) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,17 +56,6 @@ ActiveRecord::Schema.define(version: 2021_11_04_083414) do
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
-  create_table "headlines", force: :cascade do |t|
-    t.bigint "stock_id", null: false
-    t.date "date", null: false
-    t.text "title", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["date"], name: "index_headlines_on_date"
-    t.index ["stock_id", "date"], name: "index_headlines_on_stock_id_and_date"
-    t.index ["stock_id"], name: "index_headlines_on_stock_id"
-  end
-
   create_table "model_configs", force: :cascade do |t|
     t.string "name", null: false
     t.text "params", null: false
@@ -76,19 +65,6 @@ ActiveRecord::Schema.define(version: 2021_11_04_083414) do
     t.boolean "active"
     t.enum "model_type", enum_name: "ml_name"
     t.index ["name"], name: "index_model_configs_on_name", unique: true
-  end
-
-  create_table "model_parameters", force: :cascade do |t|
-    t.string "name"
-    t.string "ml"
-    t.integer "param_one"
-    t.integer "param_two"
-    t.integer "param_three"
-    t.string "train_set"
-    t.date "start_date"
-    t.date "end_date"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "model_trainings", force: :cascade do |t|
@@ -217,7 +193,6 @@ ActiveRecord::Schema.define(version: 2021_11_04_083414) do
 
   add_foreign_key "favorites", "stocks"
   add_foreign_key "favorites", "users"
-  add_foreign_key "headlines", "stocks"
   add_foreign_key "model_trainings", "model_configs"
   add_foreign_key "model_trainings", "stocks"
   add_foreign_key "price_histories", "stocks"
